@@ -60,6 +60,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mysqlpp_connection.cpp" />
+    <ClCompile Include="mysqlpp_pool.cpp" />
+    <ClCompile Include="mysqlpp_result.cpp" />
+    <ClCompile Include="mysqlpp_statement.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mysqlpp_connection.hpp" />
+    <ClInclude Include="mysqlpp_pool.hpp" />
+    <ClInclude Include="mysqlpp_result.hpp" />
+    <ClInclude Include="mysqlpp_statement.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
