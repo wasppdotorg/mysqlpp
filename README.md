@@ -1,2 +1,2 @@
 # mysqlpp
-MySQL C API Wrapper
+C++ Wrapper for MySQL C API
