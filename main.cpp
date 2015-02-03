@@ -17,12 +17,15 @@ int main()
 		stmt = conn->prepare_statement("DROP TABLE IF EXISTS test");
 		stmt->execute();
 
-		stmt = conn->prepare_statement("CREATE TABLE test(id INT)");
+		stmt = conn->prepare_statement("CREATE TABLE test(id1 INT, id2 INT)");
 		stmt->execute();
 
-		//stmt = conn->prepare_statement("INSERT INTO test(id) VALUES (?)");
-		//stmt->bind
-		//stmt->execute();
+		stmt = conn->prepare_statement("INSERT INTO test(id1, id2) VALUES (?, ?)");
+		{
+			stmt->param(1);
+			stmt->param(2);
+		}
+		stmt->execute();
 	}
 	catch (std::exception& e)
 	{

@@ -18,14 +18,14 @@ namespace mysqlpp
 class result
 {
 public:
-	result(MYSQL_STMT* stmt);
+	result(st_mysql_stmt* stmt);
 	~result();
 
 private:
 	unsigned int field_count;
 	unsigned int current_row;
 
-	MYSQL_RES* metadata;
+	st_mysql_res* metadata;
 };
 
 } // namespace mysqlpp

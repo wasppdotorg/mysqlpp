@@ -12,7 +12,7 @@
 namespace mysqlpp
 {
 
-statement::statement(MYSQL* mysql, const std::string& query)
+statement::statement(st_mysql* mysql, const std::string& query)
 {
 	stmt = mysql_stmt_init(mysql);
 
@@ -28,7 +28,14 @@ statement::statement(MYSQL* mysql, const std::string& query)
 			throw std::exception(mysql_stmt_error(stmt));
 		}
 
+		param_index = 0;
 		param_count = mysql_stmt_param_count(stmt);
+
+		params.resize(0);
+		params.resize(param_count);
+
+		binds.resize(0);
+		binds.resize(param_count, st_mysql_bind());
 	}
 	catch (...)
 	{
@@ -41,8 +48,38 @@ statement::~statement()
 	mysql_stmt_close(stmt);
 }
 
+void statement::param(signed char value) { set_param(value); }
+
+void statement::param(short int value) { set_param(value); }
+void statement::param(int value) { set_param(value); }
+
+void statement::param(float value) { set_param(value); }
+	
+void statement::param(long int value) { set_param(value); }
+void statement::param(long long int value) { set_param(value); }
+
+void statement::param(double value) { set_param(value); }
+void statement::param(long double value) { set_param(value); }
+
+void statement::param(unsigned int value) { set_param(value); }
+void statement::param(unsigned long int value) { set_param(value); }
+void statement::param(unsigned long long int value) { set_param(value); }
+
 unsigned long long statement::execute()
 {
+	if (!params.empty())
+	{
+		for (std::size_t i = 0; i < params.size(); ++i)
+		{
+			params[i].make_bind(&binds[i]);
+		}
+
+		if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
+		{
+			throw std::exception(mysql_stmt_error(stmt));
+		}
+	}
+	
 	if (mysql_stmt_execute(stmt) != 0)
 	{
 		throw std::exception(mysql_stmt_error(stmt));
@@ -51,7 +88,7 @@ unsigned long long statement::execute()
 	return mysql_stmt_affected_rows(stmt);
 }
 
-result* statement::query()
+result* statement::execute_query()
 {
 	if (mysql_stmt_execute(stmt) != 0)
 	{

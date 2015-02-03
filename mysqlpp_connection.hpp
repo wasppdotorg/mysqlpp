@@ -24,7 +24,7 @@ public:
 	statement* prepare_statement(const std::string& query);
 
 private:
-	MYSQL* mysql;
+	st_mysql* mysql;
 };
 
 } // namespace mysqlpp

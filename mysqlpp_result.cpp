@@ -14,7 +14,7 @@
 namespace mysqlpp
 {
 
-result::result(MYSQL_STMT* stmt)
+result::result(st_mysql_stmt* stmt)
 {
 	if (mysql_stmt_store_result(stmt) == 0)
 	{
