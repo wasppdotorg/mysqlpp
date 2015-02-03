@@ -21,9 +21,6 @@
     <ClCompile Include="mysqlpp_connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mysqlpp_pool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mysqlpp_result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,13 +32,13 @@
     <ClInclude Include="mysqlpp_connection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mysqlpp_pool.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mysqlpp_result.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mysqlpp_statement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mysqlpp_exception.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
