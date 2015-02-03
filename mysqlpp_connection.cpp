@@ -5,8 +5,11 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <stdexcept>
+
 #include <mysql/mysql.h>
 
+#include "mysqlpp_exception.hpp"
 #include "mysqlpp_statement.hpp"
 #include "mysqlpp_connection.hpp"
 
@@ -21,12 +24,12 @@ connection::connection(const std::string host, const std::string& userid, const 
 	{
 		if (!mysql)
 		{
-			throw std::exception("mysql_init failed");
+			throw exception("mysql_init failed");
 		}
 
 		if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
 		{
-			throw std::exception(mysql_error(mysql));
+			throw exception(mysql_error(mysql));
 		}
 	}
 	catch (...)

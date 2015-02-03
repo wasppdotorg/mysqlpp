@@ -9,6 +9,7 @@
 
 #include <mysql/mysql.h>
 
+#include "mysqlpp_exception.hpp"
 #include "mysqlpp_result.hpp"
 
 namespace mysqlpp
@@ -18,13 +19,13 @@ result::result(st_mysql_stmt* stmt)
 {
 	if (mysql_stmt_store_result(stmt) == 0)
 	{
-		throw std::exception(mysql_stmt_error(stmt));
+		throw exception(mysql_stmt_error(stmt));
 	}
 
 	metadata = mysql_stmt_result_metadata(stmt);
 	if (!metadata)
 	{
-		throw std::exception("empty result");
+		throw exception("empty result");
 	}
 
 	field_count = mysql_stmt_field_count(stmt);

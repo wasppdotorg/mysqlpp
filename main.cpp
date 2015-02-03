@@ -34,7 +34,7 @@ int main()
 		std::cin.get();
 		return 1;
 	}
-	
+
 	std::cout << "OK" << std::endl;
 
 	std::cin.get();

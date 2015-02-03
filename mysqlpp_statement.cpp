@@ -7,6 +7,7 @@
 
 #include <mysql/mysql.h>
 
+#include "mysqlpp_exception.hpp"
 #include "mysqlpp_statement.hpp"
 
 namespace mysqlpp
@@ -20,12 +21,12 @@ statement::statement(st_mysql* mysql, const std::string& query)
 	{
 		if (!stmt)
 		{
-			throw std::exception("statement_init failed");
+			throw exception("statement_init failed");
 		}
 
 		if (mysql_stmt_prepare(stmt, query.c_str(), query.size()) != 0)
 		{
-			throw std::exception(mysql_stmt_error(stmt));
+			throw exception(mysql_stmt_error(stmt));
 		}
 
 		param_index = 0;
@@ -54,7 +55,7 @@ void statement::param(short int value) { set_param(value); }
 void statement::param(int value) { set_param(value); }
 
 void statement::param(float value) { set_param(value); }
-	
+
 void statement::param(long int value) { set_param(value); }
 void statement::param(long long int value) { set_param(value); }
 
@@ -76,13 +77,13 @@ unsigned long long statement::execute()
 
 		if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
 		{
-			throw std::exception(mysql_stmt_error(stmt));
+			throw exception(mysql_stmt_error(stmt));
 		}
 	}
-	
+
 	if (mysql_stmt_execute(stmt) != 0)
 	{
-		throw std::exception(mysql_stmt_error(stmt));
+		throw exception(mysql_stmt_error(stmt));
 	}
 
 	return mysql_stmt_affected_rows(stmt);
@@ -92,7 +93,7 @@ result* statement::execute_query()
 {
 	if (mysql_stmt_execute(stmt) != 0)
 	{
-		throw std::exception(mysql_stmt_error(stmt));
+		throw exception(mysql_stmt_error(stmt));
 	}
 
 	return new result(stmt);

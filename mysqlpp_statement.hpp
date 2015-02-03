@@ -13,6 +13,7 @@
 #include <string>
 #include <istream>
 #include <sstream>
+#include <limits>
 
 #include <mysql/mysql.h>
 
@@ -41,7 +42,7 @@ struct st_mysql_param
 	void set(const std::string& str)
 	{
 		is_null_ = 0;
-		
+
 		value_ = str;
 		length_ = value_.size();
 		buffer_ =  const_cast<char*>(value_.c_str());
@@ -81,18 +82,18 @@ class statement
 public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
-	
+
 	void param(signed char value);
 
 	void param(short int value);
 	void param(int value);
 
 	void param(float value);
-	
+
 	void param(long int value);
 	void param(long long int value);
 
-	void param(double value); 
+	void param(double value);
 	void param(long double value);
 
 	void param(unsigned int value);
