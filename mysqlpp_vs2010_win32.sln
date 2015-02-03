@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mysqlpp_vs2010_win32", "mysqlpp_vs2010_win32.vcxproj", "{DE9A925F-0AC9-4D0A-94E8-453833596849}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE9A925F-0AC9-4D0A-94E8-453833596849}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE9A925F-0AC9-4D0A-94E8-453833596849}.Debug|Win32.Build.0 = Debug|Win32
+		{DE9A925F-0AC9-4D0A-94E8-453833596849}.Release|Win32.ActiveCfg = Release|Win32
+		{DE9A925F-0AC9-4D0A-94E8-453833596849}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
