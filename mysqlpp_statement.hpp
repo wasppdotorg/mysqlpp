@@ -80,72 +80,17 @@ public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
 
-	void param_null()
-	{
-		if (param_index == param_count)
-		{
-			throw exception("invalid param_index");
-		}
-
-		params[param_index] = st_mysql_param();
-		++param_index;
-	}
-
-	void param(const std::string& value)
-	{
-		if (param_index == param_count)
-		{
-			throw exception("invalid param_index");
-		}
-
-		params[param_index].set(MYSQL_TYPE_STRING, value.c_str(), value.c_str() + value.size());
-		++param_index;
-	}
-
-	void param(std::istream& value)
-	{
-		if (param_index == param_count)
-		{
-			throw exception("invalid param_index");
-		}
-
-		std::ostringstream ss;
-		ss << value.rdbuf();
-
-		params[param_index].set(MYSQL_TYPE_BLOB, ss.str());
-		++param_index;
-	}
-
-	void param(signed char value)
-	{
-	    set_param(MYSQL_TYPE_TINY, value);
-	}
-
-	void param(short int value)
-	{
-	    set_param(MYSQL_TYPE_SHORT, value);
-	}
-
-	void param(int value)
-	{
-	    set_param(MYSQL_TYPE_LONG, value);
-	}
-
-	void param(long long int value)
-	{
-	    set_param(MYSQL_TYPE_LONGLONG, value);
-	}
-
-	void param(float value)
-	{
-	    set_param(MYSQL_TYPE_FLOAT, value);
-	}
-
-	void param(double value)
-	{
-	    set_param(MYSQL_TYPE_DOUBLE, value);
-	}
-
+	void param_null();
+	
+	void param(const std::string& value);
+	void param(std::istream& value);
+	void param(signed char value);
+	void param(short int value);
+	void param(int value);
+	void param(long long int value);
+	void param(float value);
+	void param(double value);
+	
 	unsigned long long execute();
 	result* execute_query();
 
