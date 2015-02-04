@@ -39,8 +39,6 @@
 		<Unit filename="mysqlpp_connection.cpp" />
 		<Unit filename="mysqlpp_connection.hpp" />
 		<Unit filename="mysqlpp_exception.hpp" />
-		<Unit filename="mysqlpp_pool.cpp" />
-		<Unit filename="mysqlpp_pool.hpp" />
 		<Unit filename="mysqlpp_result.cpp" />
 		<Unit filename="mysqlpp_result.hpp" />
 		<Unit filename="mysqlpp_statement.cpp" />
