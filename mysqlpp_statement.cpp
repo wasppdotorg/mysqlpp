@@ -16,6 +16,7 @@ namespace mysqlpp
 statement::statement(st_mysql* mysql, const std::string& query)
 {
 	stmt = mysql_stmt_init(mysql);
+	oss.imbue(std::locale::classic());
 
 	try
 	{
@@ -48,23 +49,6 @@ statement::~statement()
 {
 	mysql_stmt_close(stmt);
 }
-
-void statement::param(signed char value) { set_param(value); }
-
-void statement::param(short int value) { set_param(value); }
-void statement::param(int value) { set_param(value); }
-
-void statement::param(float value) { set_param(value); }
-
-void statement::param(long int value) { set_param(value); }
-void statement::param(long long int value) { set_param(value); }
-
-void statement::param(double value) { set_param(value); }
-void statement::param(long double value) { set_param(value); }
-
-void statement::param(unsigned int value) { set_param(value); }
-void statement::param(unsigned long int value) { set_param(value); }
-void statement::param(unsigned long long int value) { set_param(value); }
 
 unsigned long long statement::execute()
 {

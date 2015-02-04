@@ -14,9 +14,11 @@
 #include <istream>
 #include <sstream>
 #include <limits>
+#include <type_traits>
 
 #include <mysql/mysql.h>
 
+#include "mysqlpp_exception.hpp"
 #include "mysqlpp_result.hpp"
 
 namespace mysqlpp
@@ -24,25 +26,20 @@ namespace mysqlpp
 
 struct st_mysql_param
 {
-	st_mysql_param() : is_null_(1), is_blob_(false), length_(0), buffer_(0)
+	st_mysql_param() : field_type_(MYSQL_TYPE_NULL), is_null_(0), length_(0), buffer_(0)
 	{
 	}
 
-	/*
-	void set(const char* begin, const char* end, bool is_blob = false)
+	void set(enum_field_types field_type, const char* begin, const char* end)
 	{
-		is_null_ = 0;
-		is_blob_ = is_blob;
-
+		field_type_ = field_type;
 		length_ = end - begin;
 		buffer_ = const_cast<char*>(begin);
 	}
-	*/
 
-	void set(const std::string& str)
+	void set(enum_field_types field_type, const std::string& str)
 	{
-		is_null_ = 0;
-
+		field_type_ = field_type;
 		value_ = str;
 		length_ = value_.size();
 		buffer_ =  const_cast<char*>(value_.c_str());
@@ -50,26 +47,26 @@ struct st_mysql_param
 
 	void make_bind(st_mysql_bind* bind)
 	{
-		bind->is_null = &is_null_;
-		if (is_null_)
+		if (field_type_ == MYSQL_TYPE_NULL)
 		{
-			bind->buffer_type = MYSQL_TYPE_NULL;
+			is_null_ = 1;
+			bind->is_null = &is_null_;
+
+			bind->buffer_type = field_type_;
 			return;
 		}
 
-		bind->buffer_type = MYSQL_TYPE_STRING;
-		if (is_blob_)
-		{
-			bind->buffer_type = MYSQL_TYPE_BLOB;
-		}
+		is_null_ = 0;
+		bind->is_null = &is_null_;
 
+		bind->buffer_type = field_type_;
 		bind->buffer = buffer_;
 		bind->buffer_length = length_;
 		bind->length = &length_;
 	}
 
 	my_bool is_null_;
-	bool is_blob_;
+	enum_field_types field_type_;
 
 	std::string value_;
 	unsigned long length_;
@@ -83,29 +80,79 @@ public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
 
-	void param(signed char value);
-
-	void param(short int value);
-	void param(int value);
-
-	void param(float value);
-
-	void param(long int value);
-	void param(long long int value);
-
-	void param(double value);
-	void param(long double value);
-
-	void param(unsigned int value);
-	void param(unsigned long int value);
-	void param(unsigned long long int value);
-
-	unsigned long long execute();
-	result* execute_query();
-
-private:
-	template<typename T> void set_param(T value)
+	void param_null()
 	{
+		if (param_index == param_count)
+		{
+			throw exception("invalid param_index");
+		}
+
+		params[param_index] = st_mysql_param();
+		++param_index;
+	}
+
+	void param(const std::string& value)
+	{
+		if (param_index == param_count)
+		{
+			throw exception("invalid param_index");
+		}
+
+		params[param_index].set(MYSQL_TYPE_STRING, value.c_str(), value.c_str() + value.size());
+		++param_index;
+	}
+
+	void param(std::istream& value)
+	{
+		if (param_index == param_count)
+		{
+			throw exception("invalid param_index");
+		}
+
+		std::ostringstream ss;
+		ss << value.rdbuf();
+
+		params[param_index].set(MYSQL_TYPE_BLOB, ss.str());
+		++param_index;
+	}
+
+	template<typename T> void param(T value)
+	{
+		if (param_index == param_count)
+		{
+			throw exception("invalid param_index");
+		}
+
+		enum_field_types field_type;
+		if (std::is_same<T, signed char>::value)
+		{
+			field_type = MYSQL_TYPE_TINY;
+		}
+		else if (std::is_same<T, short int>::value)
+		{
+			field_type = MYSQL_TYPE_SHORT;
+		}
+		else if (std::is_same<T, int>::value)
+		{
+			field_type = MYSQL_TYPE_LONG;
+		}
+		else if (std::is_same<T, long long int>::value)
+		{
+			field_type = MYSQL_TYPE_LONGLONG;
+		}
+		else if (std::is_same<T, float>::value)
+		{
+			field_type = MYSQL_TYPE_FLOAT;
+		}
+		else if (std::is_same<T, double>::value)
+		{
+			field_type = MYSQL_TYPE_DOUBLE;
+		}
+		else
+		{
+			throw exception("invalid numeric param");
+		}
+		
 		oss.str(std::string());
 		if (!std::numeric_limits<T>::is_integer)
 		{
@@ -113,10 +160,14 @@ private:
 		}
 		oss << value;
 
-		params[param_index].set(oss.str());
+		params[param_index].set(field_type, oss.str());
 		++param_index;
 	}
 
+	unsigned long long execute();
+	result* execute_query();
+
+private:
 	st_mysql_stmt* stmt;
 
 	int param_count;
