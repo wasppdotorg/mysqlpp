@@ -19,11 +19,7 @@
 
 namespace mysqlpp
 {
-	/*bind_data() :
-	ptr(0),
-		length(0),
-		is_null(0),
-		error(0)*/
+
 struct mysqlpp_data
 {
 	mysqlpp_data() : is_null(0), error(0), length(0), ptr(0)
@@ -41,7 +37,6 @@ struct mysqlpp_data
 	std::vector<char> vbuf;
 };
 
-
 class result
 {
 public:
@@ -51,6 +46,37 @@ public:
 	void reset();
 	std::string name(int index);
 	int index(const std::string& name);
+	std::tm str_to_time(const std::string& time);
+	
+	bool fetch(int index, short int &value);
+	bool fetch(int index, unsigned short int &value);
+	bool fetch(int index, int &value);
+	bool fetch(int index, unsigned int &value);
+	bool fetch(int index, long int &value);
+	bool fetch(int index, unsigned long int &value);
+	bool fetch(int index, long long int &value);
+	bool fetch(int index, unsigned long long int &value);
+	bool fetch(int index, float &value);
+	bool fetch(int index, double &value);
+	bool fetch(int index, long double &value);
+	
+	bool fetch(int index, std::string &value);
+	bool fetch(int index, std::ostream &value);
+
+	bool fetch(const std::string& name, short int &value);
+	bool fetch(const std::string& name, unsigned short int &value);
+	bool fetch(const std::string& name, int &value);
+	bool fetch(const std::string& name, unsigned int &value);
+	bool fetch(const std::string& name, long int &value);
+	bool fetch(const std::string& name, unsigned long int &value);
+	bool fetch(const std::string& name, long long int &value);
+	bool fetch(const std::string& name, unsigned long long int &value);
+	bool fetch(const std::string& name, float &value);
+	bool fetch(const std::string& name, double &value);
+	bool fetch(const std::string& name, long double &value);
+	
+	bool fetch(const std::string& name, std::string &value);
+	bool fetch(const std::string& name, std::ostream &value);
 
 	template<typename T>
 	T get(const std::string& name)
@@ -75,30 +101,21 @@ public:
 	}
 
 private:
-	bool fetch(int index, short int &value);
-	bool fetch(int index, unsigned short int &value);
-	bool fetch(int index, int &value);
-	bool fetch(int index, unsigned int &value);
-	bool fetch(int index, long int &value);
-	bool fetch(int index, unsigned long int &value);
-	bool fetch(int index, long long int &value);
-	bool fetch(int index, unsigned long long int &value);
-	bool fetch(int index, float &value);
-	bool fetch(int index, double &value);
-	bool fetch(int index, long double &value);
-	
-	bool fetch(int index, std::string &value);
-	bool fetch(int index, std::ostream &value);
-
-	template<typename T> bool do_fetch(T& value)
+	template<typename T> bool fetch_data(int index, T& value)
 	{
-		mysqlpp_data &d = data[field_index];
-		if (d.is_null)
+		if (index < 0 || index >= field_count)
+		{
+			throw exception("invalid field index");
+		}
+
+		mysqlpp_data& dat = data[index];
+		if (dat.is_null)
 		{
 			return false;
 		}
 
-		std::string str(d.ptr, d.length);
+		std::string str(dat.ptr, dat.length);
+
 		iss.clear();
 		iss.str(str);
 		
@@ -109,12 +126,12 @@ private:
 			throw exception("bad value cast");
 		}
 
-		if (std::numeric_limits<T>::is_integer &&
-			!std::numeric_limits<T>::is_signed &&
-			str.find('-') != std::string::npos &&
-			&& value != 0)
+		if (std::numeric_limits<T>::is_integer)
 		{
-			throw exception("bad value cast");
+			if (!std::numeric_limits<T>::is_signed && str.find('-') != std::string::npos && value_ != 0)
+			{
+				throw exception("bad value cast");
+			}
 		}
 
 		value = static_cast<T>(value_);
@@ -124,8 +141,7 @@ private:
 	st_mysql_stmt* stmt;
 	st_mysql_res* metadata;
 	
-	int field_index;
-	unsigned int field_count;
+	int field_count;
 	unsigned int current_row;
 	
 	std::vector<st_mysql_bind> binds;
