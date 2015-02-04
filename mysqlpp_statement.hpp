@@ -14,7 +14,6 @@
 #include <istream>
 #include <sstream>
 #include <limits>
-#include <type_traits>
 
 #include <mysql/mysql.h>
 
@@ -26,8 +25,9 @@ namespace mysqlpp
 
 struct st_mysql_param
 {
-	st_mysql_param() : field_type_(MYSQL_TYPE_NULL), is_null_(0), length_(0), buffer_(0)
+	st_mysql_param() : is_null_(0), length_(0), buffer_(0)
 	{
+	    field_type_ = MYSQL_TYPE_NULL;
 	}
 
 	void set(enum_field_types field_type, const char* begin, const char* end)
@@ -116,43 +116,47 @@ public:
 		++param_index;
 	}
 
-	template<typename T> void param(T value)
+	void param(signed char value)
+	{
+	    set_param(MYSQL_TYPE_TINY, value);
+	}
+
+	void param(short int value)
+	{
+	    set_param(MYSQL_TYPE_SHORT, value);
+	}
+
+	void param(int value)
+	{
+	    set_param(MYSQL_TYPE_LONG, value);
+	}
+
+	void param(long long int value)
+	{
+	    set_param(MYSQL_TYPE_LONGLONG, value);
+	}
+
+	void param(float value)
+	{
+	    set_param(MYSQL_TYPE_FLOAT, value);
+	}
+
+	void param(double value)
+	{
+	    set_param(MYSQL_TYPE_DOUBLE, value);
+	}
+
+	unsigned long long execute();
+	result* execute_query();
+
+private:
+    template<typename T> void set_param(enum_field_types field_type, T value)
 	{
 		if (param_index == param_count)
 		{
 			throw exception("invalid param_index");
 		}
 
-		enum_field_types field_type;
-		if (std::is_same<T, signed char>::value)
-		{
-			field_type = MYSQL_TYPE_TINY;
-		}
-		else if (std::is_same<T, short int>::value)
-		{
-			field_type = MYSQL_TYPE_SHORT;
-		}
-		else if (std::is_same<T, int>::value)
-		{
-			field_type = MYSQL_TYPE_LONG;
-		}
-		else if (std::is_same<T, long long int>::value)
-		{
-			field_type = MYSQL_TYPE_LONGLONG;
-		}
-		else if (std::is_same<T, float>::value)
-		{
-			field_type = MYSQL_TYPE_FLOAT;
-		}
-		else if (std::is_same<T, double>::value)
-		{
-			field_type = MYSQL_TYPE_DOUBLE;
-		}
-		else
-		{
-			throw exception("invalid numeric param");
-		}
-		
 		oss.str(std::string());
 		if (!std::numeric_limits<T>::is_integer)
 		{
@@ -164,10 +168,6 @@ public:
 		++param_index;
 	}
 
-	unsigned long long execute();
-	result* execute_query();
-
-private:
 	st_mysql_stmt* stmt;
 
 	int param_count;
