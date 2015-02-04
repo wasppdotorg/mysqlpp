@@ -23,9 +23,9 @@
 namespace mysqlpp
 {
 
-struct st_mysql_param
+struct mysqlpp_param
 {
-	st_mysql_param() : is_null_(0), length_(0), buffer_(0)
+	mysqlpp_param() : is_null_(0), length_(0), buffer_(0)
 	{
 	    field_type_ = MYSQL_TYPE_NULL;
 	}
@@ -80,16 +80,17 @@ public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
 
-	void param_null();
-	
-	void param(const std::string& value);
-	void param(std::istream& value);
 	void param(signed char value);
 	void param(short int value);
 	void param(int value);
 	void param(long long int value);
 	void param(float value);
 	void param(double value);
+
+	void param(const std::string& value);
+	void param(std::istream& value);
+
+	void param_null();
 	
 	unsigned long long execute();
 	result* execute_query();
@@ -118,7 +119,7 @@ private:
 	int param_count;
 	int param_index;
 
-	std::vector<st_mysql_param> params;
+	std::vector<mysqlpp_param> params;
 	std::vector<st_mysql_bind> binds;
 
 	std::ostringstream oss;

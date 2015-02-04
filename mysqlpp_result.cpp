@@ -98,20 +98,72 @@ void result::reset()
 	binds.resize(0);
 	binds.resize(field_count, st_mysql_bind());
 
-	bind_data.resize(0);
-	bind_data.resize(field_count, st_mysql_bind_data());
+	data.resize(0);
+	data.resize(field_count, mysqlpp_data());
 
 	for (std::size_t i = 0; i < field_count; ++i)
 	{
 		binds[i].buffer_type = MYSQL_TYPE_STRING;
-		binds[i].buffer = bind_data[i].buf;
-		binds[i].buffer_length = sizeof(bind_data[i].buf);
-		binds[i].length = &bind_data[i].length;
-		binds[i].is_null = &bind_data[i].is_null;
-		binds[i].error = &bind_data[i].error;
+		binds[i].buffer = data[i].buf;
+		binds[i].buffer_length = sizeof(data[i].buf);
+		binds[i].length = &data[i].length;
+		binds[i].is_null = &data[i].is_null;
+		binds[i].error = &data[i].error;
 		
-		bind_data[i].ptr = bind_data[i].buf;
+		data[i].ptr = data[i].buf;
 	}
+}
+
+bool fetch(int index, short int &value)
+{
+}
+
+bool fetch(int index, unsigned short int &value)
+{
+}
+
+bool fetch(int index, int &value)
+{
+}
+
+bool fetch(int index, unsigned int &value)
+{
+}
+
+bool fetch(int index, long int &value)
+{
+}
+
+bool fetch(int index, unsigned long int &value)
+{
+}
+
+bool fetch(int index, long long int &value)
+{
+}
+
+bool fetch(int index, unsigned long long int &value)
+{
+}
+
+bool fetch(int index, float &value)
+{
+}
+
+bool fetch(int index, double &value)
+{
+}
+
+bool fetch(int index, long double &value)
+{
+}
+	
+bool fetch(int index, std::string &value)
+{
+}
+
+bool fetch(int index, std::ostream &value)
+{
 }
 
 } // namespace mysqlpp
