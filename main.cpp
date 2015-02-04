@@ -5,7 +5,6 @@
 #include "mysqlpp_result.hpp"
 #include "mysqlpp_statement.hpp"
 #include "mysqlpp_connection.hpp"
-#include "mysqlpp_pool.hpp"
 
 int main()
 {
