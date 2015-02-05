@@ -9,12 +9,8 @@
 #define MYSQLPP_RESULT_HPP
 
 #include <ctime>
-#include <cstring>
 #include <string>
 #include <vector>
-#include <string>
-#include <sstream>
-#include <limits>
 
 #include <mysql/mysql.h>
 
@@ -23,23 +19,6 @@
 
 namespace mysqlpp
 {
-
-struct mysqlpp_data
-{
-	mysqlpp_data() : is_null(0), error(0), length(0), ptr(0)
-	{
-		std::memset(&buf, 0, sizeof(buf));
-	}
-
-	my_bool is_null;
-	my_bool error;
-
-	unsigned long length;
-
-	char* ptr;
-	char buf[128];
-	std::vector<char> vbuf;
-};
 
 class result
 {
@@ -74,8 +53,6 @@ public:
 	}
 
 private:
-	void reset_data();
-
 	std::string name(int index);
 	int index(const std::string& name);
 
@@ -111,16 +88,17 @@ private:
 	bool fetch(const std::string& name, std::string &value);
 	bool fetch(const std::string& name, std::ostream &value);
 
-	mysqlpp_data& data_at(int field_index)
+	st_mysql_bind& this_bind()
 	{
-		if (field_index < 0 || field_index >= field_count)
+		if (bind_index < 0 || bind_index == column_count)
 		{
-			throw exception("invalid field_index");
+			throw exception("invalid bind_index");
 		}
 
-		return data.at(field_index);
+		return binds.at(bind_index);
 	}
 
+	/*
 	template<typename T> bool fetch_data(int index, T& value)
 	{
 		mysqlpp_data& dat = data_at(index);
@@ -152,17 +130,18 @@ private:
 		value = static_cast<T>(value_);
 		return true;
 	}
+	*/
 
 	st_mysql_stmt* stmt;
 	st_mysql_res* metadata;
 
-	int field_count;
-	unsigned int current_row;
+	int column_count;
+	int bind_index;
 
 	std::vector<st_mysql_bind> binds;
-	std::vector<mysqlpp_data> data;
+	//std::vector<mysqlpp_data> data;
 
-	std::istringstream iss;
+	//std::istringstream iss;
 };
 
 } // namespace mysqlpp

@@ -13,7 +13,8 @@ int main()
 	{
 		mysqlpp::connection* conn = new mysqlpp::connection("127.0.0.1", "root", "1235", "test");
 
-		mysqlpp::statement* stmt = conn->prepare_statement("DROP TABLE IF EXISTS test");
+		mysqlpp::statement* stmt;
+		stmt = conn->prepare_statement("DROP TABLE IF EXISTS test");
 		stmt->execute();
 
 		stmt = conn->prepare_statement("CREATE TABLE test(id1 INT, id2 INT)");
@@ -21,8 +22,8 @@ int main()
 
 		stmt = conn->prepare_statement("INSERT INTO test(id1, id2) VALUES (?, ?)");
 		{
-			stmt->param(1);
-			stmt->param(2);
+			stmt->param(new short int(1));
+			stmt->param(new short int(2));
 		}
 		stmt->execute();
 

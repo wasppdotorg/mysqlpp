@@ -6,6 +6,7 @@
 //
 
 #include <ctime>
+#include <sstream>
 
 #include <mysql/mysql.h>
 
@@ -18,8 +19,7 @@ namespace mysqlpp
 statement::statement(st_mysql* mysql, const std::string& query)
 {
 	stmt = mysql_stmt_init(mysql);
-	oss.imbue(std::locale::classic());
-
+	
 	try
 	{
 		if (!stmt)
@@ -32,14 +32,12 @@ statement::statement(st_mysql* mysql, const std::string& query)
 			throw exception(mysql_stmt_error(stmt));
 		}
 
-		param_index = 0;
 		param_count = mysql_stmt_param_count(stmt);
-
-		params.resize(0);
-		params.resize(param_count);
 
 		binds.resize(0);
 		binds.resize(param_count, st_mysql_bind());
+
+		bind_index = 0;
 	}
 	catch (...)
 	{
@@ -52,72 +50,126 @@ statement::~statement()
 	mysql_stmt_close(stmt);
 }
 
-void statement::param(signed char value)
+void statement::param(unsigned char* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_TINY, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_TINY;
+	bind.buffer = (char*)value;
+	bind.is_null = 0;
+	bind.length = &length;
 }
 
-void statement::param(short int value)
+void statement::param(short int* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_SHORT, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_SHORT;
+	bind.buffer = (char*)value;
+	bind.is_null = 0;
+	bind.length = &length;
 }
 
-void statement::param(int value)
+void statement::param(int* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_LONG, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_LONG;
+	bind.buffer = (char*)value;
+	bind.is_null = 0;
+	bind.length = &length;
 }
 
-void statement::param(long long int value)
+void statement::param(long long int* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_LONGLONG, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_LONGLONG;
+	bind.buffer = (char*)value;
+	bind.is_null = 0;
+	bind.length = &length;
 }
 
-void statement::param(float value)
+void statement::param(float* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_FLOAT, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_FLOAT;
+	bind.buffer = value;
+	bind.is_null = 0;
+
+	length = sizeof(value);
+	bind.length = &length;
 }
 
-void statement::param(double value)
+void statement::param(double* value, unsigned long length)
 {
-	set_param(MYSQL_TYPE_DOUBLE, value);
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_DOUBLE;
+	bind.buffer = value;
+	bind.is_null = 0;
+
+	length = sizeof(value);
+	bind.length = &length;
 }
 
-void statement::param(const std::tm& value)
+void statement::param(const std::tm& value, unsigned long length)
 {
-	param_at(param_index).set(MYSQL_TYPE_DATETIME, value);
-	++param_index;
+	st_mysql_bind& bind = this_bind();
+
+	char buf[64] = { 0 };
+	strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &value);
+
+	std::string value_(buf);
+	bind.buffer_type = MYSQL_TYPE_DATETIME;
+	bind.buffer = const_cast<char*>(value_.c_str());
+	bind.is_null = 0;
+
+	length = value_.size();
+	bind.length = &length;
 }
 
-void statement::param(const std::string& value)
+void statement::param(const std::string& value, unsigned long length)
 {
-	param_at(param_index).set(MYSQL_TYPE_STRING, value.c_str(), value.c_str() + value.size());
-	++param_index;
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_STRING;
+	bind.buffer = const_cast<char*>(value.c_str());
+	bind.is_null = 0;
+
+	length = value.size();
+	bind.length = &length;
 }
 
-void statement::param(std::istream& value)
+void statement::param(std::istream& value, unsigned long length)
 {
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_BLOB;
+
 	std::ostringstream ss;
 	ss << value.rdbuf();
+	bind.buffer = const_cast<char*>(ss.str().c_str());
 
-	param_at(param_index).set(MYSQL_TYPE_BLOB, ss.str());
-	++param_index;
+	bind.is_null = 0;
+
+	length = ss.str().size();
+	bind.length = &length;
 }
 
-void statement::param_null()
+void statement::param_null(my_bool is_null_)
 {
-	param_at(param_index) = mysqlpp_param();
-	++param_index;
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_NULL;
+	bind.is_null = &is_null_;
 }
 
 unsigned long long statement::execute()
 {
-	if (!params.empty())
+	if (param_count > 0 && !binds.empty())
 	{
-		for (std::size_t i = 0; i < params.size(); ++i)
-		{
-			params[i].make_bind(&binds[i]);
-		}
-
 		if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
 		{
 			throw exception(mysql_stmt_error(stmt));

@@ -5,13 +5,9 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <cstdio>
-#include <cstring>
 #include <ctime>
-#include <cstring>
-
+#include <string>
 #include <vector>
-#include <stdexcept>
 
 #include <mysql/mysql.h>
 
@@ -21,21 +17,32 @@
 namespace mysqlpp
 {
 
-result::result(st_mysql_stmt* stmt) : stmt(0), current_row(0), metadata(0)
+result::result(st_mysql_stmt* stmt) : stmt(0), metadata(0)
 {
-	iss.imbue(std::locale::classic());
-	field_count = mysql_stmt_field_count(stmt);
-
-	if (mysql_stmt_store_result(stmt) != 0)
-	{
-		throw exception(mysql_stmt_error(stmt));
-	}
-
 	metadata = mysql_stmt_result_metadata(stmt);
 	if (!metadata)
 	{
 		throw exception("empty result");
 	}
+
+	column_count =  mysql_num_fields(metadata);
+
+	binds.resize(0);
+	binds.resize(column_count, st_mysql_bind());
+
+	bind_index = 0;
+
+	if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
+	{
+		throw exception(mysql_stmt_error(stmt));
+	}
+
+	/*
+	if (mysql_stmt_store_result(stmt) != 0)
+	{
+		throw exception(mysql_stmt_error(stmt));
+	}
+	*/
 }
 
 result::~result()
