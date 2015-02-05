@@ -17,13 +17,13 @@
 #include "mysqlpp_exception.hpp"
 #include "mysqlpp_result.hpp"
 
-#include <vld.h>
 namespace mysqlpp
 {
 
 result::result(st_mysql_stmt* stmt) : stmt(0), current_row(0), metadata(0)
 {
 	iss.imbue(std::locale::classic());
+	field_count = mysql_stmt_field_count(stmt);
 
 	if (mysql_stmt_store_result(stmt) != 0)
 	{
@@ -35,8 +35,6 @@ result::result(st_mysql_stmt* stmt) : stmt(0), current_row(0), metadata(0)
 	{
 		throw exception("empty result");
 	}
-
-	field_count = mysql_stmt_field_count(stmt);
 }
 
 result::~result()
@@ -44,6 +42,27 @@ result::~result()
 	if (metadata)
 	{
 		mysql_free_result(metadata);
+	}
+}
+
+void result::reset_data()
+{
+	binds.resize(0);
+	binds.resize(field_count, st_mysql_bind());
+
+	data.resize(0);
+	data.resize(field_count, mysqlpp_data());
+
+	for (int i = 0; i < field_count; ++i)
+	{
+		binds[i].buffer_type = MYSQL_TYPE_STRING;
+		binds[i].buffer = data[i].buf;
+		binds[i].buffer_length = sizeof(data[i].buf);
+		binds[i].length = &data[i].length;
+		binds[i].is_null = &data[i].is_null;
+		binds[i].error = &data[i].error;
+		
+		data[i].ptr = data[i].buf;
 	}
 }
 
@@ -87,27 +106,6 @@ bool result::next()
 	}
 
 	return true;
-}
-
-void result::reset_data()
-{
-	binds.resize(0);
-	binds.resize(field_count, st_mysql_bind());
-
-	data.resize(0);
-	data.resize(field_count, mysqlpp_data());
-
-	for (int i = 0; i < field_count; ++i)
-	{
-		binds[i].buffer_type = MYSQL_TYPE_STRING;
-		binds[i].buffer = data[i].buf;
-		binds[i].buffer_length = sizeof(data[i].buf);
-		binds[i].length = &data[i].length;
-		binds[i].is_null = &data[i].is_null;
-		binds[i].error = &data[i].error;
-		
-		data[i].ptr = data[i].buf;
-	}
 }
 
 std::string result:: name(int index)

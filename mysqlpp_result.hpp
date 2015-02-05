@@ -67,6 +67,8 @@ public:
 		{
 			throw exception("null value fetch");
 		}
+
+		return value;
 	}
 
 private:

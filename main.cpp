@@ -7,7 +7,6 @@
 #include "mysqlpp_statement.hpp"
 #include "mysqlpp_connection.hpp"
 
-#include <vld.h>
 int main()
 {
 	try
@@ -27,21 +26,19 @@ int main()
 		}
 		stmt->execute();
 
-		stmt = conn->prepare_statement("SELECT * from test");
-		mysqlpp::result* rs = stmt->execute_query();
+		//stmt = conn->prepare_statement("SELECT * from test");
+		//mysqlpp::result* rs = stmt->execute_query();
 
-		if (rs->next())
-		{
-			std::cout << 1 << std::endl;
-		}
+		//if (rs->next())
+		//{
+			//std::cout << 1 << std::endl;
+		//}
 
-		/*
-		while (rs->next())
-		{
-			std::cout << rs->get<int>(0) << std::endl;
-			std::cout << rs->get<int>("id2") << std::endl;
-		}
-		*/
+		//while (rs->next())
+		//{
+			//std::cout << rs->get<int>(0) << std::endl;
+			//std::cout << rs->get<int>("id2") << std::endl;
+		//}
 	}
 	catch (std::exception& e)
 	{

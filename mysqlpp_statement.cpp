@@ -12,7 +12,6 @@
 #include "mysqlpp_exception.hpp"
 #include "mysqlpp_statement.hpp"
 
-#include <vld.h>
 namespace mysqlpp
 {
 

@@ -13,11 +13,10 @@
 #include "mysqlpp_statement.hpp"
 #include "mysqlpp_connection.hpp"
 
-#include <vld.h>
 namespace mysqlpp
 {
 
-connection::connection(const std::string host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port)
+connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port)
 {
 	mysql = mysql_init(0);
 
