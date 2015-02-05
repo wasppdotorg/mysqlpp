@@ -11,10 +11,12 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <string>
 #include <sstream>
 
 #include <mysql/mysql.h>
 
+#include "mysqlpp_exception.hpp"
 #include "mysqlpp_result.hpp"
 
 namespace mysqlpp
@@ -43,41 +45,8 @@ public:
 	result(st_mysql_stmt* stmt);
 	~result();
 
-	void reset();
-	std::string name(int index);
-	int index(const std::string& name);
-	std::tm str_to_time(const std::string& time);
+	bool next();
 	
-	bool fetch(int index, short int &value);
-	bool fetch(int index, unsigned short int &value);
-	bool fetch(int index, int &value);
-	bool fetch(int index, unsigned int &value);
-	bool fetch(int index, long int &value);
-	bool fetch(int index, unsigned long int &value);
-	bool fetch(int index, long long int &value);
-	bool fetch(int index, unsigned long long int &value);
-	bool fetch(int index, float &value);
-	bool fetch(int index, double &value);
-	bool fetch(int index, long double &value);
-	
-	bool fetch(int index, std::string &value);
-	bool fetch(int index, std::ostream &value);
-
-	bool fetch(const std::string& name, short int &value);
-	bool fetch(const std::string& name, unsigned short int &value);
-	bool fetch(const std::string& name, int &value);
-	bool fetch(const std::string& name, unsigned int &value);
-	bool fetch(const std::string& name, long int &value);
-	bool fetch(const std::string& name, unsigned long int &value);
-	bool fetch(const std::string& name, long long int &value);
-	bool fetch(const std::string& name, unsigned long long int &value);
-	bool fetch(const std::string& name, float &value);
-	bool fetch(const std::string& name, double &value);
-	bool fetch(const std::string& name, long double &value);
-	
-	bool fetch(const std::string& name, std::string &value);
-	bool fetch(const std::string& name, std::ostream &value);
-
 	template<typename T>
 	T get(const std::string& name)
 	{
@@ -101,14 +70,56 @@ public:
 	}
 
 private:
-	template<typename T> bool fetch_data(int index, T& value)
+	void reset_data();
+
+	std::string name(int index);
+	int index(const std::string& name);
+
+	bool fetch(int index, short int &value);
+	bool fetch(int index, unsigned short int &value);
+	bool fetch(int index, int &value);
+	bool fetch(int index, unsigned int &value);
+	bool fetch(int index, long int &value);
+	bool fetch(int index, unsigned long int &value);
+	bool fetch(int index, long long int &value);
+	bool fetch(int index, unsigned long long int &value);
+	bool fetch(int index, float &value);
+	bool fetch(int index, double &value);
+	bool fetch(int index, long double &value);
+
+	bool fetch(int index, std::tm& value);
+	bool fetch(int index, std::string &value);
+	bool fetch(int index, std::ostream &value);
+
+	bool fetch(const std::string& name, short int &value);
+	bool fetch(const std::string& name, unsigned short int &value);
+	bool fetch(const std::string& name, int &value);
+	bool fetch(const std::string& name, unsigned int &value);
+	bool fetch(const std::string& name, long int &value);
+	bool fetch(const std::string& name, unsigned long int &value);
+	bool fetch(const std::string& name, long long int &value);
+	bool fetch(const std::string& name, unsigned long long int &value);
+	bool fetch(const std::string& name, float &value);
+	bool fetch(const std::string& name, double &value);
+	bool fetch(const std::string& name, long double &value);
+
+	bool fetch(const std::string& name, std::tm& value);
+	bool fetch(const std::string& name, std::string &value);
+	bool fetch(const std::string& name, std::ostream &value);
+
+	mysqlpp_data& data_at(int field_index)
 	{
-		if (index < 0 || index >= field_count)
+		if (field_index < 0 || field_index >= field_count)
 		{
-			throw exception("invalid field index");
+			throw exception("invalid field_index");
 		}
 
-		mysqlpp_data& dat = data[index];
+		return data.at(field_index);
+	}
+
+	template<typename T> bool fetch_data(int index, T& value)
+	{
+		mysqlpp_data& dat = data_at(index);
 		if (dat.is_null)
 		{
 			return false;

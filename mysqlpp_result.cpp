@@ -17,6 +17,7 @@
 #include "mysqlpp_exception.hpp"
 #include "mysqlpp_result.hpp"
 
+#include <vld.h>
 namespace mysqlpp
 {
 
@@ -24,7 +25,7 @@ result::result(st_mysql_stmt* stmt) : stmt(0), current_row(0), metadata(0)
 {
 	iss.imbue(std::locale::classic());
 
-	if (mysql_stmt_store_result(stmt) == 0)
+	if (mysql_stmt_store_result(stmt) != 0)
 	{
 		throw exception(mysql_stmt_error(stmt));
 	}
@@ -46,23 +47,49 @@ result::~result()
 	}
 }
 
-/*
 bool result::next()
 {
 	++current_row;
-	reset_field();
+	reset_data();
 
-	if (data_index > 0)
+	if (field_count > 0)
 	{
-		if (myssql_stmt_bind_result(stmt, &binds[0]))
+		if (mysql_stmt_bind_result(stmt, &binds[0]) != 0)
 		{
 			throw exception(mysql_stmt_error(stmt));
 		}
 	}
-}
-*/
 
-void result::reset()
+	int r = mysql_stmt_fetch(stmt);
+	if (r == MYSQL_NO_DATA)
+	{
+		return false;
+	}
+
+	if (r == MYSQL_DATA_TRUNCATED)
+	{
+		for (std::size_t i = 0; i < field_count; ++i)
+		{
+			if (data[i].error && !data[i].is_null && data[i].length >= sizeof(data[i].buf))
+			{
+				data[i].vbuf.resize(data[i].length);
+				binds[i].buffer = &data[i].vbuf.front();
+				binds[i].buffer_length = data[i].length;
+
+				if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)
+				{
+					throw exception(mysql_stmt_error(stmt));
+				}
+
+				data[i].ptr = &data[i].vbuf.front();
+			}
+		}
+	}
+
+	return true;
+}
+
+void result::reset_data()
 {
 	binds.resize(0);
 	binds.resize(field_count, st_mysql_bind());
@@ -116,42 +143,6 @@ int result::index(const std::string& name)
 	}
 
 	return -1;
-}
-
-std::tm string_to_time(const std::string& time_str)
-{
-	if (strlen(time_str.c_str()) != time_str.size())
-	{
-		throw exception("bad value cast");
-	}
-	
-	std::tm time = std::tm();
-
-	double sec = 0;
-	int n = sscanf_s(time_str.c_str(), "%d-%d-%d %d:%d:%lf",
-		&time.tm_year,
-		&time.tm_mon,
-		&time.tm_mday,
-		&time.tm_hour,
-		&time.tm_min,
-		&sec);
-
-	if (n != 3 && n != 6)
-	{
-		throw exception("bad value cast");
-	}
-
-	time.tm_year -= 1900;
-	time.tm_mon -= 1;
-	time.tm_isdst -= 1;
-	time.tm_sec = static_cast<int>(sec);
-
-	if (mktime(&time) == -1)
-	{
-		throw exception("bad value cast");
-	}
-
-	return time;
 }
 
 bool result::fetch(int index, short int &value)
@@ -208,15 +199,56 @@ bool result::fetch(int index, long double &value)
 {
 	return fetch_data(index, value);
 }
+
+bool result::fetch(int index, std::tm &value)
+{
+	mysqlpp_data& dat = data_at(index);
+	if (dat.is_null)
+	{
+		return false;
+	}
+
+	std::string time_str;
+	time_str.assign(dat.ptr, dat.length);
+
+	if (strlen(time_str.c_str()) != time_str.size())
+	{
+		throw exception("bad value cast");
+	}
+
+	std::tm time = std::tm();
+
+	double sec = 0;
+	int n = sscanf_s(time_str.c_str(), "%d-%d-%d %d:%d:%lf",
+		&time.tm_year,
+		&time.tm_mon,
+		&time.tm_mday,
+		&time.tm_hour,
+		&time.tm_min,
+		&sec);
+
+	if (n != 3 && n != 6)
+	{
+		throw exception("bad value cast");
+	}
+
+	time.tm_year -= 1900;
+	time.tm_mon -= 1;
+	time.tm_isdst -= 1;
+	time.tm_sec = static_cast<int>(sec);
+
+	if (mktime(&time) == -1)
+	{
+		throw exception("bad value cast");
+	}
+
+	value = time;
+	return true;
+}
 	
 bool result::fetch(int index, std::string &value)
 {
-	if (index < 0 || index >= field_count)
-	{
-		throw exception("invalid field index");
-	}
-
-	mysqlpp_data& dat = data[index];
+	mysqlpp_data& dat = data_at(index);
 	if (dat.is_null)
 	{
 		return false;
@@ -228,12 +260,7 @@ bool result::fetch(int index, std::string &value)
 
 bool result::fetch(int index, std::ostream &value)
 {
-	if (index < 0 || index >= field_count)
-	{
-		throw exception("invalid field index");
-	}
-
-	mysqlpp_data& dat = data[index];
+	mysqlpp_data& dat = data_at(index);
 	if (dat.is_null)
 	{
 		return false;

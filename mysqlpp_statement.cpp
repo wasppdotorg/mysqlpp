@@ -5,11 +5,14 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <ctime>
+
 #include <mysql/mysql.h>
 
 #include "mysqlpp_exception.hpp"
 #include "mysqlpp_statement.hpp"
 
+#include <vld.h>
 namespace mysqlpp
 {
 
@@ -80,39 +83,30 @@ void statement::param(double value)
 	set_param(MYSQL_TYPE_DOUBLE, value);
 }
 
+void statement::param(const std::tm& value)
+{
+	param_at(param_index).set(MYSQL_TYPE_DATETIME, value);
+	++param_index;
+}
+
 void statement::param(const std::string& value)
 {
-	if (param_index == param_count)
-	{
-		throw exception("invalid param_index");
-	}
-
-	params[param_index].set(MYSQL_TYPE_STRING, value.c_str(), value.c_str() + value.size());
+	param_at(param_index).set(MYSQL_TYPE_STRING, value.c_str(), value.c_str() + value.size());
 	++param_index;
 }
 
 void statement::param(std::istream& value)
 {
-	if (param_index == param_count)
-	{
-		throw exception("invalid param_index");
-	}
-
 	std::ostringstream ss;
 	ss << value.rdbuf();
 
-	params[param_index].set(MYSQL_TYPE_BLOB, ss.str());
+	param_at(param_index).set(MYSQL_TYPE_BLOB, ss.str());
 	++param_index;
 }
 
 void statement::param_null()
 {
-	if (param_index == param_count)
-	{
-		throw exception("invalid param_index");
-	}
-
-	params[param_index] = mysqlpp_param();
+	param_at(param_index) = mysqlpp_param();
 	++param_index;
 }
 

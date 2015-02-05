@@ -37,6 +37,14 @@ struct mysqlpp_param
 		buffer_ = const_cast<char*>(begin);
 	}
 
+	void set(enum_field_types field_type, const std::tm& time)
+	{
+		char buf[64] = { 0 };
+		strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
+
+		set(field_type, std::string(buf));
+	}
+
 	void set(enum_field_types field_type, const std::string& str)
 	{
 		field_type_ = field_type;
@@ -87,6 +95,7 @@ public:
 	void param(float value);
 	void param(double value);
 
+	void param(const std::tm& value);
 	void param(const std::string& value);
 	void param(std::istream& value);
 
@@ -96,13 +105,18 @@ public:
 	result* execute_query();
 
 private:
-    template<typename T> void set_param(enum_field_types field_type, T value)
+	mysqlpp_param& param_at(int param_index)
 	{
-		if (param_index == param_count)
+		if (param_index < 0 || param_index >= param_count)
 		{
 			throw exception("invalid param_index");
 		}
 
+		return params[param_index];
+	}
+
+    template<typename T> void set_param(enum_field_types field_type, T value)
+	{
 		oss.str(std::string());
 		if (!std::numeric_limits<T>::is_integer)
 		{
@@ -110,7 +124,7 @@ private:
 		}
 		oss << value;
 
-		params[param_index].set(field_type, oss.str());
+		param_at(param_index).set(field_type, oss.str());
 		++param_index;
 	}
 
