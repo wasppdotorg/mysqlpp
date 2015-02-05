@@ -8,11 +8,13 @@
 #ifndef MYSQLPP_RESULT_HPP
 #define MYSQLPP_RESULT_HPP
 
+#include <ctime>
 #include <cstring>
 #include <string>
 #include <vector>
 #include <string>
 #include <sstream>
+#include <limits>
 
 #include <mysql/mysql.h>
 
@@ -46,7 +48,7 @@ public:
 	~result();
 
 	bool next();
-	
+
 	template<typename T>
 	T get(const std::string& name)
 	{
@@ -131,7 +133,7 @@ private:
 
 		iss.clear();
 		iss.str(str);
-		
+
 		T value_;
 		iss >> value_;
 		if (iss.fail() || !std::ws(iss).eof())
@@ -153,10 +155,10 @@ private:
 
 	st_mysql_stmt* stmt;
 	st_mysql_res* metadata;
-	
+
 	int field_count;
 	unsigned int current_row;
-	
+
 	std::vector<st_mysql_bind> binds;
 	std::vector<mysqlpp_data> data;
 

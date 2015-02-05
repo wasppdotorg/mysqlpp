@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
+#include <cstring>
 
 #include <vector>
 #include <stdexcept>
@@ -61,7 +62,7 @@ void result::reset_data()
 		binds[i].length = &data[i].length;
 		binds[i].is_null = &data[i].is_null;
 		binds[i].error = &data[i].error;
-		
+
 		data[i].ptr = data[i].buf;
 	}
 }
@@ -217,7 +218,7 @@ bool result::fetch(int index, std::tm &value)
 	std::tm time = std::tm();
 
 	double sec = 0;
-	int n = sscanf_s(time_str.c_str(), "%d-%d-%d %d:%d:%lf",
+	int n = sscanf(time_str.c_str(), "%d-%d-%d %d:%d:%lf",
 		&time.tm_year,
 		&time.tm_mon,
 		&time.tm_mday,
@@ -243,7 +244,7 @@ bool result::fetch(int index, std::tm &value)
 	value = time;
 	return true;
 }
-	
+
 bool result::fetch(int index, std::string &value)
 {
 	mysqlpp_data& dat = data_at(index);
@@ -322,7 +323,7 @@ bool result::fetch(const std::string& name, long double &value)
 {
 	return fetch_data(index(name), value);
 }
-	
+
 bool result::fetch(const std::string& name, std::string &value)
 {
 	return fetch(index(name), value);
