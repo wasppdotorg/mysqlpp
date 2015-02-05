@@ -24,7 +24,7 @@ statement::statement(st_mysql* mysql, const std::string& query)
 	{
 		if (!stmt)
 		{
-			throw exception("statement_init failed");
+			throw exception("stmt_init failed");
 		}
 
 		if (mysql_stmt_prepare(stmt, query.c_str(), query.size()) != 0)

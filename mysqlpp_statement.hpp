@@ -23,7 +23,6 @@
 namespace mysqlpp
 {
 
-	/*
 struct mysqlpp_param
 {
 	mysqlpp_param() : is_null_(0), length_(0), buffer_(0)
@@ -37,7 +36,7 @@ struct mysqlpp_param
 		length_ = end - begin;
 		buffer_ = const_cast<char*>(begin);
 	}
-
+	
 	void set(enum_field_types field_type, const std::tm& time)
 	{
 		char buf[64] = { 0 };
@@ -82,7 +81,6 @@ struct mysqlpp_param
 
 	void *buffer_;
 };
-*/
 
 class statement
 {
@@ -107,7 +105,6 @@ public:
 	result* execute_query();
 
 private:
-	/*
 	mysqlpp_param& param_at(int param_index)
 	{
 		if (param_index < 0 || param_index >= param_count)
@@ -117,7 +114,6 @@ private:
 
 		return params[param_index];
 	}
-	*/
 
     template<typename T> void set_param(enum_field_types field_type, T value)
 	{
@@ -137,7 +133,7 @@ private:
 	int param_count;
 	int param_index;
 
-	//std::vector<mysqlpp_param> params;
+	std::vector<mysqlpp_param> params;
 	std::vector<st_mysql_bind> binds;
 
 	std::ostringstream oss;
