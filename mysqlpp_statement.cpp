@@ -6,6 +6,7 @@
 //
 
 #include <ctime>
+#include <iostream>
 #include <sstream>
 
 #include <mysql/mysql.h>
@@ -42,6 +43,7 @@ statement::statement(st_mysql* mysql, const std::string& query)
 	catch (...)
 	{
 		mysql_stmt_close(stmt);
+		throw;
 	}
 }
 
@@ -50,99 +52,83 @@ statement::~statement()
 	mysql_stmt_close(stmt);
 }
 
-void statement::param(unsigned char* value, unsigned long length)
+void statement::param(const unsigned char& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_TINY;
-	bind.buffer = (char*)value;
+	bind.buffer = (char*)&value;
 	bind.is_null = 0;
 	bind.length = &length;
 }
 
-void statement::param(short int* value, unsigned long length)
+void statement::param(const short int& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_SHORT;
-	bind.buffer = (char*)value;
+	bind.buffer = (char*)&value;
 	bind.is_null = 0;
 	bind.length = &length;
 }
 
-void statement::param(int* value, unsigned long length)
+void statement::param(const int& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_LONG;
-	bind.buffer = (char*)value;
+	bind.buffer = (char*)&value;
 	bind.is_null = 0;
 	bind.length = &length;
 }
 
-void statement::param(long long int* value, unsigned long length)
+void statement::param(const long long int& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_LONGLONG;
-	bind.buffer = (char*)value;
+	bind.buffer = (char*)&value;
 	bind.is_null = 0;
 	bind.length = &length;
 }
 
-void statement::param(float* value, unsigned long length)
+void statement::param(const float& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_FLOAT;
-	bind.buffer = value;
+	bind.buffer = (float*)&value;
 	bind.is_null = 0;
 
 	length = sizeof(value);
 	bind.length = &length;
 }
 
-void statement::param(double* value, unsigned long length)
+void statement::param(const double& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_DOUBLE;
-	bind.buffer = value;
+	bind.buffer = (double*)&value;
 	bind.is_null = 0;
 
 	length = sizeof(value);
 	bind.length = &length;
 }
 
-void statement::param(const std::tm& value, unsigned long length)
-{
-	st_mysql_bind& bind = this_bind();
-
-	char buf[64] = { 0 };
-	strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &value);
-
-	std::string value_(buf);
-	bind.buffer_type = MYSQL_TYPE_DATETIME;
-	bind.buffer = const_cast<char*>(value_.c_str());
-	bind.is_null = 0;
-
-	length = value_.size();
-	bind.length = &length;
-}
-
-void statement::param(const std::string& value, unsigned long length)
+void statement::param(std::string* value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_STRING;
-	bind.buffer = const_cast<char*>(value.c_str());
+	bind.buffer = const_cast<char*>(value->c_str());
 	bind.is_null = 0;
 
-	length = value.size();
+	length = value->size();
 	bind.length = &length;
 }
 
-void statement::param(std::istream& value, unsigned long length)
+void statement::param(const std::istream& value, unsigned long length)
 {
 	st_mysql_bind& bind = this_bind();
 
@@ -150,12 +136,22 @@ void statement::param(std::istream& value, unsigned long length)
 
 	std::ostringstream ss;
 	ss << value.rdbuf();
-	bind.buffer = const_cast<char*>(ss.str().c_str());
+	bind.buffer = (char*)ss.str().c_str();
 
 	bind.is_null = 0;
 
 	length = ss.str().size();
 	bind.length = &length;
+}
+
+void statement::param(const st_mysql_time& value, unsigned long length)
+{
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_DATETIME;
+	bind.buffer = (st_mysql_time*)&value;
+	bind.is_null = 0;
+	bind.length = 0;
 }
 
 void statement::param_null(my_bool is_null_)
@@ -168,27 +164,45 @@ void statement::param_null(my_bool is_null_)
 
 unsigned long long statement::execute()
 {
-	if (param_count > 0 && !binds.empty())
+	unsigned long long affected_rows = -1;
+
+	try
 	{
-		if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
+		if (param_count > 0 && !binds.empty())
+		{
+			if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
+			{
+				throw exception(mysql_stmt_error(stmt));
+			}
+		}
+
+		if (mysql_stmt_execute(stmt) != 0)
+		{
+			throw exception(mysql_stmt_error(stmt));
+		}
+
+		affected_rows = mysql_stmt_affected_rows(stmt);
+	}
+	catch (...)
+	{
+		throw;
+	}
+
+	return affected_rows;
+}
+
+result* statement::query()
+{
+	try
+	{
+		if (mysql_stmt_execute(stmt) != 0)
 		{
 			throw exception(mysql_stmt_error(stmt));
 		}
 	}
-
-	if (mysql_stmt_execute(stmt) != 0)
+	catch (...)
 	{
-		throw exception(mysql_stmt_error(stmt));
-	}
-
-	return mysql_stmt_affected_rows(stmt);
-}
-
-result* statement::execute_query()
-{
-	if (mysql_stmt_execute(stmt) != 0)
-	{
-		throw exception(mysql_stmt_error(stmt));
+		throw;
 	}
 
 	return new result(stmt);

@@ -53,15 +53,13 @@ result::~result()
 	}
 }
 
+/*
 void result::reset_data()
 {
 	binds.resize(0);
-	binds.resize(field_count, st_mysql_bind());
+	binds.resize(column_count, st_mysql_bind());
 
-	data.resize(0);
-	data.resize(field_count, mysqlpp_data());
-
-	for (int i = 0; i < field_count; ++i)
+	for (int i = 0; i < column_count; ++i)
 	{
 		binds[i].buffer_type = MYSQL_TYPE_STRING;
 		binds[i].buffer = data[i].buf;
@@ -79,7 +77,7 @@ bool result::next()
 	++current_row;
 	reset_data();
 
-	if (field_count > 0)
+	if (column_count > 0)
 	{
 		if (mysql_stmt_bind_result(stmt, &binds[0]) != 0)
 		{
@@ -95,7 +93,7 @@ bool result::next()
 
 	if (r == MYSQL_DATA_TRUNCATED)
 	{
-		for (std::size_t i = 0; i < field_count; ++i)
+		for (std::size_t i = 0; i < column_count; ++i)
 		{
 			if (data[i].error && !data[i].is_null && data[i].length >= sizeof(data[i].buf))
 			{
@@ -115,10 +113,11 @@ bool result::next()
 
 	return true;
 }
+*/
 
 std::string result:: name(int index)
 {
-	if (index < 0 || index > field_count)
+	if (index < 0 || index > column_count)
 	{
 		throw exception("invalid field index");
 	}
@@ -140,7 +139,7 @@ int result::index(const std::string& name)
 		throw exception("empty fields");
 	}
 
-	for (int i = 0; i < field_count; ++i)
+	for (int i = 0; i < column_count; ++i)
 	{
 		if (name == fields[i].name)
 		{
@@ -151,6 +150,7 @@ int result::index(const std::string& name)
 	return -1;
 }
 
+/*
 bool result::fetch(int index, short int &value)
 {
 	return fetch_data(index, value);
@@ -340,5 +340,6 @@ bool result::fetch(const std::string& name, std::ostream &value)
 {
 	return fetch(index(name), value);
 }
+*/
 
 } // namespace mysqlpp

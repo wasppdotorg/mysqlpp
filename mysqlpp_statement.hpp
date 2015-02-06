@@ -27,21 +27,21 @@ public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
 
-	void param(unsigned char* value, unsigned long length = 0);
-	void param(short int* value, unsigned long length = 0);
-	void param(int* value, unsigned long length = 0);
-	void param(long long int* value, unsigned long length = 0);
-	void param(float* value, unsigned long length = 0);
-	void param(double* value, unsigned long length = 0);
+	void param(const unsigned char& value, unsigned long length = 0);
+	void param(const short int& value, unsigned long length = 0);
+	void param(const int& value, unsigned long length = 0);
+	void param(const long long int& value, unsigned long length = 0);
+	void param(const float& value, unsigned long length = 0);
+	void param(const double& value, unsigned long length = 0);
 
-	void param(const std::tm& value, unsigned long length = 0);
-	void param(const std::string& value, unsigned long length = 0);
-	void param(std::istream& value, unsigned long length = 0);
+	void param(std::string value, unsigned long length = 0);
+	void param(const std::istream& value, unsigned long length = 0);
 
+	void param(const st_mysql_time& value, unsigned long length = 0);
 	void param_null(my_bool is_null_ = 1);
 	
 	unsigned long long execute();
-	result* execute_query();
+	result* query();
 
 private:
 	st_mysql_bind& this_bind()
