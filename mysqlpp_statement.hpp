@@ -34,7 +34,7 @@ public:
 	void param(const float& value, unsigned long length = 0);
 	void param(const double& value, unsigned long length = 0);
 
-	void param(std::string value, unsigned long length = 0);
+	void param(const std::string& value, unsigned long length = 0);
 	void param(const std::istream& value, unsigned long length = 0);
 
 	void param(const st_mysql_time& value, unsigned long length = 0);
