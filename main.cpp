@@ -27,7 +27,7 @@ int main()
 		float param5 = 5;
 		double param6 = 6;
 
-		std::string param7("test7");
+		std::string param7("한글");
 		// std::size_to to unsigned long
 		unsigned long param7_size = param7.size();
 
