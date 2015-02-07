@@ -25,14 +25,14 @@ public:
 	statement(st_mysql* mysql, const std::string& query);
 	~statement();
 
-	void param(const unsigned char& value, unsigned long length = 0);
-	void param(const short int& value, unsigned long length = 0);
-	void param(const int& value, unsigned long length = 0);
-	void param(const long long int& value, unsigned long length = 0);
+	void param(const unsigned char& value);
+	void param(const short int& value);
+	void param(const int& value);
+	void param(const long long int& value);
 	void param(const float& value, unsigned long length = 0);
 	void param(const double& value, unsigned long length = 0);
-	void param(const st_mysql_time& value, unsigned long length = 0);
 	void param(const std::string& value, unsigned long& length);
+	void param(const st_mysql_time& value);
 	void param_null(my_bool is_null = 1);
 	
 	unsigned long long execute();

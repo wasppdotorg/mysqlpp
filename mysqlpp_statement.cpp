@@ -48,44 +48,44 @@ statement::~statement()
 	mysql_stmt_close(stmt);
 }
 
-void statement::param(const unsigned char& value, unsigned long length)
+void statement::param(const unsigned char& value)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_TINY;
 	bind.buffer = (char*)&value;
 	bind.is_null = 0;
-	bind.length = &length;
+	bind.length = 0;
 }
 
-void statement::param(const short int& value, unsigned long length)
+void statement::param(const short int& value)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_SHORT;
 	bind.buffer = (char*)&value;
 	bind.is_null = 0;
-	bind.length = &length;
+	bind.length = 0;
 }
 
-void statement::param(const int& value, unsigned long length)
+void statement::param(const int& value)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_LONG;
 	bind.buffer = (char*)&value;
 	bind.is_null = 0;
-	bind.length = &length;
+	bind.length = 0;
 }
 
-void statement::param(const long long int& value, unsigned long length)
+void statement::param(const long long int& value)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_LONGLONG;
 	bind.buffer = (char*)&value;
 	bind.is_null = 0;
-	bind.length = &length;
+	bind.length = 0;
 }
 
 void statement::param(const float& value, unsigned long length)
@@ -112,16 +112,6 @@ void statement::param(const double& value, unsigned long length)
 	bind.length = &length;
 }
 
-void statement::param(const st_mysql_time& value, unsigned long length)
-{
-	st_mysql_bind& bind = this_bind();
-
-	bind.buffer_type = MYSQL_TYPE_DATE;
-	bind.buffer = (char*)&value;
-	bind.is_null = 0;
-	bind.length = &length;
-}
-
 void statement::param(const std::string& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
@@ -131,6 +121,16 @@ void statement::param(const std::string& value, unsigned long& length)
 	bind.buffer_length = length;
 	bind.is_null = 0;
 	bind.length = &length;
+}
+
+void statement::param(const st_mysql_time& value)
+{
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_DATE;
+	bind.buffer = (char*)&value;
+	bind.is_null = 0;
+	bind.length = 0;
 }
 
 void statement::param_null(my_bool is_null)
