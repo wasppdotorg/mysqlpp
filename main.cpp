@@ -27,12 +27,8 @@ int main()
 		float param5 = 5;
 		double param6 = 6;
 
-<<<<<<< HEAD
 		std::string param7("ÇÑ±Û");
-=======
-		std::string param7("param7");
 		// std::size_to to unsigned long
->>>>>>> 87dacb6e5f1bda11458ad76c22e3081868e7b06b
 		unsigned long param7_size = param7.size();
 
 		std::string param8("param8");
