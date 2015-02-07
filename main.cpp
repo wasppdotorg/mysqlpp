@@ -17,7 +17,7 @@ int main()
 		stmt = conn->prepare("DROP TABLE IF EXISTS test");
 		stmt->execute();
 
-		stmt = conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col9 DATETIME, col10 INT NULL)");
+		stmt = conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col8 TEXT, col9 DATETIME, col10 INT NULL)");
 		stmt->execute();
 
 		unsigned char param1 = 1;
@@ -26,20 +26,24 @@ int main()
 		long long int param4 = 4;
 		float param5 = 5;
 		double param6 = 6;
-		std::string param7("test7");
+
+		std::string param7("param7");
 		unsigned long param7_size = param7.size();
+
+		std::string param8("param8");
+		unsigned long param8_size = param8.size();
 		
-		st_mysql_time param8;
+		st_mysql_time param9;
 		{
-			param8.year = 1970;
-			param8.month = 1;
-			param8.day = 1;
-			param8.hour = 0;
-			param8.minute = 0;
-			param8.second = 0;
+			param9.year = 1970;
+			param9.month = 1;
+			param9.day = 1;
+			param9.hour = 0;
+			param9.minute = 0;
+			param9.second = 0;
 		}
 
-		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col9, col10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		{
 			stmt->param(param1);
 			stmt->param(param2);
@@ -47,18 +51,14 @@ int main()
 			stmt->param(param4);
 			stmt->param(param5);
 			stmt->param(param6);
-
-			/*
-			something's wrong here, but I can't find why..
-			with vs2010_win32, the first byte of 'test7' gets ripped off..
-			so, it's saved as 'est7' int the db..
-			when tested with pure c code, there's no problem..
-			*/
 			stmt->param(param7, param7_size);
-
-			stmt->param(param8);
+			stmt->param(param8, param8_size);
+			stmt->param(param9);
 			stmt->param_null();
 		}
+		stmt->execute();
+
+		// insert one more time
 		stmt->execute();
 
 		//stmt = conn->prepare_statement("SELECT * from test");

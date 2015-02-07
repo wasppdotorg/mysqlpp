@@ -112,6 +112,16 @@ void statement::param(const double& value, unsigned long length)
 	bind.length = &length;
 }
 
+void statement::param(const st_mysql_time& value, unsigned long length)
+{
+	st_mysql_bind& bind = this_bind();
+
+	bind.buffer_type = MYSQL_TYPE_DATE;
+	bind.buffer = (char*)&value;
+	bind.is_null = 0;
+	bind.length = &length;
+}
+
 void statement::param(const std::string& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
@@ -119,16 +129,6 @@ void statement::param(const std::string& value, unsigned long& length)
 	bind.buffer_type = MYSQL_TYPE_STRING;
 	bind.buffer = (char*)value.c_str();
 	bind.buffer_length = length;
-	bind.is_null = 0;
-	bind.length = &length;
-}
-
-void statement::param(const st_mysql_time& value, unsigned long length)
-{
-	st_mysql_bind& bind = this_bind();
-
-	bind.buffer_type = MYSQL_TYPE_DATE;
-	bind.buffer = (char*)&value;
 	bind.is_null = 0;
 	bind.length = &length;
 }

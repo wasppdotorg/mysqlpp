@@ -31,9 +31,8 @@ public:
 	void param(const long long int& value, unsigned long length = 0);
 	void param(const float& value, unsigned long length = 0);
 	void param(const double& value, unsigned long length = 0);
-
-	void param(const std::string& value, unsigned long& length);
 	void param(const st_mysql_time& value, unsigned long length = 0);
+	void param(const std::string& value, unsigned long& length);
 	void param_null(my_bool is_null = 1);
 	
 	unsigned long long execute();
