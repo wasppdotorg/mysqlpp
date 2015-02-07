@@ -5,10 +5,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <ctime>
-#include <iostream>
-#include <sstream>
-
 #include <mysql/mysql.h>
 
 #include "mysqlpp_exception.hpp"
@@ -19,7 +15,6 @@ namespace mysqlpp
 
 statement::statement(st_mysql* mysql, const std::string& query)
 {
-	//oss.imbue(std::locale::classic());
 	stmt = mysql_stmt_init(mysql);
 	
 	try
@@ -121,44 +116,12 @@ void statement::param(const std::string& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
 
-	std::cout << &value << " &str_data" << std::endl;
-
 	bind.buffer_type = MYSQL_TYPE_STRING;
 	bind.buffer = (char*)value.c_str();
-
-	std::cout << bind.buffer << " bind[0].buffer" << std::endl;
-
-	bind.is_null = 0;
-
-	std::cout << &length << " &str_length" << std::endl;
-
-	//bind.buffer_length = length - 1;
-
-	//std::cout << bind.buffer_length << " bind[0].buffer_length" << std::endl;
-
-	bind.length = &length;
-	std::cout << bind.length << " bind[0].length" << std::endl;
-
-	int steve = 1;
-}
-
-/*
-void statement::param(const std::istream& value, unsigned long& length)
-{
-	st_mysql_bind& bind = this_bind();
-
-	bind.buffer_type = MYSQL_TYPE_BLOB;
-
-	std::ostringstream ss;
-	ss << value.rdbuf();
-	bind.buffer = (char*)ss.str().c_str();
-
-	bind.is_null = 0;
-
 	bind.buffer_length = length;
+	bind.is_null = 0;
 	bind.length = &length;
 }
-*/
 
 void statement::param(const st_mysql_time& value, unsigned long length)
 {
@@ -170,12 +133,12 @@ void statement::param(const st_mysql_time& value, unsigned long length)
 	bind.length = &length;
 }
 
-void statement::param_null(my_bool is_null_)
+void statement::param_null(my_bool is_null)
 {
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_NULL;
-	bind.is_null = &is_null_;
+	bind.is_null = &is_null;
 }
 
 unsigned long long statement::execute()
