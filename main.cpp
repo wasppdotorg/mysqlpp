@@ -28,11 +28,12 @@ int main()
 		double param6 = 6;
 
 		std::string param7("param7");
+		// std::size_to to unsigned long
 		unsigned long param7_size = param7.size();
 
 		std::string param8("param8");
 		unsigned long param8_size = param8.size();
-		
+
 		st_mysql_time param9;
 		{
 			param9.year = 1970;
