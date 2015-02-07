@@ -20,37 +20,43 @@ namespace mysqlpp
 result::result(st_mysql_stmt* stmt) : stmt(0), metadata(0)
 {
 	metadata = mysql_stmt_result_metadata(stmt);
-	if (!metadata)
+
+	try
 	{
-		throw exception("empty result");
+		if (!metadata)
+		{
+			throw exception("empty result");
+		}
+
+		column_count =  mysql_num_fields(metadata);
+
+		binds.resize(0);
+		binds.resize(column_count, st_mysql_bind());
+
+		bind_index = 0;
+
+		if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
+		{
+			throw exception(mysql_stmt_error(stmt));
+		}
+
+		/*
+		if (mysql_stmt_store_result(stmt) != 0)
+		{
+			throw exception(mysql_stmt_error(stmt));
+		}
+		*/
 	}
-
-	column_count =  mysql_num_fields(metadata);
-
-	binds.resize(0);
-	binds.resize(column_count, st_mysql_bind());
-
-	bind_index = 0;
-
-	if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
+	catch (...)
 	{
-		throw exception(mysql_stmt_error(stmt));
+		mysql_free_result(metadata);
+		throw;
 	}
-
-	/*
-	if (mysql_stmt_store_result(stmt) != 0)
-	{
-		throw exception(mysql_stmt_error(stmt));
-	}
-	*/
 }
 
 result::~result()
 {
-	if (metadata)
-	{
-		mysql_free_result(metadata);
-	}
+	mysql_free_result(metadata);
 }
 
 /*

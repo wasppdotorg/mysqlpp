@@ -6,6 +6,7 @@
 //
 
 #include <ctime>
+#include <iostream>
 #include <sstream>
 
 #include <mysql/mysql.h>
@@ -18,6 +19,7 @@ namespace mysqlpp
 
 statement::statement(st_mysql* mysql, const std::string& query)
 {
+	//oss.imbue(std::locale::classic());
 	stmt = mysql_stmt_init(mysql);
 	
 	try
@@ -115,20 +117,33 @@ void statement::param(const double& value, unsigned long length)
 	bind.length = &length;
 }
 
-void statement::param(const std::string& value, unsigned long length)
+void statement::param(const std::string& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
 
+	std::cout << &value << " &str_data" << std::endl;
+
 	bind.buffer_type = MYSQL_TYPE_STRING;
 	bind.buffer = (char*)value.c_str();
+
+	std::cout << bind.buffer << " bind[0].buffer" << std::endl;
+
 	bind.is_null = 0;
 
-	length = value.size();
-	bind.buffer_length = length;
+	std::cout << &length << " &str_length" << std::endl;
+
+	//bind.buffer_length = length - 1;
+
+	//std::cout << bind.buffer_length << " bind[0].buffer_length" << std::endl;
+
 	bind.length = &length;
+	std::cout << bind.length << " bind[0].length" << std::endl;
+
+	int steve = 1;
 }
 
-void statement::param(const std::istream& value, unsigned long length)
+/*
+void statement::param(const std::istream& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
 
@@ -140,10 +155,10 @@ void statement::param(const std::istream& value, unsigned long length)
 
 	bind.is_null = 0;
 
-	length = ss.str().size();
 	bind.buffer_length = length;
 	bind.length = &length;
 }
+*/
 
 void statement::param(const st_mysql_time& value, unsigned long length)
 {
@@ -152,7 +167,7 @@ void statement::param(const st_mysql_time& value, unsigned long length)
 	bind.buffer_type = MYSQL_TYPE_DATE;
 	bind.buffer = (char*)&value;
 	bind.is_null = 0;
-	bind.length = 0;
+	bind.length = &length;
 }
 
 void statement::param_null(my_bool is_null_)
