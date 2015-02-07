@@ -23,31 +23,39 @@ int main()
 
 		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col9, col10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		{
-			stmt->param(unsigned char(1));
-			stmt->param(short int(2));
-			stmt->param(int(3));
-			stmt->param(long long int(4));
-			stmt->param(float(5));
-			stmt->param(double(6));
+		    unsigned char param1 = 1;
+			stmt->param(param1);
 
-			//std::string str("test7");
-			//stmt->param(str.c_str());
+			short int param2 = 2;
+			stmt->param(param2);
 
-			std::string test7("test7");
-			unsigned long test7_size = test7.size();
-			stmt->param(test7, test7_size);
+			int param3 = 3;
+			stmt->param(param3);
 
-			st_mysql_time now;
+			long long int param4 = 4;
+			stmt->param(param4);
+
+			float param5 = 5;
+			stmt->param(param5);
+
+			double param6 = 6;
+			stmt->param(param6);
+
+			std::string param7("test7");
+			unsigned long param7_size = param7.size();
+			stmt->param(param7, param7_size);
+
+			st_mysql_time param8;
 			{
-				now.year = 1970;
-				now.month = 1;
-				now.day = 1;
-				now.hour = 0;
-				now.minute = 0;
-				now.second = 0;
+				param8.year = 1970;
+				param8.month = 1;
+				param8.day = 1;
+				param8.hour = 0;
+				param8.minute = 0;
+				param8.second = 0;
 			}
 
-			stmt->param(now);
+			stmt->param(param8);
 			stmt->param_null();
 		}
 		stmt->execute();
