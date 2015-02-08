@@ -24,8 +24,8 @@ int main()
 		short int param2 = 2;
 		int param3 = 3;
 		long long int param4 = 4;
-		float param5 = 5;
-		double param6 = 6;
+		float param5 = 5.01f;
+		double param6 = 6.01f;
 
 		std::string param7("param7");
 		// std::size_to to unsigned long
@@ -60,20 +60,30 @@ int main()
 		stmt->execute();
 
 		// insert one more time
-		stmt->execute();
+		unsigned long long affected_rows = stmt->execute();
+		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt = conn->prepare("SELECT col3 from test");
-		mysqlpp::result* res = stmt->query();
+		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5 from test");
+		mysqlpp::result* r = stmt->query();
 
-		if (res->num_rows() == 0)
+		if (r->num_rows() == 0)
 		{
-			std::cout << "no result" << std::endl;
+			std::cout << "no result" << std::endl << std::endl;
 		}
 
-		if (res->fetch())
+		while (r->fetch())
 		{
-			std::cout << res->field(0) << std::endl;
-			std::cout << res->field("col3") << std::endl;
+			std::cout << "param1 : " << r->field<short int>(0) << std::endl;
+
+			std::cout << "param1 : " << r->field<unsigned short int>("col1") << std::endl;
+			std::cout << "param2 : " << r->field<short int>("col2") << std::endl;
+			std::cout << "param3 : " << r->field<int>("col3") << std::endl;
+			std::cout << "param4 : " << r->field<long long int>("col4") << std::endl;
+			std::cout << "param5 : " << r->field<float>("col5") << std::endl;
+			std::cout << "param6 : " << r->field<double>("col6") << std::endl;
+			std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
+
+			std::cout << "--" << std::endl;
 		}
 	}
 	catch (std::exception& e)
@@ -85,7 +95,7 @@ int main()
 	}
 
 	std::cout << "OK" << std::endl;
-
+	
 	std::cin.get();
 	return 0;
 }

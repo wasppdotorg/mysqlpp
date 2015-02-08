@@ -91,26 +91,36 @@ bool result::fetch()
 	return true;
 }
 
+unsigned int result::index(const std::string& name)
+{
+	unsigned int i = 0;
+	for (; i < field_count; ++i)
+	{
+		if (name == fields[i].name)
+		{
+			return i;
+		}
+	}
+
+	throw exception("invalid column_name");
+}
+
+/*
 int result::field(unsigned int index)
 {
 	st_mysql_column& column = this_column(index);
 
-	char* buffer = new char[column.length];
-	*buffer = column.buffer.front();
-
-	return static_cast<int>(*buffer);
+	return static_cast<int>((char&)column.buffer.front());
 }
 
 int result::field(const std::string& name)
 {
 	st_mysql_column& column = this_column(name);
-	char* buffer = new char[column.length];
-	*buffer = column.buffer.front();
 
-	return static_cast<int>(*buffer);
+	return static_cast<int>((char&)column.buffer.front());
 }
 
-/*
+
 std::string result::name(int index)
 {
 	if (index < 0 || index > field_count)
@@ -145,10 +155,12 @@ int result::index(const std::string& name)
 
 	return -1;
 }
+*/
 
-bool result::fetch(int index, short int &value)
+bool result::fetch_column(unsigned int index, short int &value)
 {
-	return fetch_data(index, value);
+	value = static_cast<int>((char&)column.buffer.front());
+	return true;
 }
 
 bool result::fetch(int index, unsigned short int &value)
