@@ -73,7 +73,7 @@ bool result::fetch()
 		columns[i].buffer.resize(fields[i].length);
 
 		binds[i].buffer_type = fields[i].type;
-		binds[i].buffer = (char*)&columns[i].buffer.front();
+		binds[i].buffer = const_cast<char*>(&columns[i].buffer.front());
 		binds[i].length = &columns[i].length;
 		binds[i].error = &columns[i].error;
 	}

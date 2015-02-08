@@ -93,7 +93,7 @@ void statement::param(const float& value, unsigned long length)
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_FLOAT;
-	bind.buffer = (float*)&value;
+	bind.buffer = const_cast<float*>(&value);
 	bind.is_null = 0;
 
 	length = sizeof(value);
@@ -105,7 +105,7 @@ void statement::param(const double& value, unsigned long length)
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_DOUBLE;
-	bind.buffer = (double*)&value;
+	bind.buffer = const_cast<double*>(&value);
 	bind.is_null = 0;
 
 	length = sizeof(value);
@@ -117,7 +117,7 @@ void statement::param(const std::string& value, unsigned long& length)
 	st_mysql_bind& bind = this_bind();
 
 	bind.buffer_type = MYSQL_TYPE_VAR_STRING;
-	bind.buffer = (char*)value.c_str();
+	bind.buffer = const_cast<char*>(value.c_str());
 	bind.buffer_length = length;
 	bind.is_null = 0;
 	bind.length = &length;

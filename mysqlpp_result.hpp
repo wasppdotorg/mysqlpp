@@ -76,22 +76,22 @@ public:
 
 	void fetch_column(const st_mysql_column& column, unsigned char& value)
 	{
-		value = static_cast<unsigned char>((char&)column.buffer.front());
+		value = static_cast<unsigned char>(column.buffer.front());
 	}
 
 	void fetch_column(const st_mysql_column& column, short int& value)
 	{
-		value = static_cast<short int>((char&)column.buffer.front());
+		value = static_cast<short int>(column.buffer.front());
 	}
 
 	void fetch_column(const st_mysql_column& column, int& value)
 	{
-		value = static_cast<int>((char&)column.buffer.front());
+		value = static_cast<int>(column.buffer.front());
 	}
 
 	void fetch_column(const st_mysql_column& column, long long int& value)
 	{
-		value = static_cast<long long int>((char&)column.buffer.front());
+		value = static_cast<long long int>(column.buffer.front());
 	}
 
 	void fetch_column(const st_mysql_column& column, float& value)
@@ -102,17 +102,17 @@ public:
 	void fetch_column(const st_mysql_column& column, double& value)
 	{
 		//value = *reinterpret_cast<double*>((char&)column.buffer.front());
-		value = (double)column.buffer.front();
+		//value = (double)column.buffer.front();
 	}
 
 	void fetch_column(const st_mysql_column& column, std::string& value)
 	{
-		value = std::string((char*)column.buffer.front());
+		value = std::string(column.buffer.begin(), column.buffer.end());
 	}
 
 	void fetch_column(const st_mysql_column& column, st_mysql_time& value)
 	{
-		value = *reinterpret_cast<st_mysql_time*>((char&)column.buffer.front());
+		value = *reinterpret_cast<st_mysql_time*>(column.buffer.front());
 	}
 
 private:
@@ -128,21 +128,21 @@ private:
 
 	st_mysql_column& this_column(const std::string& name)
 	{
-		unsigned int index = 0;
-		for (; index < field_count; ++index)
+		unsigned int i = 0;
+		for (; i < field_count; ++i)
 		{
-			if (name == columns[index].name)
+			if (name == columns[i].name)
 			{
 				break;
 			}
 		}
 
-		if (index == field_count)
+		if (i == field_count)
 		{
 			throw exception("invalid column_name");
 		}
 
-		return columns.at(index);
+		return columns.at(i);
 	}
 
 	st_mysql_stmt* stmt;
