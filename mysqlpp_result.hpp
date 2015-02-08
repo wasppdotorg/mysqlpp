@@ -96,7 +96,7 @@ public:
 
 	void fetch_column(const st_mysql_column& column, float& value)
 	{
-		value = *reinterpret_cast<float*>((char*)column.buffer.front());
+		//value = *reinterpret_cast<float*>((char*)column.buffer.front());
 	}
 
 	void fetch_column(const st_mysql_column& column, double& value)
@@ -115,46 +115,10 @@ public:
 		value = *reinterpret_cast<st_mysql_time*>((char&)column.buffer.front());
 	}
 
-	/*
-	template<typename T>
-	bool fetch_column(const st_mysql_column& column, T& value)
-	{
-		if (column.type == MYSQL_TYPE_NULL)
-		{
-			return false;
-		}
-		else if (column.type == MYSQL_TYPE_TINY || column.type == MYSQL_TYPE_SHORT || column.type == MYSQL_TYPE_LONG || column.type == MYSQL_TYPE_LONGLONG)
-		{
-			value = static_cast<T>((char&)column.buffer.front());
-		}
-		else if (column.type == MYSQL_TYPE_FLOAT || column.type == MYSQL_TYPE_DOUBLE)
-		{
-			char* buffer = new char[column.length];
-			*buffer = column.buffer.front();
-
-			std::cout << buffer << std::endl;
-
-			//T* value_ = *reinterpret_cast<T*>((char&)column.buffer.front());
-			T* value_ = *reinterpret_cast<T*>(&buffer);
-			value = *value_;
-		}
-		//else if (column.type == MYSQL_TYPE_DATE)
-		//{
-		//	value = st_mysql_time();
-		//}
-		else if (column.type == MYSQL_TYPE_STRING || column.type == MYSQL_TYPE_VAR_STRING || column.type == MYSQL_TYPE_BLOB)
-		{
-			value = std::string((char*)column.buffer.front());
-		}
-
-		return true;
-	}
-	*/
-
 private:
 	st_mysql_column& this_column(unsigned int index)
 	{
-		if (index < 0 || index >= field_count)
+		if (index >= field_count)
 		{
 			throw exception("invalid column_index");
 		}

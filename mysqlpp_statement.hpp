@@ -41,7 +41,7 @@ public:
 private:
 	st_mysql_bind& this_bind()
 	{
-		if (bind_index < 0 || bind_index == param_count)
+		if (bind_index < 0 || bind_index >= param_count)
 		{
 			throw exception("invalid bind_index");
 		}
