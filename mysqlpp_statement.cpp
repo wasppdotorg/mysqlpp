@@ -116,7 +116,7 @@ void statement::param(const std::string& value, unsigned long& length)
 {
 	st_mysql_bind& bind = this_bind();
 
-	bind.buffer_type = MYSQL_TYPE_STRING;
+	bind.buffer_type = MYSQL_TYPE_VAR_STRING;
 	bind.buffer = (char*)value.c_str();
 	bind.buffer_length = length;
 	bind.is_null = 0;

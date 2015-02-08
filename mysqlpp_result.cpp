@@ -5,7 +5,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <ctime>
 #include <string>
 #include <vector>
 
@@ -17,7 +16,7 @@
 namespace mysqlpp
 {
 
-result::result(st_mysql_stmt* stmt) : stmt(0), metadata(0)
+result::result(st_mysql_stmt* stmt_) : stmt(stmt_), metadata(0), fields(0)
 {
 	metadata = mysql_stmt_result_metadata(stmt);
 
@@ -25,27 +24,21 @@ result::result(st_mysql_stmt* stmt) : stmt(0), metadata(0)
 	{
 		if (!metadata)
 		{
-			throw exception("empty result");
-		}
-
-		column_count =  mysql_num_fields(metadata);
-
-		binds.resize(0);
-		binds.resize(column_count, st_mysql_bind());
-
-		bind_index = 0;
-
-		if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
-		{
 			throw exception(mysql_stmt_error(stmt));
 		}
 
-		/*
+		field_count = mysql_stmt_field_count(stmt);
+		if (field_count == 0)
+		{
+			throw exception("zero field_count");
+		}
+
+		fields = mysql_fetch_fields(metadata);
+
 		if (mysql_stmt_store_result(stmt) != 0)
 		{
 			throw exception(mysql_stmt_error(stmt));
 		}
-		*/
 	}
 	catch (...)
 	{
@@ -59,79 +52,72 @@ result::~result()
 	mysql_free_result(metadata);
 }
 
-/*
-void result::reset_data()
+unsigned long long result::num_rows()
 {
-	binds.resize(0);
-	binds.resize(column_count, st_mysql_bind());
-
-	for (int i = 0; i < column_count; ++i)
-	{
-		binds[i].buffer_type = MYSQL_TYPE_STRING;
-		binds[i].buffer = data[i].buf;
-		binds[i].buffer_length = sizeof(data[i].buf);
-		binds[i].length = &data[i].length;
-		binds[i].is_null = &data[i].is_null;
-		binds[i].error = &data[i].error;
-
-		data[i].ptr = data[i].buf;
-	}
+	return mysql_stmt_num_rows(stmt);
 }
 
-bool result::next()
+bool result::fetch()
 {
-	++current_row;
-	reset_data();
+	binds.resize(0);
+	binds.resize(field_count, st_mysql_bind());
 
-	if (column_count > 0)
+	columns.resize(0);
+	columns.resize(field_count, st_mysql_column());
+		
+	for (std::size_t i = 0; i < field_count; ++i)
 	{
-		if (mysql_stmt_bind_result(stmt, &binds[0]) != 0)
-		{
-			throw exception(mysql_stmt_error(stmt));
-		}
+		columns[i].name = std::string(fields[i].name);
+		columns[i].buffer.resize(0);
+		columns[i].buffer.resize(fields[i].length);
+
+		binds[i].buffer_type = fields[i].type;
+		binds[i].buffer = (char*)&columns[i].buffer.front();
+		binds[i].is_null = &columns[i].is_null;
+		binds[i].length = &columns[i].length;
+		binds[i].error = &columns[i].error;
+	}
+
+	if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
+	{
+		throw exception(mysql_stmt_error(stmt));
 	}
 
 	int r = mysql_stmt_fetch(stmt);
-	if (r == MYSQL_NO_DATA)
+	if (r == MYSQL_NO_DATA || r != MYSQL_DATA_TRUNCATED)
 	{
 		return false;
 	}
 
-	if (r == MYSQL_DATA_TRUNCATED)
-	{
-		for (std::size_t i = 0; i < column_count; ++i)
-		{
-			if (data[i].error && !data[i].is_null && data[i].length >= sizeof(data[i].buf))
-			{
-				data[i].vbuf.resize(data[i].length);
-				binds[i].buffer = &data[i].vbuf.front();
-				binds[i].buffer_length = data[i].length;
-
-				if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)
-				{
-					throw exception(mysql_stmt_error(stmt));
-				}
-
-				data[i].ptr = &data[i].vbuf.front();
-			}
-		}
-	}
-
 	return true;
 }
-*/
 
-std::string result:: name(int index)
+int result::field(int index)
 {
-	if (index < 0 || index > column_count)
+	st_mysql_column& column = this_column(index);
+
+	return static_cast<int>(column.buffer.front());
+}
+
+int result::field(const std::string& name)
+{
+	st_mysql_column& column = this_column(name);
+
+	return static_cast<int>(column.buffer.front());
+}
+
+/*
+std::string result::name(int index)
+{
+	if (index < 0 || index > field_count)
 	{
 		throw exception("invalid field index");
 	}
 
-	st_mysql_field* fields = mysql_fetch_fields(metadata);
-	if (!fields)
+	st_mysql_field* field = mysql_fetch_fields(metadata);
+	if (!field)
 	{
-		throw exception("empty fields");
+		throw exception("empty field");
 	}
 
 	return fields[index].name;
@@ -145,7 +131,7 @@ int result::index(const std::string& name)
 		throw exception("empty fields");
 	}
 
-	for (int i = 0; i < column_count; ++i)
+	for (int i = 0; i < field_count; ++i)
 	{
 		if (name == fields[i].name)
 		{

@@ -62,19 +62,19 @@ int main()
 		// insert one more time
 		stmt->execute();
 
-		//stmt = conn->prepare_statement("SELECT * from test");
-		//mysqlpp::result* rs = stmt->query();
+		stmt = conn->prepare("SELECT * from test");
+		mysqlpp::result* res = stmt->query();
 
-		//if (rs->next())
-		//{
-			//std::cout << 1 << std::endl;
-		//}
+		if (res->num_rows() == 0)
+		{
+			std::cout << "no result" << std::endl;
+		}
 
-		//while (rs->next())
-		//{
-			//std::cout << rs->get<int>(0) << std::endl;
-			//std::cout << rs->get<int>("id2") << std::endl;
-		//}
+		while (res->fetch())
+		{
+			std::cout << res->field(2) << std::endl;
+			std::cout << res->field("col3") << std::endl;
+		}
 	}
 	catch (std::exception& e)
 	{

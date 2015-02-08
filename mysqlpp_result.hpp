@@ -8,7 +8,6 @@
 #ifndef MYSQLPP_RESULT_HPP
 #define MYSQLPP_RESULT_HPP
 
-#include <ctime>
 #include <string>
 #include <vector>
 
@@ -20,16 +19,38 @@
 namespace mysqlpp
 {
 
+struct st_mysql_column
+{
+	st_mysql_column() : buffer(0), length(0), is_null(0), error(0)
+	{
+	}
+
+	enum_field_types type;
+	std::string name;
+
+	std::vector<char> buffer;
+	unsigned long length;
+
+	my_bool is_null;
+	my_bool error;
+};
+
 class result
 {
 public:
-	result(st_mysql_stmt* stmt);
+	result(st_mysql_stmt* stmt_);
 	~result();
 
-	bool next();
+	unsigned long long num_rows();
 
+	bool fetch();
+
+	int field(int index);
+	int field(const std::string& name);
+
+	/*
 	template<typename T>
-	T get(const std::string& name)
+	T field(const std::string& name)
 	{
 		T value = T();
 		if (!fetch(name, value))
@@ -41,7 +62,7 @@ public:
 	}
 
 	template<typename T>
-	T get(int index)
+	T field(int index)
 	{
 		T value = T();
 		if (!fetch(index, value))
@@ -51,8 +72,10 @@ public:
 
 		return value;
 	}
+	*/
 
 private:
+	/*
 	std::string name(int index);
 	int index(const std::string& name);
 
@@ -87,15 +110,36 @@ private:
 	bool fetch(const std::string& name, std::tm& value);
 	bool fetch(const std::string& name, std::string &value);
 	bool fetch(const std::string& name, std::ostream &value);
+	*/
 
-	st_mysql_bind& this_bind()
+	st_mysql_column& this_column(int index)
 	{
-		if (bind_index < 0 || bind_index == column_count)
+		if (index < 0 || index >= field_count)
 		{
-			throw exception("invalid bind_index");
+			throw exception("invalid column_index");
 		}
 
-		return binds.at(bind_index);
+		return columns.at(index);
+	}
+
+	st_mysql_column& this_column(const std::string& name)
+	{
+		int index = -1;
+		for (std::size_t i = 0; i < field_count; ++i)
+		{
+			if (name == columns[i].name)
+			{
+				index = i;
+				break;
+			}
+		}
+
+		if (index == -1)
+		{
+			throw exception("invalid column_name");
+		}
+
+		return columns.at(index);
 	}
 
 	/*
@@ -134,14 +178,12 @@ private:
 
 	st_mysql_stmt* stmt;
 	st_mysql_res* metadata;
+	st_mysql_field* fields;
 
-	int column_count;
-	int bind_index;
+	int field_count;
 
 	std::vector<st_mysql_bind> binds;
-	//std::vector<mysqlpp_data> data;
-
-	//std::istringstream iss;
+	std::vector<st_mysql_column> columns;
 };
 
 } // namespace mysqlpp
