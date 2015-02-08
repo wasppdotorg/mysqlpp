@@ -83,8 +83,7 @@ bool result::fetch()
 		throw exception(mysql_stmt_error(stmt));
 	}
 
-	int r = mysql_stmt_fetch(stmt);
-	if (r == MYSQL_NO_DATA || r != MYSQL_DATA_TRUNCATED)
+	if (mysql_stmt_fetch(stmt) != 0)
 	{
 		return false;
 	}

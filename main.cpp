@@ -62,7 +62,7 @@ int main()
 		// insert one more time
 		stmt->execute();
 
-		stmt = conn->prepare("SELECT * from test");
+		stmt = conn->prepare("SELECT col3 from test");
 		mysqlpp::result* res = stmt->query();
 
 		if (res->num_rows() == 0)
@@ -70,9 +70,9 @@ int main()
 			std::cout << "no result" << std::endl;
 		}
 
-		while (res->fetch())
+		if (res->fetch())
 		{
-			std::cout << res->field(2) << std::endl;
+			std::cout << res->field(0) << std::endl;
 			std::cout << res->field("col3") << std::endl;
 		}
 	}
