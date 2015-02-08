@@ -64,7 +64,7 @@ bool result::fetch()
 
 	columns.resize(0);
 	columns.resize(field_count, st_mysql_column());
-		
+
 	for (std::size_t i = 0; i < field_count; ++i)
 	{
 		columns[i].name = std::string(fields[i].name);
@@ -92,18 +92,23 @@ bool result::fetch()
 	return true;
 }
 
-int result::field(int index)
+int result::field(unsigned int index)
 {
 	st_mysql_column& column = this_column(index);
 
-	return static_cast<int>(column.buffer.front());
+	char* buffer = new char[column.length];
+	*buffer = column.buffer.front();
+
+	return static_cast<int>(*buffer);
 }
 
 int result::field(const std::string& name)
 {
 	st_mysql_column& column = this_column(name);
+	char* buffer = new char[column.length];
+	*buffer = column.buffer.front();
 
-	return static_cast<int>(column.buffer.front());
+	return static_cast<int>(*buffer);
 }
 
 /*
@@ -142,7 +147,6 @@ int result::index(const std::string& name)
 	return -1;
 }
 
-/*
 bool result::fetch(int index, short int &value)
 {
 	return fetch_data(index, value);

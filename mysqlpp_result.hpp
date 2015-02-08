@@ -45,7 +45,7 @@ public:
 
 	bool fetch();
 
-	int field(int index);
+	int field(unsigned int index);
 	int field(const std::string& name);
 
 	/*
@@ -112,7 +112,7 @@ private:
 	bool fetch(const std::string& name, std::ostream &value);
 	*/
 
-	st_mysql_column& this_column(int index)
+	st_mysql_column& this_column(unsigned int index)
 	{
 		if (index < 0 || index >= field_count)
 		{
@@ -124,17 +124,16 @@ private:
 
 	st_mysql_column& this_column(const std::string& name)
 	{
-		int index = -1;
-		for (std::size_t i = 0; i < field_count; ++i)
+		unsigned int index = 0;
+		for (; index < field_count; ++index)
 		{
-			if (name == columns[i].name)
+			if (name == columns[index].name)
 			{
-				index = i;
 				break;
 			}
 		}
 
-		if (index == -1)
+		if (index == field_count)
 		{
 			throw exception("invalid column_name");
 		}
@@ -180,7 +179,7 @@ private:
 	st_mysql_res* metadata;
 	st_mysql_field* fields;
 
-	int field_count;
+	unsigned int field_count;
 
 	std::vector<st_mysql_bind> binds;
 	std::vector<st_mysql_column> columns;
