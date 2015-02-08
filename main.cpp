@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <string>
 
 #include <mysql/mysql.h>
 
@@ -63,7 +64,7 @@ int main()
 		unsigned long long affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5 from test");
+		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6 from test");
 		mysqlpp::result* r = stmt->query();
 
 		if (r->num_rows() == 0)
@@ -73,15 +74,15 @@ int main()
 
 		while (r->fetch())
 		{
-			std::cout << "param1 : " << r->field<short int>(0) << std::endl;
+			//std::cout << "param1 : " << r->field<short int>(0) << std::endl;
 
-			std::cout << "param1 : " << r->field<unsigned short int>("col1") << std::endl;
+			//std::cout << "param1 : " << r->field<short int>("col1") << std::endl;
 			std::cout << "param2 : " << r->field<short int>("col2") << std::endl;
 			std::cout << "param3 : " << r->field<int>("col3") << std::endl;
 			std::cout << "param4 : " << r->field<long long int>("col4") << std::endl;
 			std::cout << "param5 : " << r->field<float>("col5") << std::endl;
 			std::cout << "param6 : " << r->field<double>("col6") << std::endl;
-			std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
+			//std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
 
 			std::cout << "--" << std::endl;
 		}
