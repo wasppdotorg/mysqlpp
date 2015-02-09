@@ -8,6 +8,8 @@
 #ifndef MYSQLPP_HPP
 #define MYSQLPP_HPP
 
+#include <ctime>
+
 #include <stdexcept>
 #include <vector>
 #include <string>
@@ -17,9 +19,28 @@ namespace mysqlpp
 
 	typedef st_mysql_time datetime;
 
+	/*
+	struct datetime : st_mysql_time
+	{
+		datetime()
+		{
+			std::time_t raw_time = std::time(0);	
+			std::tm time = *std::localtime(&raw_time);
+
+			year = static_cast<unsigned int>(time.tm_year) + 1900;
+			month = static_cast<unsigned int>(time.tm_mon) + 1;
+			day = static_cast<unsigned int>(time.tm_mday);
+
+			hour = static_cast<unsigned int>(time.tm_hour);
+			minute = static_cast<unsigned int>(time.tm_min);
+			second = static_cast<unsigned int>(time.tm_sec);
+		}
+	};
+	*/
+
 	struct st_mysql_column
 	{
-		st_mysql_column() : buffer(0), length(0), error(0)
+		st_mysql_column() : buffer(0), length(0), is_null(0), error(0)
 		{
 		}
 
@@ -29,6 +50,7 @@ namespace mysqlpp
 		std::vector<char> buffer;
 		unsigned long length;
 
+		char is_null;
 		char error;
 	};
 
@@ -51,10 +73,10 @@ namespace mysqlpp
 		bool fetch();
 
 		template<typename T>
-		T field(unsigned int index)
+		T get(unsigned int index)
 		{
 			st_mysql_column& column = this_column(index);
-			if (column.type == MYSQL_TYPE_NULL)
+			if (column.is_null)
 			{
 				throw exception("null value field");
 			}
@@ -66,10 +88,10 @@ namespace mysqlpp
 		}
 
 		template<typename T>
-		T field(const std::string& name)
+		T get(const std::string& name)
 		{
 			st_mysql_column& column = this_column(name);
-			if (column.type == MYSQL_TYPE_NULL)
+			if (column.is_null)
 			{
 				throw exception("null value field");
 			}
@@ -138,13 +160,16 @@ namespace mysqlpp
 	class connection
 	{
 	public:
-		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306);
+		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306, bool pooled_ = false);
 		~connection();
 
 		statement* prepare(const std::string& query);
 
 	private:
 		st_mysql* mysql;
+
+		std::tm released;
+		bool pooled;
 
 	};
 

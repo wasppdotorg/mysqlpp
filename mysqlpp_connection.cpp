@@ -12,7 +12,7 @@
 namespace mysqlpp
 {
 
-	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port)
+	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port, bool pooled_)
 	{
 		mysql = mysql_init(0);
 
@@ -33,6 +33,11 @@ namespace mysqlpp
 			mysql_close(mysql);
 			throw;
 		}
+
+		std::time_t raw_time = std::time(0);
+		released = *std::localtime(&raw_time);
+
+		pooled = pooled_;
 	}
 
 	connection::~connection()

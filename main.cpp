@@ -72,22 +72,24 @@ int main()
 
 		while (r->fetch())
 		{
-			std::cout << "param1 : " << r->field<short int>(0) << std::endl;
+			std::cout << "param1 : " << r->get<short int>(0) << std::endl;
 
-			std::cout << "param1 : " << r->field<short int>("col1") << std::endl;
-			std::cout << "param2 : " << r->field<short int>("col2") << std::endl;
-			std::cout << "param3 : " << r->field<int>("col3") << std::endl;
-			std::cout << "param4 : " << r->field<long long int>("col4") << std::endl;
-			std::cout << "param5 : " << r->field<float>("col5") << std::endl;
-			std::cout << "param6 : " << r->field<double>("col6") << std::endl;
-			std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
-			std::cout << "param8 : " << r->field<std::string>("col8") << std::endl;
-			//std::cout << "param9 : " << r->field<int>("col9") << std::endl;
+			std::cout << "param1 : " << r->get<short int>("col1") << std::endl;
+			std::cout << "param2 : " << r->get<short int>("col2") << std::endl;
+			std::cout << "param3 : " << r->get<int>("col3") << std::endl;
+			std::cout << "param4 : " << r->get<long long int>("col4") << std::endl;
+			std::cout << "param5 : " << r->get<float>("col5") << std::endl;
+			std::cout << "param6 : " << r->get<double>("col6") << std::endl;
+			std::cout << "param7 : " << r->get<std::string>("col7") << std::endl;
+			std::cout << "param8 : " << r->get<std::string>("col8") << std::endl;
 
-			//mysqlpp::datetime col10 = r->field<mysqlpp::datetime>("col10");
+			// this is null value
+			//std::cout << "param9 : " << r->get<int>("col9") << std::endl;
+
+			//mysqlpp::datetime col10 = r->get<mysqlpp::datetime>("col10");
 			//std::cout << "param10 : " << r->time_to_str(col10) << std::endl;
 
-			//mysqlpp::datetime col11 = r->field<mysqlpp::datetime>("col11");
+			//mysqlpp::datetime col11 = r->get<mysqlpp::datetime>("col11");
 			//std::cout << "param11 : " << r->datetime_str(col11) << std::endl;
 
 			std::cout << "--" << std::endl;
