@@ -83,12 +83,111 @@ namespace mysqlpp
 			throw exception(mysql_stmt_error(stmt));
 		}
 
-		if (mysql_stmt_fetch(stmt) != 0)
+		int fetch_result = mysql_stmt_fetch(stmt);
+
+		if (fetch_result == MYSQL_NO_DATA)
 		{
 			return false;
 		}
+		else if (fetch_result == MYSQL_DATA_TRUNCATED)
+		{
+			for (unsigned int i = 0; i < field_count; ++i)
+			{
+				columns[i].buffer.resize(columns[i].length);
+
+				binds[i].buffer = &columns[i].buffer.front();
+				binds[i].buffer_length = columns[i].length;
+
+				if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)
+				{
+					throw exception(mysql_stmt_error(stmt));
+				}
+			}
+		}
 
 		return true;
+	}
+
+	void result::fetch_column(const st_mysql_column& column, unsigned char& value)
+	{
+		value = static_cast<unsigned char>(column.buffer.front());
+	}
+
+	void result::fetch_column(const st_mysql_column& column, short int& value)
+	{
+		value = static_cast<short int>(column.buffer.front());
+	}
+
+	void result::fetch_column(const st_mysql_column& column, int& value)
+	{
+		value = static_cast<int>(column.buffer.front());
+	}
+
+	void result::fetch_column(const st_mysql_column& column, long long int& value)
+	{
+		value = static_cast<long long int>(column.buffer.front());
+	}
+
+	void result::fetch_column(const st_mysql_column& column, float& value)
+	{
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<float*>(buffer);
+	}
+
+	void result::fetch_column(const st_mysql_column& column, double& value)
+	{
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<double*>(buffer);
+	}
+
+	void result::fetch_column(const st_mysql_column& column, std::string& value)
+	{
+		/*
+		for (std::size_t i = 0; i < column.buffer.size(); ++i)
+		{
+			std::cout << "1:" << column.buffer[i] << std::endl;
+
+		}
+		*/
+		//char* buffer = const_cast<char*>(&column.buffer.front());
+		//std::cout << buffer << std::endl;
+		value.assign(&column.buffer.front(), column.length);
+		//value = std::string(column.buffer.front(), column.length);
+	}
+
+	void result::fetch_column(const st_mysql_column& column, st_mysql_time& value)
+	{
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<st_mysql_time*>(buffer);
+	}
+
+	st_mysql_column& result::this_column(unsigned int index)
+	{
+		if (index >= field_count)
+		{
+			throw exception("invalid column_index");
+		}
+
+		return columns.at(index);
+	}
+
+	st_mysql_column& result::this_column(const std::string& name)
+	{
+		unsigned int i = 0;
+		for (; i < field_count; ++i)
+		{
+			if (name == columns[i].name)
+			{
+				break;
+			}
+		}
+
+		if (i == field_count)
+		{
+			throw exception("invalid column_name");
+		}
+
+		return columns.at(i);
 	}
 
 } // namespace mysqlpp

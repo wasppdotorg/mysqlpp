@@ -64,7 +64,7 @@ int main()
 		unsigned long long affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6 from test");
+		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col8 from test");
 		mysqlpp::result* r = stmt->query();
 
 		if (r->num_rows() == 0)
@@ -82,7 +82,10 @@ int main()
 			std::cout << "param4 : " << r->field<long long int>("col4") << std::endl;
 			std::cout << "param5 : " << r->field<float>("col5") << std::endl;
 			std::cout << "param6 : " << r->field<double>("col6") << std::endl;
-			//std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
+			std::cout << "param7 : " << r->field<std::string>("col7") << std::endl;
+			std::cout << "param8 : " << r->field<std::string>("col8") << std::endl;
+			//std::cout << "param9 : " << r->field<st_mysql_time>("col9") << std::endl;
+			std::cout << "param10 : " << r->field<int>("col9") << std::endl;
 
 			std::cout << "--" << std::endl;
 		}

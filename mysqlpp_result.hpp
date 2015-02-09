@@ -11,7 +11,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 #include <mysql/mysql.h>
 
@@ -75,75 +74,68 @@ namespace mysqlpp
 			return value;
 		}
 
-		void fetch_column(const st_mysql_column& column, unsigned char& value)
+		void fetch_column(const st_mysql_column& column, unsigned char& value);
+		/*
 		{
 			value = static_cast<unsigned char>(column.buffer.front());
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, short int& value)
+		void fetch_column(const st_mysql_column& column, short int& value);
+		/*
 		{
 			value = static_cast<short int>(column.buffer.front());
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, int& value)
+		void fetch_column(const st_mysql_column& column, int& value);
+		/*
 		{
 			value = static_cast<int>(column.buffer.front());
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, long long int& value)
+		void fetch_column(const st_mysql_column& column, long long int& value);
+		/*
 		{
 			value = static_cast<long long int>(column.buffer.front());
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, float& value)
+		void fetch_column(const st_mysql_column& column, float& value);
+		/*
 		{
-			iss.clear();
-			float value_ = 0;
-
-			std::string a(std::string(column.buffer.begin(), column.buffer.end()));
-			std::cout << a << std::endl;
-
-			iss.str(std::string(column.buffer.begin(), column.buffer.end()));
-			iss >> value_;
-
-			std::cout << value_ << std::endl;
-
-			if (iss.fail() || !std::ws(iss).eof())
-			{
-				throw exception("cast failed");
-			}
-
-			value = value_;
+			char* buffer = const_cast<char*>(&column.buffer.front());
+			value = *reinterpret_cast<float*>(buffer);
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, double& value)
+		void fetch_column(const st_mysql_column& column, double& value);
+		/*
 		{
-			iss.clear();
-			double value_ = 0;
-
-			iss.str(std::string(column.buffer.begin(), column.buffer.end()));
-			iss >> value_;
-
-			if (iss.fail() || !std::ws(iss).eof())
-			{
-				throw exception("casst failed");
-			}
-
-			value = value_;
+			char* buffer = const_cast<char*>(&column.buffer.front());
+			value = *reinterpret_cast<double*>(buffer);
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, std::string& value)
+		void fetch_column(const st_mysql_column& column, std::string& value);
+		/*
 		{
-			value = std::string(column.buffer.begin(), column.buffer.end());
+			//char* buffer = const_cast<char*>(&column.buffer.front());
+			value.assign(&column.buffer.front(), column.length);
 		}
+		*/
 
-		void fetch_column(const st_mysql_column& column, st_mysql_time& value)
+		void fetch_column(const st_mysql_column& column, st_mysql_time& value);
+		/*
 		{
 			value = *reinterpret_cast<st_mysql_time*>(column.buffer.front());
 		}
+		*/
 
 	private:
-		st_mysql_column& this_column(unsigned int index)
+		st_mysql_column& this_column(unsigned int index);
+		/*
 		{
 			if (index >= field_count)
 			{
@@ -152,8 +144,10 @@ namespace mysqlpp
 
 			return columns.at(index);
 		}
+		*/
 
-		st_mysql_column& this_column(const std::string& name)
+		st_mysql_column& this_column(const std::string& name);
+		/*
 		{
 			unsigned int i = 0;
 			for (; i < field_count; ++i)
@@ -171,6 +165,7 @@ namespace mysqlpp
 
 			return columns.at(i);
 		}
+		*/
 
 		st_mysql_stmt* stmt;
 		st_mysql_res* metadata;
@@ -180,8 +175,6 @@ namespace mysqlpp
 
 		std::vector<st_mysql_bind> binds;
 		std::vector<st_mysql_column> columns;
-
-		std::istringstream iss;
 	};
 
 } // namespace mysqlpp
