@@ -22,39 +22,39 @@ namespace mysqlpp
 class statement
 {
 public:
-	statement(st_mysql* mysql, const std::string& query);
-	~statement();
+    statement(st_mysql* mysql, const std::string& query);
+    ~statement();
 
-	void param(const unsigned char& value);
-	void param(const short int& value);
-	void param(const int& value);
-	void param(const long long int& value);
-	void param(const float& value, unsigned long length = 0);
-	void param(const double& value, unsigned long length = 0);
-	void param(const std::string& value, unsigned long& length);
-	void param(const st_mysql_time& value);
-	void param_null(my_bool is_null = 1);
-	
-	unsigned long long execute();
-	result* query();
+    void param(const unsigned char& value);
+    void param(const short int& value);
+    void param(const int& value);
+    void param(const long long int& value);
+    void param(const float& value, unsigned long length = 0);
+    void param(const double& value, unsigned long length = 0);
+    void param(const std::string& value, unsigned long& length);
+    void param(const st_mysql_time& value);
+    void param_null(my_bool is_null = 1);
+
+    unsigned long long execute();
+    result* query();
 
 private:
-	st_mysql_bind& this_bind()
-	{
-		if (bind_index < 0 || bind_index >= param_count)
-		{
-			throw exception("invalid bind_index");
-		}
+    st_mysql_bind& this_bind()
+    {
+        if (bind_index < 0 || bind_index >= param_count)
+        {
+            throw exception("invalid bind_index");
+        }
 
-		return binds[bind_index++];
-	}
+        return binds[bind_index++];
+    }
 
-	st_mysql_stmt* stmt;
+    st_mysql_stmt* stmt;
 
-	int param_count;
-	int bind_index;
+    int param_count;
+    int bind_index;
 
-	std::vector<st_mysql_bind> binds;
+    std::vector<st_mysql_bind> binds;
 };
 
 } // namespace mysqlpp

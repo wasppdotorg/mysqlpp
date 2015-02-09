@@ -16,40 +16,40 @@ namespace mysqlpp
 
 connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, const std::string& charset, unsigned int port)
 {
-	mysql = mysql_init(0);
+    mysql = mysql_init(0);
 
-	try
-	{
-		if (!mysql)
-		{
-			throw exception("mysql_init failed");
-		}
+    try
+    {
+        if (!mysql)
+        {
+            throw exception("mysql_init failed");
+        }
 
-		if (mysql_options(mysql, MYSQL_SET_CHARSET_NAME, charset.c_str()) != 0)
-		{
-			throw exception(mysql_error(mysql));
-		}
+        if (mysql_options(mysql, MYSQL_SET_CHARSET_NAME, charset.c_str()) != 0)
+        {
+            throw exception(mysql_error(mysql));
+        }
 
-		if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
-		{
-			throw exception(mysql_error(mysql));
-		}
-	}
-	catch (...)
-	{
-		mysql_close(mysql);
-		throw;
-	}
+        if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
+        {
+            throw exception(mysql_error(mysql));
+        }
+    }
+    catch (...)
+    {
+        mysql_close(mysql);
+        throw;
+    }
 }
 
 connection::~connection()
 {
-	mysql_close(mysql);
+    mysql_close(mysql);
 }
 
 statement* connection::prepare(const std::string& query)
 {
-	return new statement(mysql, query);
+    return new statement(mysql, query);
 }
 
 } // namespace mysqlpp

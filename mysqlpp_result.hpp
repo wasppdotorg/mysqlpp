@@ -22,137 +22,137 @@ namespace mysqlpp
 
 struct st_mysql_column
 {
-	st_mysql_column() : buffer(0), length(0), error(0)
-	{
-	}
+    st_mysql_column() : buffer(0), length(0), error(0)
+    {
+    }
 
-	enum_field_types type;
-	std::string name;
+    enum_field_types type;
+    std::string name;
 
-	std::vector<char> buffer;
-	unsigned long length;
+    std::vector<char> buffer;
+    unsigned long length;
 
-	my_bool error;
+    my_bool error;
 };
 
 class result
 {
 public:
-	result(st_mysql_stmt* stmt_);
-	~result();
+    result(st_mysql_stmt* stmt_);
+    ~result();
 
-	unsigned long long num_rows();
-	bool fetch();
+    unsigned long long num_rows();
+    bool fetch();
 
-	template<typename T>
-	T field(unsigned int index)
-	{
-		st_mysql_column& column = this_column(index);
-		if (column.type == MYSQL_TYPE_NULL)
-		{
-			throw exception("null value fetch");
-		}
+    template<typename T>
+    T field(unsigned int index)
+    {
+        st_mysql_column& column = this_column(index);
+        if (column.type == MYSQL_TYPE_NULL)
+        {
+            throw exception("null value fetch");
+        }
 
-		T value = T();
-		fetch_column(column, value);
+        T value = T();
+        fetch_column(column, value);
 
-		return value;
-	}
+        return value;
+    }
 
-	template<typename T>
-	T field(const std::string& name)
-	{
-		st_mysql_column& column = this_column(name);
-		if (column.type == MYSQL_TYPE_NULL)
-		{
-			throw exception("null value fetch");
-		}
+    template<typename T>
+    T field(const std::string& name)
+    {
+        st_mysql_column& column = this_column(name);
+        if (column.type == MYSQL_TYPE_NULL)
+        {
+            throw exception("null value fetch");
+        }
 
-		T value = T();
-		fetch_column(column, value);
+        T value = T();
+        fetch_column(column, value);
 
-		return value;
-	}
+        return value;
+    }
 
-	void fetch_column(const st_mysql_column& column, unsigned char& value)
-	{
-		value = static_cast<unsigned char>(column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, unsigned char& value)
+    {
+        value = static_cast<unsigned char>(column.buffer.front());
+    }
 
-	void fetch_column(const st_mysql_column& column, short int& value)
-	{
-		value = static_cast<short int>(column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, short int& value)
+    {
+        value = static_cast<short int>(column.buffer.front());
+    }
 
-	void fetch_column(const st_mysql_column& column, int& value)
-	{
-		value = static_cast<int>(column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, int& value)
+    {
+        value = static_cast<int>(column.buffer.front());
+    }
 
-	void fetch_column(const st_mysql_column& column, long long int& value)
-	{
-		value = static_cast<long long int>(column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, long long int& value)
+    {
+        value = static_cast<long long int>(column.buffer.front());
+    }
 
-	void fetch_column(const st_mysql_column& column, float& value)
-	{
-		//value = *reinterpret_cast<float*>((char*)column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, float& value)
+    {
+        //value = *reinterpret_cast<float*>((char*)column.buffer.front());
+    }
 
-	void fetch_column(const st_mysql_column& column, double& value)
-	{
-		//value = *reinterpret_cast<double*>((char&)column.buffer.front());
-		//value = (double)column.buffer.front();
-	}
+    void fetch_column(const st_mysql_column& column, double& value)
+    {
+        //value = *reinterpret_cast<double*>((char&)column.buffer.front());
+        //value = (double)column.buffer.front();
+    }
 
-	void fetch_column(const st_mysql_column& column, std::string& value)
-	{
-		value = std::string(column.buffer.begin(), column.buffer.end());
-	}
+    void fetch_column(const st_mysql_column& column, std::string& value)
+    {
+        value = std::string(column.buffer.begin(), column.buffer.end());
+    }
 
-	void fetch_column(const st_mysql_column& column, st_mysql_time& value)
-	{
-		value = *reinterpret_cast<st_mysql_time*>(column.buffer.front());
-	}
+    void fetch_column(const st_mysql_column& column, st_mysql_time& value)
+    {
+        value = *reinterpret_cast<st_mysql_time*>(column.buffer.front());
+    }
 
 private:
-	st_mysql_column& this_column(unsigned int index)
-	{
-		if (index >= field_count)
-		{
-			throw exception("invalid column_index");
-		}
+    st_mysql_column& this_column(unsigned int index)
+    {
+        if (index >= field_count)
+        {
+            throw exception("invalid column_index");
+        }
 
-		return columns.at(index);
-	}
+        return columns.at(index);
+    }
 
-	st_mysql_column& this_column(const std::string& name)
-	{
-		unsigned int i = 0;
-		for (; i < field_count; ++i)
-		{
-			if (name == columns[i].name)
-			{
-				break;
-			}
-		}
+    st_mysql_column& this_column(const std::string& name)
+    {
+        unsigned int i = 0;
+        for (; i < field_count; ++i)
+        {
+            if (name == columns[i].name)
+            {
+                break;
+            }
+        }
 
-		if (i == field_count)
-		{
-			throw exception("invalid column_name");
-		}
+        if (i == field_count)
+        {
+            throw exception("invalid column_name");
+        }
 
-		return columns.at(i);
-	}
+        return columns.at(i);
+    }
 
-	st_mysql_stmt* stmt;
-	st_mysql_res* metadata;
-	st_mysql_field* fields;
+    st_mysql_stmt* stmt;
+    st_mysql_res* metadata;
+    st_mysql_field* fields;
 
-	unsigned int field_count;
+    unsigned int field_count;
 
-	std::vector<st_mysql_bind> binds;
-	std::vector<st_mysql_column> columns;
+    std::vector<st_mysql_bind> binds;
+    std::vector<st_mysql_column> columns;
 };
 
 } // namespace mysqlpp
