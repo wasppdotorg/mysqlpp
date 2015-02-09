@@ -14,14 +14,14 @@
 namespace mysqlpp
 {
 
-class exception : public std::runtime_error
-{
-public:
-    exception(const std::string& what) : std::runtime_error(what)
-    {
+	class exception : public std::runtime_error
+	{
+	public:
+		exception(const std::string& what) : std::runtime_error(what)
+		{
 
-    }
-};
+		}
+	};
 
 } // namespace mysqlpp
 

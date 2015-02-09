@@ -16,18 +16,18 @@
 namespace mysqlpp
 {
 
-class connection
-{
-public:
-	connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306);
-	~connection();
+	class connection
+	{
+	public:
+		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306);
+		~connection();
 
-	statement* prepare(const std::string& query);
+		statement* prepare(const std::string& query);
 
-private:
-	st_mysql* mysql;
+	private:
+		st_mysql* mysql;
 
-};
+	};
 
 } // namespace mysqlpp
 

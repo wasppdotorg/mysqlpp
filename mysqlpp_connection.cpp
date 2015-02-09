@@ -15,36 +15,36 @@ namespace mysqlpp
 {
 
 	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port)
-{
-	mysql = mysql_init(0);
-
-	try
 	{
-		if (!mysql)
-		{
-			throw exception("mysql_init failed");
-		}
+		mysql = mysql_init(0);
 
-		if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
+		try
 		{
-			throw exception(mysql_error(mysql));
+			if (!mysql)
+			{
+				throw exception("mysql_init failed");
+			}
+
+			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
+			{
+				throw exception(mysql_error(mysql));
+			}
+		}
+		catch (...)
+		{
+			mysql_close(mysql);
+			throw;
 		}
 	}
-	catch (...)
+
+	connection::~connection()
 	{
 		mysql_close(mysql);
-		throw;
 	}
-}
 
-connection::~connection()
-{
-	mysql_close(mysql);
-}
-
-statement* connection::prepare(const std::string& query)
-{
-	return new statement(mysql, query);
-}
+	statement* connection::prepare(const std::string& query)
+	{
+		return new statement(mysql, query);
+	}
 
 } // namespace mysqlpp
