@@ -7,8 +7,7 @@
 
 #include <mysql/mysql.h>
 
-#include "mysqlpp_exception.hpp"
-#include "mysqlpp_statement.hpp"
+#include "mysqlpp.hpp"
 
 namespace mysqlpp
 {
@@ -123,7 +122,7 @@ namespace mysqlpp
 		bind.length = &length;
 	}
 
-	void statement::param(const st_time& value)
+	void statement::param(const datetime& value)
 	{
 		st_mysql_bind& bind = this_bind();
 
@@ -185,6 +184,16 @@ namespace mysqlpp
 		}
 
 		return new result(stmt);
+	}
+
+	st_mysql_bind& statement::this_bind()
+	{
+		if (bind_index < 0 || bind_index >= param_count)
+		{
+			throw exception("invalid bind_index");
+		}
+
+		return binds[bind_index++];
 	}
 
 } // namespace mysqlpp

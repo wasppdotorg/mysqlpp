@@ -4,9 +4,7 @@
 
 #include <mysql/mysql.h>
 
-#include "mysqlpp_result.hpp"
-#include "mysqlpp_statement.hpp"
-#include "mysqlpp_connection.hpp"
+#include "mysqlpp.hpp"
 
 int main()
 {
@@ -35,7 +33,7 @@ int main()
 		std::string param8("param8");
 		unsigned long param8_size = param8.size();
 
-		mysqlpp::st_time param10;
+		mysqlpp::datetime param10;
 		{
 			param10.year = 1970;
 			param10.month = 1;
@@ -56,8 +54,7 @@ int main()
 			stmt->param(param7, param7_size);
 			stmt->param(param8, param8_size);
 			stmt->param_null();
-			stmt->param(param10);
-			
+			stmt->param(param10);			
 		}
 		stmt->execute();
 
@@ -87,11 +84,11 @@ int main()
 			std::cout << "param8 : " << r->field<std::string>("col8") << std::endl;
 			//std::cout << "param9 : " << r->field<int>("col9") << std::endl;
 
-			//mysqlpp::st_time col10 = r->field<mysqlpp::st_time>("col10");
+			//mysqlpp::datetime col10 = r->field<mysqlpp::datetime>("col10");
 			//std::cout << "param10 : " << r->time_to_str(col10) << std::endl;
 
-			//mysqlpp::st_time col11 = r->field<mysqlpp::st_time>("col11");
-			//std::cout << "param11 : " << r->time_to_str(col11) << std::endl;
+			//mysqlpp::datetime col11 = r->field<mysqlpp::datetime>("col11");
+			//std::cout << "param11 : " << r->datetime_str(col11) << std::endl;
 
 			std::cout << "--" << std::endl;
 		}

@@ -7,9 +7,7 @@
 
 #include <mysql/mysql.h>
 
-#include "mysqlpp_exception.hpp"
-#include "mysqlpp_statement.hpp"
-#include "mysqlpp_connection.hpp"
+#include "mysqlpp.hpp"
 
 namespace mysqlpp
 {

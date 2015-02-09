@@ -29,16 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mysqlpp_connection.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mysqlpp_result.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mysqlpp_statement.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mysqlpp_exception.hpp">
+    <ClInclude Include="mysqlpp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

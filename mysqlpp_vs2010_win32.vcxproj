@@ -70,10 +70,7 @@
     <ClCompile Include="mysqlpp_statement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mysqlpp_connection.hpp" />
-    <ClInclude Include="mysqlpp_exception.hpp" />
-    <ClInclude Include="mysqlpp_result.hpp" />
-    <ClInclude Include="mysqlpp_statement.hpp" />
+    <ClInclude Include="mysqlpp.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

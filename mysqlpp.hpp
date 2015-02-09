@@ -5,20 +5,17 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef MYSQLPP_RESULT_HPP
-#define MYSQLPP_RESULT_HPP
+#ifndef MYSQLPP_HPP
+#define MYSQLPP_HPP
 
-#include <iostream>
-#include <string>
+#include <stdexcept>
 #include <vector>
-
-#include <mysql/mysql.h>
-
-#include "mysqlpp_exception.hpp"
-#include "mysqlpp_result.hpp"
+#include <string>
 
 namespace mysqlpp
 {
+
+	typedef st_mysql_time datetime;
 
 	struct st_mysql_column
 	{
@@ -33,6 +30,15 @@ namespace mysqlpp
 		unsigned long length;
 
 		char error;
+	};
+
+	class exception : public std::runtime_error
+	{
+	public:
+		exception(const std::string& what) : std::runtime_error(what)
+		{
+
+		}
 	};
 
 	class result
@@ -81,9 +87,9 @@ namespace mysqlpp
 		void fetch_column(const st_mysql_column& column, float& value);
 		void fetch_column(const st_mysql_column& column, double& value);
 		void fetch_column(const st_mysql_column& column, std::string& value);
-		void fetch_column(const st_mysql_column& column, st_time& value);
+		void fetch_column(const st_mysql_column& column, datetime& value);
 
-		std::string time_to_str(const st_time& time);
+		std::string datetime_str(const datetime& time);
 
 	private:
 		st_mysql_column& this_column(unsigned int index);
@@ -99,6 +105,49 @@ namespace mysqlpp
 		std::vector<st_mysql_column> columns;
 	};
 
+	class statement
+	{
+	public:
+		statement(st_mysql* mysql, const std::string& query);
+		~statement();
+
+		void param(const unsigned char& value);
+		void param(const short int& value);
+		void param(const int& value);
+		void param(const long long int& value);
+		void param(const float& value, unsigned long length = 0);
+		void param(const double& value, unsigned long length = 0);
+		void param(const std::string& value, unsigned long& length);
+		void param(const datetime& value);
+		void param_null(char is_null = 1);
+
+		unsigned long long execute();
+		result* query();
+
+	private:
+		st_mysql_bind& this_bind();
+		
+		st_mysql_stmt* stmt;
+
+		int param_count;
+		int bind_index;
+
+		std::vector<st_mysql_bind> binds;
+	};
+
+	class connection
+	{
+	public:
+		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306);
+		~connection();
+
+		statement* prepare(const std::string& query);
+
+	private:
+		st_mysql* mysql;
+
+	};
+
 } // namespace mysqlpp
 
-#endif // MYSQLPP_RESULT_HPP
+#endif // MYSQLPP_HPP

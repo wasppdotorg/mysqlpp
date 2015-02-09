@@ -11,8 +11,7 @@
 
 #include <mysql/mysql.h>
 
-#include "mysqlpp_exception.hpp"
-#include "mysqlpp_result.hpp"
+#include "mysqlpp.hpp"
 
 namespace mysqlpp
 {
@@ -146,13 +145,13 @@ namespace mysqlpp
 		value.assign(&column.buffer.front(), column.length);
 	}
 
-	void result::fetch_column(const st_mysql_column& column, st_time& value)
+	void result::fetch_column(const st_mysql_column& column, datetime& value)
 	{
 		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<st_time*>(buffer);
+		value = *reinterpret_cast<datetime*>(buffer);
 	}
 
-	std::string result::time_to_str(const st_time& time)
+	std::string result::datetime_str(const datetime& time)
 	{
 		std::ostringstream oss;
 		oss << time.year << '-' << time.month << '-' << time.day << ' ' << time.hour << ':' << time.minute << ':' << time.second;
