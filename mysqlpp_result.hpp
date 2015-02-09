@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include <mysql/mysql.h>
 
@@ -50,7 +51,7 @@ public:
 		st_mysql_column& column = this_column(index);
 		if (column.type == MYSQL_TYPE_NULL)
 		{
-			throw exception("null value fetch");
+			throw exception("null value field");
 		}
 
 		T value = T();
@@ -65,7 +66,7 @@ public:
 		st_mysql_column& column = this_column(name);
 		if (column.type == MYSQL_TYPE_NULL)
 		{
-			throw exception("null value fetch");
+			throw exception("null value field");
 		}
 
 		T value = T();
@@ -96,13 +97,39 @@ public:
 
 	void fetch_column(const st_mysql_column& column, float& value)
 	{
-		//value = *reinterpret_cast<float*>((char*)column.buffer.front());
+		iss.clear();
+		float value_ = 0;
+
+		std::string a(std::string(column.buffer.begin(), column.buffer.end()));
+		std::cout << a << std::endl;
+
+		iss.str(std::string(column.buffer.begin(), column.buffer.end()));
+		iss >> value_;
+
+		std::cout << value_ << std::endl;
+
+		if (iss.fail() || !std::ws(iss).eof())
+		{
+			throw exception("cast failed");
+		}
+
+		value = value_;
 	}
 
 	void fetch_column(const st_mysql_column& column, double& value)
 	{
-		//value = *reinterpret_cast<double*>((char&)column.buffer.front());
-		//value = (double)column.buffer.front();
+		iss.clear();
+		double value_ = 0;
+
+		iss.str(std::string(column.buffer.begin(), column.buffer.end()));
+		iss >> value_;
+
+		if (iss.fail() || !std::ws(iss).eof())
+		{
+			throw exception("casst failed");
+		}
+
+		value = value_;
 	}
 
 	void fetch_column(const st_mysql_column& column, std::string& value)
@@ -153,6 +180,8 @@ private:
 
 	std::vector<st_mysql_bind> binds;
 	std::vector<st_mysql_column> columns;
+
+	std::istringstream iss;
 };
 
 } // namespace mysqlpp

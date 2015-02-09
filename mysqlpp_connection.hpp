@@ -8,6 +8,7 @@
 #ifndef MYSQLPP_CONNECTION_HPP
 #define MYSQLPP_CONNECTION_HPP
 
+#include <map>
 #include <string>
 
 #include <mysql/mysql.h>
@@ -18,13 +19,14 @@ namespace mysqlpp
 class connection
 {
 public:
-	connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, const std::string& charset = "utf8", unsigned int port = 3306);
+	connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port = 3306);
 	~connection();
 
 	statement* prepare(const std::string& query);
 
 private:
 	st_mysql* mysql;
+
 };
 
 } // namespace mysqlpp

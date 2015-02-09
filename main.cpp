@@ -74,9 +74,9 @@ int main()
 
 		while (r->fetch())
 		{
-			//std::cout << "param1 : " << r->field<short int>(0) << std::endl;
+			std::cout << "param1 : " << r->field<short int>(0) << std::endl;
 
-			//std::cout << "param1 : " << r->field<short int>("col1") << std::endl;
+			std::cout << "param1 : " << r->field<short int>("col1") << std::endl;
 			std::cout << "param2 : " << r->field<short int>("col2") << std::endl;
 			std::cout << "param3 : " << r->field<int>("col3") << std::endl;
 			std::cout << "param4 : " << r->field<long long int>("col4") << std::endl;
