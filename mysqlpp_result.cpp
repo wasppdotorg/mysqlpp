@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include <mysql/mysql.h>
 
@@ -142,23 +143,21 @@ namespace mysqlpp
 
 	void result::fetch_column(const st_mysql_column& column, std::string& value)
 	{
-		/*
-		for (std::size_t i = 0; i < column.buffer.size(); ++i)
-		{
-			std::cout << "1:" << column.buffer[i] << std::endl;
-
-		}
-		*/
-		//char* buffer = const_cast<char*>(&column.buffer.front());
-		//std::cout << buffer << std::endl;
 		value.assign(&column.buffer.front(), column.length);
-		//value = std::string(column.buffer.front(), column.length);
 	}
 
-	void result::fetch_column(const st_mysql_column& column, st_mysql_time& value)
+	void result::fetch_column(const st_mysql_column& column, st_time& value)
 	{
 		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<st_mysql_time*>(buffer);
+		value = *reinterpret_cast<st_time*>(buffer);
+	}
+
+	std::string result::time_to_str(const st_time& time)
+	{
+		std::ostringstream oss;
+		oss << time.year << '-' << time.month << '-' << time.day << ' ' << time.hour << ':' << time.minute << ':' << time.second;
+
+		return oss.str();
 	}
 
 	st_mysql_column& result::this_column(unsigned int index)

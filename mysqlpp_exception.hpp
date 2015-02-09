@@ -14,6 +14,8 @@
 namespace mysqlpp
 {
 
+	typedef st_mysql_time st_time;
+
 	class exception : public std::runtime_error
 	{
 	public:

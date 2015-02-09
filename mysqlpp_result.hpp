@@ -32,7 +32,7 @@ namespace mysqlpp
 		std::vector<char> buffer;
 		unsigned long length;
 
-		my_bool error;
+		char error;
 	};
 
 	class result
@@ -75,97 +75,19 @@ namespace mysqlpp
 		}
 
 		void fetch_column(const st_mysql_column& column, unsigned char& value);
-		/*
-		{
-			value = static_cast<unsigned char>(column.buffer.front());
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, short int& value);
-		/*
-		{
-			value = static_cast<short int>(column.buffer.front());
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, int& value);
-		/*
-		{
-			value = static_cast<int>(column.buffer.front());
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, long long int& value);
-		/*
-		{
-			value = static_cast<long long int>(column.buffer.front());
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, float& value);
-		/*
-		{
-			char* buffer = const_cast<char*>(&column.buffer.front());
-			value = *reinterpret_cast<float*>(buffer);
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, double& value);
-		/*
-		{
-			char* buffer = const_cast<char*>(&column.buffer.front());
-			value = *reinterpret_cast<double*>(buffer);
-		}
-		*/
-
 		void fetch_column(const st_mysql_column& column, std::string& value);
-		/*
-		{
-			//char* buffer = const_cast<char*>(&column.buffer.front());
-			value.assign(&column.buffer.front(), column.length);
-		}
-		*/
+		void fetch_column(const st_mysql_column& column, st_time& value);
 
-		void fetch_column(const st_mysql_column& column, st_mysql_time& value);
-		/*
-		{
-			value = *reinterpret_cast<st_mysql_time*>(column.buffer.front());
-		}
-		*/
+		std::string time_to_str(const st_time& time);
 
 	private:
 		st_mysql_column& this_column(unsigned int index);
-		/*
-		{
-			if (index >= field_count)
-			{
-				throw exception("invalid column_index");
-			}
-
-			return columns.at(index);
-		}
-		*/
-
 		st_mysql_column& this_column(const std::string& name);
-		/*
-		{
-			unsigned int i = 0;
-			for (; i < field_count; ++i)
-			{
-				if (name == columns[i].name)
-				{
-					break;
-				}
-			}
-
-			if (i == field_count)
-			{
-				throw exception("invalid column_name");
-			}
-
-			return columns.at(i);
-		}
-		*/
 
 		st_mysql_stmt* stmt;
 		st_mysql_res* metadata;

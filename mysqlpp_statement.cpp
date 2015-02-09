@@ -123,7 +123,7 @@ namespace mysqlpp
 		bind.length = &length;
 	}
 
-	void statement::param(const st_mysql_time& value)
+	void statement::param(const st_time& value)
 	{
 		st_mysql_bind& bind = this_bind();
 
@@ -133,7 +133,7 @@ namespace mysqlpp
 		bind.length = 0;
 	}
 
-	void statement::param_null(my_bool is_null)
+	void statement::param_null(char is_null)
 	{
 		st_mysql_bind& bind = this_bind();
 
