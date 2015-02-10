@@ -62,21 +62,11 @@ namespace mysqlpp
 		for (std::size_t i = 0; i < field_count; ++i)
 		{
 			columns[i].name = std::string(fields[i].name);
-			columns[i].type = fields[i].type;
-			if (fields[i].type == MYSQL_TYPE_DATETIME)
-			{
-				columns[i].type = MYSQL_TYPE_STRING;
-			}
-
+			columns[i].type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
 			columns[i].buffer.resize(0);
 			columns[i].buffer.resize(fields[i].length);
 
-			binds[i].buffer_type = fields[i].type;
-			if (fields[i].type == MYSQL_TYPE_DATETIME)
-			{
-				binds[i].buffer_type = MYSQL_TYPE_STRING;
-			}
-
+			binds[i].buffer_type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
 			binds[i].buffer = &columns[i].buffer.front();
 			binds[i].length = &columns[i].length;
 			binds[i].is_null = &columns[i].is_null;

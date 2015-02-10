@@ -36,13 +36,10 @@
 			<Add option="-lmysqlclient" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="mysqlpp.hpp" />
 		<Unit filename="mysqlpp_connection.cpp" />
-		<Unit filename="mysqlpp_connection.hpp" />
-		<Unit filename="mysqlpp_exception.hpp" />
 		<Unit filename="mysqlpp_result.cpp" />
-		<Unit filename="mysqlpp_result.hpp" />
 		<Unit filename="mysqlpp_statement.cpp" />
-		<Unit filename="mysqlpp_statement.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
