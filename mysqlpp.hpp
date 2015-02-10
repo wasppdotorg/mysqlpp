@@ -8,6 +8,7 @@
 #ifndef MYSQLPP_HPP
 #define MYSQLPP_HPP
 
+#include <cstdio>
 #include <ctime>
 
 #include <iostream>
@@ -188,7 +189,7 @@ namespace mysqlpp
 		void param(const long long int& value);
 		void param(const float& value);
 		void param(const double& value);
-		
+
 		void param(const std::string& value);
 		void param_null(char is_null = 1);
 
