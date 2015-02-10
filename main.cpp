@@ -1,9 +1,4 @@
 
-#include <iostream>
-#include <string>
-
-#include <mysql/mysql.h>
-
 #include "mysqlpp.hpp"
 
 int main()
@@ -16,7 +11,7 @@ int main()
 		stmt = conn->prepare("DROP TABLE IF EXISTS test");
 		stmt->execute();
 
-		stmt = conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col8 TEXT, col9 INT NULL, col10 DATETIME, col11 DATETIME)");
+		stmt = conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col8 TEXT, col9 DATETIME, col10 DATETIME, col11 INT NULL)");
 		stmt->execute();
 
 		unsigned char param1 = 1;
@@ -33,10 +28,17 @@ int main()
 		std::string param8("param8");
 		unsigned long param8_size = param8.size();
 
-		mysqlpp::datetime datetime_;
-		std::string param10(datetime_.str());
+		st_mysql_time param9;
+		{
+			param9.year = 1970;
+			param9.month = 1;
+			param9.day = 1;
+			param9.hour = 1;
+			param9.minute = 1;
+			param9.second = 1;
+		}
 
-		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
 		{
 			stmt->param(param1);
 			stmt->param(param2);
@@ -46,8 +48,8 @@ int main()
 			stmt->param(param6);
 			stmt->param(param7, param7_size);
 			stmt->param(param8, param8_size);
+			stmt->param(param9);
 			stmt->param_null();
-			stmt->param_datetime(param10);
 		}
 		stmt->execute();
 
@@ -55,7 +57,8 @@ int main()
 		unsigned long long affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col8, col9 from test");
+		/*
+		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col9, col8, col11 from test");
 		mysqlpp::result* r = stmt->query();
 
 		if (r->num_rows() == 0)
@@ -65,28 +68,27 @@ int main()
 
 		while (r->fetch())
 		{
-			std::cout << "param1 : " << r->get<short int>(0) << std::endl;
+			std::cout << "col1 : " << r->get<short int>(0) << std::endl;
 
-			std::cout << "param1 : " << r->get<short int>("col1") << std::endl;
-			std::cout << "param2 : " << r->get<short int>("col2") << std::endl;
-			std::cout << "param3 : " << r->get<int>("col3") << std::endl;
-			std::cout << "param4 : " << r->get<long long int>("col4") << std::endl;
-			std::cout << "param5 : " << r->get<float>("col5") << std::endl;
-			std::cout << "param6 : " << r->get<double>("col6") << std::endl;
-			std::cout << "param7 : " << r->get<std::string>("col7") << std::endl;
-			std::cout << "param8 : " << r->get<std::string>("col8") << std::endl;
+			std::cout << "col1 : " << r->get<short int>("col1") << std::endl;
+			std::cout << "col2 : " << r->get<short int>("col2") << std::endl;
+			std::cout << "col3 : " << r->get<int>("col3") << std::endl;
+			std::cout << "col4 : " << r->get<long long int>("col4") << std::endl;
+			std::cout << "col5 : " << r->get<float>("col5") << std::endl;
+			std::cout << "col6 : " << r->get<double>("col6") << std::endl;
+			std::cout << "col7 : " << r->get<std::string>("col7") << std::endl;
+			std::cout << "col8 : " << r->get<std::string>("col8") << std::endl;
+
+			//std::cout << "col9 : " << r->get<std::string>("col9") << std::endl;
+
+			//std::cout << "col10 : " << col10.str() << std::endl;
 
 			// this is null value
-			//std::cout << "param9 : " << r->get<int>("col9") << std::endl;
-
-			//mysqlpp::datetime col10 = r->get<mysqlpp::datetime>("col10");
-			//std::cout << "param10 : " << r->time_to_str(col10) << std::endl;
-
-			//mysqlpp::datetime col11 = r->get<mysqlpp::datetime>("col11");
-			//std::cout << "param11 : " << r->datetime_str(col11) << std::endl;
+			//std::cout << "param11 : " << r->get<int>("col11") << std::endl;
 
 			std::cout << "--" << std::endl;
 		}
+		*/
 	}
 	catch (std::exception& e)
 	{

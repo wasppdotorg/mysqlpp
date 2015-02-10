@@ -5,12 +5,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <string>
-#include <vector>
-#include <sstream>
-
-#include <mysql/mysql.h>
-
 #include "mysqlpp.hpp"
 
 namespace mysqlpp
@@ -135,6 +129,12 @@ namespace mysqlpp
 		value = *reinterpret_cast<float*>(buffer);
 	}
 
+	void result::fetch_column(const st_mysql_column& column, st_mysql_time& value)
+	{
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<st_mysql_time*>(buffer);
+	}
+
 	void result::fetch_column(const st_mysql_column& column, double& value)
 	{
 		char* buffer = const_cast<char*>(&column.buffer.front());
@@ -144,12 +144,6 @@ namespace mysqlpp
 	void result::fetch_column(const st_mysql_column& column, std::string& value)
 	{
 		value.assign(&column.buffer.front(), column.length);
-	}
-
-	void result::fetch_column(const st_mysql_column& column, datetime& value)
-	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<datetime*>(buffer);
 	}
 
 	st_mysql_column& result::this_column(unsigned int index)

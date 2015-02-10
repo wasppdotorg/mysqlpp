@@ -10,9 +10,12 @@
 
 #include <ctime>
 
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 #include <string>
+
+#include <mysql/mysql.h>
 
 namespace mysqlpp
 {
@@ -28,62 +31,81 @@ namespace mysqlpp
 
 	//typedef st_mysql_time datetime;
 
+	/*
 	struct datetime
 	{
 		datetime()
 		{
 			std::time_t time_ = std::time(0);
-			time = *std::localtime(&time_);
+			std::tm time = *std::localtime(&time_);
+
+			convert(time);
+		}
+
+		datetime(st_mysql_time time_) : value(time_)
+		{
+
 		}
 
 		datetime(const std::string& str)
 		{
-			int n = 0;
-			double sec = 0;
-
-			n = sscanf(str.c_str(), "%d-%d-%d %d:%d:%lf", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &sec);
-			if (n != 3 && n != 6)
+			std::tm time;
+			int count = sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
+			if (count != 3 && count != 6)
 			{
 				throw exception("datetime cast failed");
 			}
 
 			time.tm_year -= 1900;
 			time.tm_mon -= 1;
-			time.tm_sec = static_cast<int>(sec);
 			time.tm_isdst = -1;
 
 			if (mktime(&time) == -1)
 			{
 				throw exception("datetime cast failed");
 			}
+
+			convert(time);
 		}
 
-		/*
-		datetime(const st_mysql_time& time_)
+		void convert(std::tm time)
 		{
-			time.tm_year = time_.year;
-			time.tm_mon = time_.month;
-			time.tm_mday = time_.day;
-			time.tm_hour = time_.hour;
-			time.tm_min = time_.minute;
-			time.tm_sec = time_.second;
-
-			time.tm_year -= 1900;
-			time.tm_mon -= 1;
-			time.tm_isdst = -1;
+			value.year = static_cast<unsigned int>(time.tm_year) + 1900;
+			value.month = static_cast<unsigned int>(time.tm_mon) + 1;
+			value.day = static_cast<unsigned int>(time.tm_mday);
+			value.hour = static_cast<unsigned int>(time.tm_hour);
+			value.minute = static_cast<unsigned int>(time.tm_min);
+			value.second = static_cast<unsigned int>(time.tm_sec);
 		}
-		*/
+
+		std::tm convert()
+		{
+			std::tm time;
+
+			time.tm_year = static_cast<int>(value.year) - 1900;
+			time.tm_mon = static_cast<int>(value.month) - 1;
+			time.tm_mday = static_cast<int>(value.day);
+			time.tm_hour = static_cast<int>(value.hour);
+			time.tm_min = static_cast<int>(value.minute);
+			time.tm_sec = static_cast<int>(value.second);
+			time.tm_isdst = -1;
+
+			return time;
+		}
 
 		std::string str()
 		{
 			char buf[32] = { 0 };
+
+			std::tm time = convert();
 			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
 
 			return std::string(buf);
 		}
 
-		std::tm time;
+		st_mysql_time value;
 	};
+	*/
 
 	struct st_mysql_column
 	{
@@ -147,9 +169,7 @@ namespace mysqlpp
 		void fetch_column(const st_mysql_column& column, float& value);
 		void fetch_column(const st_mysql_column& column, double& value);
 		void fetch_column(const st_mysql_column& column, std::string& value);
-		void fetch_column(const st_mysql_column& column, datetime& value);
-
-		std::string datetime_str(const datetime& time);
+		void fetch_column(const st_mysql_column& column, st_mysql_time& value);
 
 	private:
 		st_mysql_column& this_column(unsigned int index);
@@ -177,8 +197,8 @@ namespace mysqlpp
 		void param(const long long int& value);
 		void param(const float& value, unsigned long length = 0);
 		void param(const double& value, unsigned long length = 0);
+		void param(const st_mysql_time& value);
 		void param(const std::string& value, unsigned long& length);
-		void param_datetime(const std::string& value, unsigned long = 10);
 		void param_null(char is_null = 1);
 
 		unsigned long long execute();
