@@ -88,6 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>c:\Program Files\MariaDB 10.0\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -130,10 +131,7 @@
     <ClCompile Include="mysqlpp_statement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mysqlpp_connection.hpp" />
-    <ClInclude Include="mysqlpp_exception.hpp" />
-    <ClInclude Include="mysqlpp_result.hpp" />
-    <ClInclude Include="mysqlpp_statement.hpp" />
+    <ClInclude Include="mysqlpp.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
