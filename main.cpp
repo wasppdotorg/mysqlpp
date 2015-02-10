@@ -46,15 +46,14 @@ int main()
 		unsigned long long affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		/*
-		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col9, col8, col11 from test");
+		stmt = conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col9, col8, col9, col10, col11 from test");
 		mysqlpp::result* r = stmt->query();
 
 		if (r->num_rows() == 0)
 		{
 			std::cout << "no result" << std::endl << std::endl;
 		}
-
+		
 		while (r->fetch())
 		{
 			std::cout << "col1 : " << r->get<short int>(0) << std::endl;
@@ -70,12 +69,17 @@ int main()
 			std::cout << "col9 : " << r->get<std::string>("col9") << std::endl;
 			std::cout << "col9 : " << r->get<std::string>("col10") << std::endl;
 
-			// this is null value
-			//std::cout << "param11 : " << r->get<int>("col11") << std::endl;
-
+			if (r->is_null("col11"))
+			{
+				std::cout << "param11 is null" << std::endl;
+			}
+			else
+			{
+				std::cout << "param11 : " << r->get<int>("col11") << std::endl;
+			}
+			
 			std::cout << "--" << std::endl;
 		}
-		*/
 	}
 	catch (std::exception& e)
 	{

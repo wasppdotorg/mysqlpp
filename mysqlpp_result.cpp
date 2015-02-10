@@ -63,10 +63,20 @@ namespace mysqlpp
 		{
 			columns[i].name = std::string(fields[i].name);
 			columns[i].type = fields[i].type;
+			if (fields[i].type == MYSQL_TYPE_DATETIME)
+			{
+				columns[i].type = MYSQL_TYPE_STRING;
+			}
+
 			columns[i].buffer.resize(0);
 			columns[i].buffer.resize(fields[i].length);
 
 			binds[i].buffer_type = fields[i].type;
+			if (fields[i].type == MYSQL_TYPE_DATETIME)
+			{
+				binds[i].buffer_type = MYSQL_TYPE_STRING;
+			}
+
 			binds[i].buffer = &columns[i].buffer.front();
 			binds[i].length = &columns[i].length;
 			binds[i].is_null = &columns[i].is_null;
@@ -138,6 +148,35 @@ namespace mysqlpp
 	void result::fetch_column(const st_mysql_column& column, std::string& value)
 	{
 		value.assign(&column.buffer.front(), column.length);
+	}
+
+	bool result::is_null(unsigned int index)
+	{
+		if (index >= field_count)
+		{
+			throw exception("invalid column_index");
+		}
+
+		return columns.at(index).is_null == 1;
+	}
+
+	bool result::is_null(const std::string& name)
+	{
+		unsigned int i = 0;
+		for (; i < field_count; ++i)
+		{
+			if (name == columns[i].name)
+			{
+				break;
+			}
+		}
+
+		if (i == field_count)
+		{
+			throw exception("invalid column_name");
+		}
+
+		return columns.at(i).is_null == 1;
 	}
 
 	st_mysql_column& result::this_column(unsigned int index)

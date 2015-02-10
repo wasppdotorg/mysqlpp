@@ -159,6 +159,9 @@ namespace mysqlpp
 		void fetch_column(const st_mysql_column& column, double& value);
 		void fetch_column(const st_mysql_column& column, std::string& value);
 
+		bool is_null(unsigned int index);
+		bool is_null(const std::string& name);
+
 	private:
 		st_mysql_column& this_column(unsigned int index);
 		st_mysql_column& this_column(const std::string& name);

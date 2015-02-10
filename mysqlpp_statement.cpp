@@ -119,7 +119,7 @@ namespace mysqlpp
 	{
 		st_mysql_bind& bind = this_bind();
 
-		bind.buffer_type = MYSQL_TYPE_VAR_STRING;
+		bind.buffer_type = MYSQL_TYPE_STRING;
 		bind.buffer = (void*)value.c_str();
 		bind.is_null = 0;
 
