@@ -5,6 +5,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <iostream>
+
 #include <mysql/mysql.h>
 
 #include "mysqlpp.hpp"
@@ -35,7 +37,7 @@ namespace mysqlpp
 
 			bind_index = 0;
 		}
-		catch (...)
+		catch (...)	
 		{
 			mysql_stmt_close(stmt);
 			throw;
@@ -122,12 +124,12 @@ namespace mysqlpp
 		bind.length = &length;
 	}
 
-	void statement::param(const datetime& value)
+	void statement::param(const std::string& value, unsigned long)
 	{
 		st_mysql_bind& bind = this_bind();
 
-		bind.buffer_type = MYSQL_TYPE_DATE;
-		bind.buffer = (char*)&value;
+		bind.buffer_type = MYSQL_TYPE_STRING;
+		bind.buffer = (char*)value.str().c_str();
 		bind.is_null = 0;
 		bind.length = 0;
 	}

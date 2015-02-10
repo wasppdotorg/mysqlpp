@@ -152,14 +152,6 @@ namespace mysqlpp
 		value = *reinterpret_cast<datetime*>(buffer);
 	}
 
-	std::string result::datetime_str(const datetime& time)
-	{
-		std::ostringstream oss;
-		oss << time.year << '-' << time.month << '-' << time.day << ' ' << time.hour << ':' << time.minute << ':' << time.second;
-
-		return oss.str();
-	}
-
 	st_mysql_column& result::this_column(unsigned int index)
 	{
 		if (index >= field_count)

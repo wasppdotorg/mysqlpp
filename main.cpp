@@ -33,15 +33,8 @@ int main()
 		std::string param8("param8");
 		unsigned long param8_size = param8.size();
 
-		mysqlpp::datetime param10;
-		{
-			param10.year = 1970;
-			param10.month = 1;
-			param10.day = 1;
-			param10.hour = 0;
-			param10.minute = 0;
-			param10.second = 0;
-		}
+		mysqlpp::datetime datetime_;
+		std::string param10(datetime_.str());
 
 		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 		{
@@ -54,7 +47,7 @@ int main()
 			stmt->param(param7, param7_size);
 			stmt->param(param8, param8_size);
 			stmt->param_null();
-			stmt->param(param10);			
+			stmt->param_datetime(param10);
 		}
 		stmt->execute();
 
