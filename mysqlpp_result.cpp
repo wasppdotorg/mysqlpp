@@ -67,7 +67,7 @@ namespace mysqlpp
 			columns[i].buffer.resize(fields[i].length);
 
 			binds[i].buffer_type = fields[i].type;
-			binds[i].buffer = const_cast<char*>(&columns[i].buffer.front());
+			binds[i].buffer = &columns[i].buffer.front();
 			binds[i].length = &columns[i].length;
 			binds[i].is_null = &columns[i].is_null;
 			binds[i].error = &columns[i].error;
@@ -127,12 +127,6 @@ namespace mysqlpp
 	{
 		char* buffer = const_cast<char*>(&column.buffer.front());
 		value = *reinterpret_cast<float*>(buffer);
-	}
-
-	void result::fetch_column(const st_mysql_column& column, st_mysql_time& value)
-	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<st_mysql_time*>(buffer);
 	}
 
 	void result::fetch_column(const st_mysql_column& column, double& value)

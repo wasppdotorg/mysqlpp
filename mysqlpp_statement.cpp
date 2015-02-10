@@ -31,6 +31,9 @@ namespace mysqlpp
 			binds.resize(0);
 			binds.resize(param_count, st_mysql_bind());
 
+			lengths.resize(0);
+			lengths.resize(param_count, 0);
+
 			bind_index = 0;
 		}
 		catch (...)	
@@ -50,7 +53,7 @@ namespace mysqlpp
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_TINY;
-		bind.buffer = (char*)&value;
+		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -60,7 +63,7 @@ namespace mysqlpp
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_SHORT;
-		bind.buffer = (char*)&value;
+		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -70,7 +73,7 @@ namespace mysqlpp
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_LONG;
-		bind.buffer = (char*)&value;
+		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -80,53 +83,51 @@ namespace mysqlpp
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_LONGLONG;
-		bind.buffer = (char*)&value;
+		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
 
-	void statement::param(const float& value, unsigned long length)
+	void statement::param(const float& value)
 	{
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_FLOAT;
-		bind.buffer = const_cast<float*>(&value);
+		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 
-		length = sizeof(value);
-		bind.length = &length;
+		int this_index = bind_index - 1;
+		lengths[this_index] = sizeof(value);
+		bind.length = &lengths[this_index];
 	}
 
-	void statement::param(const double& value, unsigned long length)
+	void statement::param(const double& value)
 	{
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_DOUBLE;
-		bind.buffer = const_cast<double*>(&value);
-		bind.is_null = 0;
-
-		length = sizeof(value);
-		bind.length = &length;
-	}
-
-	void statement::param(const st_mysql_time& value)
-	{
-		st_mysql_bind& bind = this_bind();
-
-		bind.buffer_type = MYSQL_TYPE_DATETIME;
 		bind.buffer = (void*)&value;
 		bind.is_null = 0;
+
+		int this_index = bind_index - 1;
+		lengths[this_index] = sizeof(value);
+
+		bind.length = &lengths[this_index];
 	}
 
-	void statement::param(const std::string& value, unsigned long& length)
+	void statement::param(const std::string& value)
 	{
 		st_mysql_bind& bind = this_bind();
 
 		bind.buffer_type = MYSQL_TYPE_VAR_STRING;
-		bind.buffer = const_cast<char*>(value.c_str());
-		bind.buffer_length = length;
+		bind.buffer = (void*)value.c_str();
 		bind.is_null = 0;
-		bind.length = &length;
+
+		int this_index = bind_index - 1;
+		lengths[this_index] = value.size();
+		
+		bind.buffer_length = lengths[this_index];
+		bind.length = &lengths[this_index];
 	}
 
 	void statement::param_null(char is_null)

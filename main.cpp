@@ -22,21 +22,10 @@ int main()
 		double param6 = 6.01f;
 
 		std::string param7("param7");
-		// std::size_to to unsigned long
-		unsigned long param7_size = param7.size();
-
 		std::string param8("param8");
-		unsigned long param8_size = param8.size();
 
-		st_mysql_time param9;
-		{
-			param9.year = 1970;
-			param9.month = 1;
-			param9.day = 1;
-			param9.hour = 1;
-			param9.minute = 1;
-			param9.second = 1;
-		}
+		mysqlpp::datetime datetime_;
+		std::string param9 = datetime_.str();
 
 		stmt = conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
 		{
@@ -46,8 +35,8 @@ int main()
 			stmt->param(param4);
 			stmt->param(param5);
 			stmt->param(param6);
-			stmt->param(param7, param7_size);
-			stmt->param(param8, param8_size);
+			stmt->param(param7);
+			stmt->param(param8);
 			stmt->param(param9);
 			stmt->param_null();
 		}
@@ -78,10 +67,8 @@ int main()
 			std::cout << "col6 : " << r->get<double>("col6") << std::endl;
 			std::cout << "col7 : " << r->get<std::string>("col7") << std::endl;
 			std::cout << "col8 : " << r->get<std::string>("col8") << std::endl;
-
-			//std::cout << "col9 : " << r->get<std::string>("col9") << std::endl;
-
-			//std::cout << "col10 : " << col10.str() << std::endl;
+			std::cout << "col9 : " << r->get<std::string>("col9") << std::endl;
+			std::cout << "col9 : " << r->get<std::string>("col10") << std::endl;
 
 			// this is null value
 			//std::cout << "param11 : " << r->get<int>("col11") << std::endl;
