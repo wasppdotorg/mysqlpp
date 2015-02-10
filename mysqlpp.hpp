@@ -197,7 +197,7 @@ namespace mysqlpp
 
 	private:
 		st_mysql_bind& this_bind();
-		
+
 		st_mysql_stmt* stmt;
 
 		int param_count;
