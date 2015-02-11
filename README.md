@@ -31,11 +31,11 @@ Install MySQLClient
 
 Install mysqlpp
 -------------
-* sudo git clone https://github.com/waspporg/mysqlpp.git
+* git clone https://github.com/waspporg/mysqlpp.git
 * cd mysqpp
-* sudo cmake .
-* sudo make
+* cmake .
+* make
 
 Run
 ---
-* sudo ./mysqlpp
+* ./mysqlpp
