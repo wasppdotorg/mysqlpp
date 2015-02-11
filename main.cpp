@@ -56,7 +56,8 @@ int main()
 		
 		while (r->fetch())
 		{
-			std::cout << "col1 : " << r->get<short int>(0) << std::endl;
+			std::cout << "col1(0) : " << r->get<short int>(0) << std::endl;
+			std::cout << "col2(1) : " << r->get<short int>(1) << std::endl;
 
 			std::cout << "col1 : " << r->get<short int>("col1") << std::endl;
 			std::cout << "col2 : " << r->get<short int>("col2") << std::endl;

@@ -96,9 +96,8 @@ namespace mysqlpp
 		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 
-		int this_index = bind_index - 1;
-		lengths[this_index] = sizeof(value);
-		bind.length = &lengths[this_index];
+		lengths[bind_index - 1] = sizeof(value);
+		bind.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param(const double& value)
@@ -109,10 +108,8 @@ namespace mysqlpp
 		bind.buffer = (void*)&value;
 		bind.is_null = 0;
 
-		int this_index = bind_index - 1;
-		lengths[this_index] = sizeof(value);
-
-		bind.length = &lengths[this_index];
+		lengths[bind_index - 1] = sizeof(value);
+		bind.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param(const std::string& value)
@@ -123,11 +120,9 @@ namespace mysqlpp
 		bind.buffer = (void*)value.c_str();
 		bind.is_null = 0;
 
-		int this_index = bind_index - 1;
-		lengths[this_index] = value.size();
-		
-		bind.buffer_length = lengths[this_index];
-		bind.length = &lengths[this_index];
+		lengths[bind_index - 1] = value.size();
+		bind.buffer_length = lengths[bind_index - 1];
+		bind.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param_null(char is_null)
