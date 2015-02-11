@@ -22,8 +22,8 @@ deb-src http://ftp.osuosl.org/pub/mariadb/repo/10.0/ubuntu trusty main
 * sudo apt-get upgrade
 * sudo apt-get install mariadb-server
 
-Install MySQLClient
--------------------
+Install MySQLClient Library
+---------------------------
 * sudo apt-get install libmariadbclient-dev
 
 Install mysqlpp
