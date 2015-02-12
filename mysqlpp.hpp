@@ -43,7 +43,7 @@ namespace mysqlpp
 		datetime(const std::string& str)
 		{
 			std::tm time;
-			int count = sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
+			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
 			if (count != 3 && count != 6)
 			{
 				throw exception("datetime cast failed");
@@ -53,7 +53,7 @@ namespace mysqlpp
 			time.tm_mon -= 1;
 			time.tm_isdst = -1;
 
-			if (mktime(&time) == -1)
+			if (std::mktime(&time) == -1)
 			{
 				throw exception("datetime cast failed");
 			}
@@ -91,7 +91,7 @@ namespace mysqlpp
 			char buf[32] = { 0 };
 
 			std::tm time = c_tm();
-			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
+			std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
 
 			return std::string(buf);
 		}
