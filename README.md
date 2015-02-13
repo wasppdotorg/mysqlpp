@@ -43,6 +43,7 @@ Install MySQLClient Library
 
 Install mysqlpp
 -------------
+* sudo apt-get install git
 * git clone https://github.com/waspporg/mysqlpp.git
 * cd mysqpp
 * sudo apt-get install cmake
