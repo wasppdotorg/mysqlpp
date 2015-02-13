@@ -32,7 +32,14 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add option="-lmysqlclient" />
+		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="mysqlpp.hpp" />
+		<Unit filename="mysqlpp_connection.cpp" />
+		<Unit filename="mysqlpp_result.cpp" />
+		<Unit filename="mysqlpp_statement.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
