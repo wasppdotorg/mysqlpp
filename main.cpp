@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include "mysqlpp.hpp"
 
 int main()
