@@ -216,6 +216,26 @@ namespace mysqlpp
 
 		statement* prepare(const std::string& query);
 
+		std::tm* last_released()
+		{
+			return &released;
+		}
+
+		void set_released(std::tm released_)
+		{
+			released = released_;
+		}
+
+		bool is_pooled()
+		{
+			return pooled;
+		}
+
+		void set_pooled(bool pooled_)
+		{
+			pooled = pooled_;
+		}
+
 	private:
 		st_mysql* mysql;
 
