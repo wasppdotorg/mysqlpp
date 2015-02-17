@@ -58,3 +58,8 @@ Install mysqlpp
 Run
 ---
 * ./mysqlpp
+
+Check
+-----
+* sudo apt-get install valgrind
+* valgrind ./mysqlpp
