@@ -29,6 +29,8 @@ namespace mysqlpp
 		catch (...)
 		{
 			mysql_close(mysql);
+			mysql_library_end();
+
 			throw;
 		}
 
@@ -41,6 +43,7 @@ namespace mysqlpp
 	connection::~connection()
 	{
 		mysql_close(mysql);
+		mysql_library_end();
 	}
 
 	statement* connection::prepare(const std::string& query)
