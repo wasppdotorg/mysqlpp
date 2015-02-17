@@ -4,16 +4,20 @@
 
 #include "mysqlpp.hpp"
 
+typedef std::auto_ptr<mysqlpp::connection> conn_ptr;
+typedef std::auto_ptr<mysqlpp::statement> stmt_ptr;
+typedef std::auto_ptr<mysqlpp::result> res_ptr;
+
 int main()
 {
 	try
 	{
-		std::auto_ptr<mysqlpp::connection> conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
+		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
-		std::auto_ptr<mysqlpp::statement> stmt1(conn->prepare("DROP TABLE IF EXISTS test"));
+		stmt_ptr stmt1(conn->prepare("DROP TABLE IF EXISTS test"));
 		stmt1->execute();
 
-		std::auto_ptr<mysqlpp::statement> stmt2(conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col8 TEXT, col9 DATETIME, col10 DATETIME, col11 INT NULL)"));
+		stmt_ptr stmt2(conn->prepare("CREATE TABLE test(col1 TINYINT, col2 SMALLINT, col3 INT, col4 BIGINT, col5 FLOAT, col6 DOUBLE, col7 VARCHAR(10), col8 TEXT, col9 DATETIME, col10 DATETIME, col11 INT NULL)"));
 		stmt2->execute();
 
 		unsigned char param1 = 1;
@@ -29,7 +33,7 @@ int main()
 		mysqlpp::datetime datetime_;
 		std::string param9 = datetime_.str();
 
-		std::auto_ptr<mysqlpp::statement> stmt3(conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
+		stmt_ptr stmt3(conn->prepare("INSERT INTO test(col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
 		{
 			stmt3->param(param1);
 			stmt3->param(param2);
@@ -48,8 +52,8 @@ int main()
 		unsigned long long affected_rows = stmt3->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		std::auto_ptr<mysqlpp::statement> stmt4(conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col9, col8, col9, col10, col11 from test"));
-		std::auto_ptr<mysqlpp::result> r(stmt4->query());
+		stmt_ptr stmt4(conn->prepare("SELECT col1, col2, col3, col4, col5, col6, col7, col9, col8, col9, col10, col11 from test"));
+		res_ptr r(stmt4->query());
 
 		if (r->num_rows() == 0)
 		{
