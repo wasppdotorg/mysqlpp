@@ -41,6 +41,11 @@ namespace mysqlpp
 
 		datetime(const std::string& str)
 		{
+			if (str.size() > 19)
+			{
+				throw exception("datetime cast failed");
+			}
+
 			std::tm time;
 			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
 			if (count != 3 && count != 6)

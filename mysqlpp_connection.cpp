@@ -34,8 +34,8 @@ namespace mysqlpp
 			throw;
 		}
 
-		std::time_t raw_time = std::time(0);
-		released = *std::localtime(&raw_time);
+		std::time_t time_ = std::time(0);
+		released = *std::localtime(&time_);
 
 		pooled = pooled_;
 	}
