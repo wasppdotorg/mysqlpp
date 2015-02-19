@@ -10,7 +10,7 @@
 namespace mysqlpp
 {
 
-	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& dbname, unsigned int port, bool pooled_)
+	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, bool pooled_)
 	{
 		mysql = mysql_init(0);
 
@@ -21,7 +21,7 @@ namespace mysqlpp
 				throw exception("mysql_init failed");
 			}
 
-			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), dbname.c_str(), port, 0, 0))
+			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))
 			{
 				throw exception(mysql_error(mysql));
 			}
@@ -35,9 +35,8 @@ namespace mysqlpp
 		}
 
 		std::time_t time_ = std::time(0);
-		released = *std::localtime(&time_);
-
-		pooled = pooled_;
+		set_released(*std::localtime(&time_));
+		set_pooled(pooled_);
 	}
 
 	connection::~connection()
