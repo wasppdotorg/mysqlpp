@@ -4,9 +4,19 @@
 
 #include "mysqlpp.hpp"
 
+// yeah, right. std::auto_ptr is deprecated
 typedef std::auto_ptr<mysqlpp::connection> conn_ptr;
 typedef std::auto_ptr<mysqlpp::statement> stmt_ptr;
 typedef std::auto_ptr<mysqlpp::result> res_ptr;
+
+// so, if boost is available, then:
+/*
+#include <boost/scoped_ptr.hpp>
+
+typedef boost::scoped_ptr<mysqlpp::connection> conn_ptr;
+typedef boost::scoped_ptr<mysqlpp::statement> stmt_ptr;
+typedef boost::scoped_ptr<mysqlpp::result> res_ptr;
+*/
 
 int main()
 {
