@@ -129,7 +129,7 @@ namespace mysqlpp
 		template<typename T>
 		T get(unsigned int index)
 		{
-			st_mysql_column& column = this_column(index);
+			st_mysql_column& column = find_column(index);
 			if (column.is_null)
 			{
 				throw exception("null value field");
@@ -144,7 +144,7 @@ namespace mysqlpp
 		template<typename T>
 		T get(const std::string& name)
 		{
-			st_mysql_column& column = this_column(name);
+			st_mysql_column& column = find_column(name);
 			if (column.is_null)
 			{
 				throw exception("null value field");
@@ -168,8 +168,8 @@ namespace mysqlpp
 		bool is_null(const std::string& name);
 
 	private:
-		st_mysql_column& this_column(unsigned int index);
-		st_mysql_column& this_column(const std::string& name);
+		st_mysql_column& find_column(unsigned int index);
+		st_mysql_column& find_column(const std::string& name);
 
 		st_mysql_stmt* stmt;
 		st_mysql_res* metadata;
@@ -201,7 +201,7 @@ namespace mysqlpp
 		result* query();
 
 	private:
-		st_mysql_bind& this_bind();
+		st_mysql_bind& find_bind();
 
 		st_mysql_stmt* stmt;
 
