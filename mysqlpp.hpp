@@ -65,7 +65,7 @@ namespace mysqlpp
 			set(time);
 		}
 
-		void set(std::tm time)
+		void set(const std::tm& time)
 		{
 			year = static_cast<unsigned int>(time.tm_year) + 1900;
 			month = static_cast<unsigned int>(time.tm_mon) + 1;
@@ -225,7 +225,7 @@ namespace mysqlpp
 			return &released;
 		}
 
-		void set_released(std::tm released_)
+		void set_released(const std::tm& released_)
 		{
 			released = released_;
 		}
