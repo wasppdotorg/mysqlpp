@@ -36,7 +36,7 @@ namespace mysqlpp
 			std::time_t time_ = std::time(0);
 			std::tm time = *std::localtime(&time_);
 
-			set(time);
+			set_time(time);
 		}
 
 		datetime(const std::string& str)
@@ -62,10 +62,10 @@ namespace mysqlpp
 				throw exception("datetime cast failed");
 			}
 
-			set(time);
+			set_time(time);
 		}
 
-		void set(const std::tm& time)
+		void set_time(const std::tm& time)
 		{
 			year = static_cast<unsigned int>(time.tm_year) + 1900;
 			month = static_cast<unsigned int>(time.tm_mon) + 1;
