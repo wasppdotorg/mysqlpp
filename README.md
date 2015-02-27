@@ -55,7 +55,7 @@ Run
 ---
 * ./mysqlpp
 
-Check
------
+Memory Leak Check
+-----------------
 * sudo apt-get install valgrind
 * valgrind ./mysqlpp
