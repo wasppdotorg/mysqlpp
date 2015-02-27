@@ -26,10 +26,10 @@ deb-src http://ftp.osuosl.org/pub/mariadb/repo/10.0/ubuntu trusty main
 default-character-set = utf8
 
 [mysqld]
-character-set-server  = utf8
-collation-server      = utf8_general_ci
-character_set_server   = utf8
-collation_server       = utf8_general_ci
+character-set-server = utf8
+collation-server     = utf8_general_ci
+character_set_server = utf8
+collation_server     = utf8_general_ci
 ```
 
 * sudo /etc/init.d/mysql restart
