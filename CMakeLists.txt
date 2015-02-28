@@ -1,9 +1,20 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 
 project (mysqlpp)
 
-find_library(MySQLClient_LIBRARIES NAMES mysqlclient)
+find_library (MySQLClient_LIBRARIES NAMES mysqlclient)
 
-add_executable(mysqlpp mysqlpp.hpp main.cpp mysqlpp_connection.cpp mysqlpp_result.cpp mysqlpp_statement.cpp)
+add_executable (
 
-target_link_libraries(mysqlpp ${MySQLClient_LIBRARIES})
+	mysqlpp
+
+	mysqlpp.hpp
+
+	main.cpp
+	mysqlpp_connection.cpp
+	mysqlpp_result.cpp
+	mysqlpp_statement.cpp
+
+)
+
+target_link_libraries (mysqlpp ${MySQLClient_LIBRARIES})
