@@ -169,7 +169,7 @@ namespace mysqlpp
 		return columns.at(i).is_null == 1;
 	}
 
-	st_mysql_column& result::find_column(unsigned int index)
+	st_mysql_column& result::get_column(unsigned int index)
 	{
 		if (index >= field_count)
 		{
@@ -179,7 +179,7 @@ namespace mysqlpp
 		return columns.at(index);
 	}
 
-	st_mysql_column& result::find_column(const std::string& name)
+	st_mysql_column& result::get_column(const std::string& name)
 	{
 		unsigned int i = 0;
 		for (; i < field_count; ++i)

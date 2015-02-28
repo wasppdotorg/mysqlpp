@@ -50,7 +50,7 @@ namespace mysqlpp
 
 	void statement::param(const unsigned char& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_TINY;
 		bind.buffer = (void*)&value;
@@ -60,7 +60,7 @@ namespace mysqlpp
 
 	void statement::param(const short int& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_SHORT;
 		bind.buffer = (void*)&value;
@@ -70,7 +70,7 @@ namespace mysqlpp
 
 	void statement::param(const int& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_LONG;
 		bind.buffer = (void*)&value;
@@ -80,7 +80,7 @@ namespace mysqlpp
 
 	void statement::param(const long long int& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_LONGLONG;
 		bind.buffer = (void*)&value;
@@ -90,7 +90,7 @@ namespace mysqlpp
 
 	void statement::param(const float& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_FLOAT;
 		bind.buffer = (void*)&value;
@@ -102,7 +102,7 @@ namespace mysqlpp
 
 	void statement::param(const double& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_DOUBLE;
 		bind.buffer = (void*)&value;
@@ -114,7 +114,7 @@ namespace mysqlpp
 
 	void statement::param(const std::string& value)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_STRING;
 		bind.buffer = (void*)value.c_str();
@@ -127,7 +127,7 @@ namespace mysqlpp
 
 	void statement::param_null(char is_null)
 	{
-		st_mysql_bind& bind = find_bind();
+		st_mysql_bind& bind = get_bind();
 
 		bind.buffer_type = MYSQL_TYPE_NULL;
 		bind.is_null = &is_null;
@@ -179,7 +179,7 @@ namespace mysqlpp
 		return new result(stmt);
 	}
 
-	st_mysql_bind& statement::find_bind()
+	st_mysql_bind& statement::get_bind()
 	{
 		if (bind_index < 0 || bind_index >= param_count)
 		{
