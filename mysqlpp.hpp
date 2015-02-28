@@ -11,11 +11,11 @@ http://www.boost.org/LICENSE_1_0.txt
 #include <cstdio>
 #include <ctime>
 
+#include <mysql/mysql.h>
+
 #include <stdexcept>
 #include <vector>
 #include <string>
-
-#include <mysql/mysql.h>
 
 namespace mysqlpp
 {
