@@ -103,7 +103,7 @@ namespace mysqlpp
 
 	struct st_mysql_column
 	{
-		st_mysql_column() : buffer(0), length(0), is_null(0), error(0)
+		st_mysql_column() : buffer(0), length(0), is_unsigned(0), is_null(0), error(0)
 		{
 		}
 
@@ -113,6 +113,7 @@ namespace mysqlpp
 		std::vector<char> buffer;
 		unsigned long length;
 
+		char is_unsigned;
 		char is_null;
 		char error;
 	};
@@ -157,11 +158,19 @@ namespace mysqlpp
 		}
 
 		void fetch_column(const st_mysql_column& column, unsigned char& value);
+
 		void fetch_column(const st_mysql_column& column, short int& value);
+		void fetch_column(const st_mysql_column& column, unsigned short int& value);
+
 		void fetch_column(const st_mysql_column& column, int& value);
+		void fetch_column(const st_mysql_column& column, unsigned int& value);
+
 		void fetch_column(const st_mysql_column& column, long long int& value);
+		void fetch_column(const st_mysql_column& column, unsigned long long int& value);
+
 		void fetch_column(const st_mysql_column& column, float& value);
 		void fetch_column(const st_mysql_column& column, double& value);
+
 		void fetch_column(const st_mysql_column& column, std::string& value);
 
 		bool is_null(unsigned int index);
@@ -188,9 +197,16 @@ namespace mysqlpp
 		~statement();
 
 		void param(const unsigned char& value);
+
 		void param(const short int& value);
+		void param(const unsigned short int& value);
+
 		void param(const int& value);
+		void param(const unsigned int& value);
+
 		void param(const long long int& value);
+		void param(const unsigned long long int& value);
+
 		void param(const float& value);
 		void param(const double& value);
 

@@ -54,6 +54,7 @@ namespace mysqlpp
 
 		bind.buffer_type = MYSQL_TYPE_TINY;
 		bind.buffer = (void*)&value;
+		bind.is_unsigned = 1;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -64,6 +65,18 @@ namespace mysqlpp
 
 		bind.buffer_type = MYSQL_TYPE_SHORT;
 		bind.buffer = (void*)&value;
+		bind.is_unsigned = 0;
+		bind.is_null = 0;
+		bind.length = 0;
+	}
+
+	void statement::param(const unsigned short int& value)
+	{
+		st_mysql_bind& bind = get_bind();
+
+		bind.buffer_type = MYSQL_TYPE_SHORT;
+		bind.buffer = (void*)&value;
+		bind.is_unsigned = 1;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -74,6 +87,18 @@ namespace mysqlpp
 
 		bind.buffer_type = MYSQL_TYPE_LONG;
 		bind.buffer = (void*)&value;
+		bind.is_unsigned = 0;
+		bind.is_null = 0;
+		bind.length = 0;
+	}
+
+	void statement::param(const unsigned int& value)
+	{
+		st_mysql_bind& bind = get_bind();
+
+		bind.buffer_type = MYSQL_TYPE_LONG;
+		bind.buffer = (void*)&value;
+		bind.is_unsigned = 1;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -84,6 +109,18 @@ namespace mysqlpp
 
 		bind.buffer_type = MYSQL_TYPE_LONGLONG;
 		bind.buffer = (void*)&value;
+		bind.is_unsigned = 0;
+		bind.is_null = 0;
+		bind.length = 0;
+	}
+
+	void statement::param(const unsigned long long int& value)
+	{
+		st_mysql_bind& bind = get_bind();
+
+		bind.buffer_type = MYSQL_TYPE_LONGLONG;
+		bind.buffer = (void*)&value;
+		bind.is_unsigned = 1;
 		bind.is_null = 0;
 		bind.length = 0;
 	}
@@ -166,6 +203,14 @@ namespace mysqlpp
 	{
 		try
 		{
+			if (param_count > 0 && !binds.empty())
+			{
+				if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
+				{
+					throw exception(mysql_stmt_error(stmt));
+				}
+			}
+
 			if (mysql_stmt_execute(stmt) != 0)
 			{
 				throw exception(mysql_stmt_error(stmt));

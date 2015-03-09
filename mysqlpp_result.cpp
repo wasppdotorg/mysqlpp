@@ -69,6 +69,7 @@ namespace mysqlpp
 			binds[i].buffer_type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
 			binds[i].buffer = &columns[i].buffer.front();
 			binds[i].length = &columns[i].length;
+			binds[i].is_unsigned = columns[i].is_unsigned;
 			binds[i].is_null = &columns[i].is_null;
 			binds[i].error = &columns[i].error;
 		}
@@ -113,14 +114,29 @@ namespace mysqlpp
 		value = static_cast<short int>(column.buffer.front());
 	}
 
+	void result::fetch_column(const st_mysql_column& column, unsigned short int& value)
+	{
+		value = static_cast<unsigned short int>(column.buffer.front());
+	}
+
 	void result::fetch_column(const st_mysql_column& column, int& value)
 	{
 		value = static_cast<int>(column.buffer.front());
 	}
 
+	void result::fetch_column(const st_mysql_column& column, unsigned int& value)
+	{
+		value = static_cast<unsigned int>(column.buffer.front());
+	}
+
 	void result::fetch_column(const st_mysql_column& column, long long int& value)
 	{
 		value = static_cast<long long int>(column.buffer.front());
+	}
+
+	void result::fetch_column(const st_mysql_column& column, unsigned long long int& value)
+	{
+		value = static_cast<unsigned long long int>(column.buffer.front());
 	}
 
 	void result::fetch_column(const st_mysql_column& column, float& value)
