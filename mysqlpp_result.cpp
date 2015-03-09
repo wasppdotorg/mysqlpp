@@ -29,6 +29,32 @@ namespace mysqlpp
 
 			fields = mysql_fetch_fields(metadata);
 
+			binds.resize(0);
+			binds.resize(field_count, st_mysql_bind());
+
+			columns.resize(0);
+			columns.resize(field_count, st_mysql_column());
+
+			for (std::size_t i = 0; i < field_count; ++i)
+			{
+				columns[i].name = std::string(fields[i].name);
+				columns[i].type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
+				columns[i].buffer.resize(0);
+				columns[i].buffer.resize(fields[i].length);
+
+				binds[i].buffer_type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
+				binds[i].buffer = &columns[i].buffer.front();
+				binds[i].length = &columns[i].length;
+				binds[i].is_unsigned = columns[i].is_unsigned;
+				binds[i].is_null = &columns[i].is_null;
+				binds[i].error = &columns[i].error;
+			}
+
+			if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
+			{
+				throw exception(mysql_stmt_error(stmt));
+			}
+
 			if (mysql_stmt_store_result(stmt) != 0)
 			{
 				throw exception(mysql_stmt_error(stmt));
@@ -46,39 +72,13 @@ namespace mysqlpp
 		mysql_free_result(metadata);
 	}
 
-	unsigned long long result::num_rows()
+	unsigned long long int result::num_rows()
 	{
 		return mysql_stmt_num_rows(stmt);
 	}
 
 	bool result::fetch()
 	{
-		binds.resize(0);
-		binds.resize(field_count, st_mysql_bind());
-
-		columns.resize(0);
-		columns.resize(field_count, st_mysql_column());
-
-		for (std::size_t i = 0; i < field_count; ++i)
-		{
-			columns[i].name = std::string(fields[i].name);
-			columns[i].type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
-			columns[i].buffer.resize(0);
-			columns[i].buffer.resize(fields[i].length);
-
-			binds[i].buffer_type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
-			binds[i].buffer = &columns[i].buffer.front();
-			binds[i].length = &columns[i].length;
-			binds[i].is_unsigned = columns[i].is_unsigned;
-			binds[i].is_null = &columns[i].is_null;
-			binds[i].error = &columns[i].error;
-		}
-
-		if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
-		{
-			throw exception(mysql_stmt_error(stmt));
-		}
-
 		int fetch_result = mysql_stmt_fetch(stmt);
 
 		if (fetch_result == MYSQL_NO_DATA)
@@ -89,9 +89,6 @@ namespace mysqlpp
 		{
 			for (unsigned int i = 0; i < field_count; ++i)
 			{
-				columns[i].buffer.resize(columns[i].length);
-
-				binds[i].buffer = &columns[i].buffer.front();
 				binds[i].buffer_length = columns[i].length;
 
 				if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)

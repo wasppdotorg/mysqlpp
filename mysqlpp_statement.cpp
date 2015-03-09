@@ -170,9 +170,9 @@ namespace mysqlpp
 		bind.is_null = &is_null;
 	}
 
-	unsigned long long statement::execute()
+	unsigned long long int statement::execute()
 	{
-		unsigned long long affected_rows = -1;
+		unsigned long long int affected_rows = 0;
 
 		try
 		{
