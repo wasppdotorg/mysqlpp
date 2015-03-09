@@ -126,6 +126,7 @@ namespace mysqlpp
 
 		unsigned long long num_rows();
 		bool fetch();
+		bool next();
 
 		template<typename T>
 		T get(unsigned int index)

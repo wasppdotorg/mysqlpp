@@ -101,6 +101,11 @@ namespace mysqlpp
 		return true;
 	}
 
+	bool result::next()
+	{
+		return false;
+	}
+
 	void result::fetch_column(const st_mysql_column& column, unsigned char& value)
 	{
 		value = static_cast<unsigned char>(column.buffer.front());
