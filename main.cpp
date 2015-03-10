@@ -114,7 +114,7 @@ int main()
 		}
 
 		res_ptr r2(stmt5->query());
-		while (r2->next())
+		if (r2->fetch())
 		{
 			std::cout << r2->get<unsigned int>("last_key") << std::endl;
 		}
