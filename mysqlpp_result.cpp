@@ -104,7 +104,21 @@ namespace mysqlpp
 
 	bool result::fetch_proc_result()
 	{
-		int fetch_result = mysql_stmt_fetch(stmt);
+		while (1)
+		{
+			int fetch_result = mysql_stmt_fetch(stmt);
+
+			if (fetch_result == MYSQL_NO_DATA)
+			{
+				break;
+			}
+
+			for (unsigned int i = 0; i < field_count; ++i)
+			{
+
+			}
+		}
+		
 
 		for (unsigned int i = 0; i < field_count; ++i)
 		{
