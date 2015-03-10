@@ -106,7 +106,7 @@ int main()
 
 			std::cout << "--" << std::endl;
 		}
-
+		
 		stmt_ptr stmt5(conn->prepare("CALL USP_GET_UNIQUE_KEYS(?, ?)"));
 		{
 			stmt5->param("users_idx");
@@ -114,9 +114,11 @@ int main()
 		}
 
 		res_ptr r2(stmt5->query());
-		if (r2->fetch())
+		if (r2->fetch_proc_result())
 		{
+			std::cout << 1 << std::endl;
 			std::cout << r2->get<unsigned int>("last_key") << std::endl;
+			std::cout << 2 << std::endl;
 		}
 
 		stmt_ptr stmt6(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));

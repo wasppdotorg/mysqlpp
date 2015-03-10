@@ -142,7 +142,7 @@ namespace mysqlpp
 
 		unsigned long long num_rows();
 		bool fetch();
-		bool next();
+		bool fetch_proc_result();
 
 		template<typename T>
 		T get(unsigned int index)
@@ -233,11 +233,14 @@ namespace mysqlpp
 		unsigned long long execute();
 		result* query();
 
+		int get_status();
+
 	private:
 		st_mysql_bind& get_bind();
 
 		st_mysql_stmt* stmt;
 
+		int status;
 		int param_count;
 		int bind_index;
 

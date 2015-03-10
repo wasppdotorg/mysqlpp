@@ -102,9 +102,19 @@ namespace mysqlpp
 		return true;
 	}
 
-	bool result::next()
+	bool result::fetch_proc_result()
 	{
-		return false;
+		int fetch_result = mysql_stmt_fetch(stmt);
+
+		for (unsigned int i = 0; i < field_count; ++i)
+		{
+			if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)
+			{
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
+			}
+		}
+
+		return true;
 	}
 
 	void result::fetch_column(const st_mysql_column& column, unsigned char& value)
