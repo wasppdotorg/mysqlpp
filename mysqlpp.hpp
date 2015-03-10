@@ -26,6 +26,13 @@ namespace mysqlpp
 	class exception : public std::runtime_error
 	{
 	public:
+		/*
+		exception(const std::string& what) : std::runtime_error(what)
+		{
+
+		}
+		*/
+
 		exception(const char* file, int line, const std::string& what) : std::runtime_error(what)
 		{
 			std::ostringstream oss;
