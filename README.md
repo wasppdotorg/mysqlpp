@@ -1,12 +1,13 @@
 mysqlpp
 =======
 
-Tested with
------------
-* CMake on Ubuntu 14.04 LTS Linux Server (Boost 1.54)
-* Visual Studio 2010 Express on Windows 7 (Boost 1.54 lib32-msvc-10.0)
-* Visual Studio 2013 Professional on Windows 7 (Boost 1.55 lib64-msvc-12.0)
-
+Built with
+----------
+* CMake 2.8 - Ubuntu Linux 14.04 LTS
+* Codeblocks 13.12 - Ubuntu Linux 14.04 LTS
+* Visual Studio 2010 Express - Windows 7
+* Visual Studio 2013 Professional - Windows 7
+* Xcode 6.1 - MacOS X 10.9
 
 Install MariaDB
 ---------------
@@ -48,7 +49,7 @@ Install mysqlpp
 * cd mysqpp
 * sudo apt-get install build-essential
 * sudo apt-get install cmake
-* cmake .
+* cmake . (look, there's a dot :)
 * make
 
 Run
@@ -59,3 +60,12 @@ Memory Leak Check
 -----------------
 * sudo apt-get install valgrind
 * valgrind ./mysqlpp
+
+For Windows
+-----------
+* mariadb-10.0.16-winx64.msi (mariadb-10.0.16-win32.msi)
+
+For MacOS X
+-----------
+* install macports (http://www.macports.org)
+* sudo port install mariadb
