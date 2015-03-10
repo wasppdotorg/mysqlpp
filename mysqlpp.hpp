@@ -14,8 +14,11 @@ http://www.boost.org/LICENSE_1_0.txt
 #include <mysql/mysql.h>
 
 #include <stdexcept>
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
+
 
 namespace mysqlpp
 {
@@ -23,10 +26,23 @@ namespace mysqlpp
 	class exception : public std::runtime_error
 	{
 	public:
-		exception(const std::string& what) : std::runtime_error(what)
+		exception(const char* file, int line, const std::string& what) : std::runtime_error(what)
 		{
-
+			std::ostringstream oss;
+			oss << file << ":" << line << " " << what;
+			err = oss.str();
 		}
+
+		~exception() throw() {}
+
+		const char* what() const throw()
+		{
+			return err.c_str();
+		}
+
+	private:
+		std::string err;
+
 	};
 
 	struct datetime : st_mysql_time
@@ -43,14 +59,14 @@ namespace mysqlpp
 		{
 			if (str.size() > 19)
 			{
-				throw exception("datetime cast failed");
+				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
 			std::tm time;
 			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
 			if (count != 3 && count != 6)
 			{
-				throw exception("datetime cast failed");
+				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
 			time.tm_year -= 1900;
@@ -59,7 +75,7 @@ namespace mysqlpp
 
 			if (std::mktime(&time) == -1)
 			{
-				throw exception("datetime cast failed");
+				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
 			set_time(time);
@@ -134,7 +150,7 @@ namespace mysqlpp
 			st_mysql_column& column = get_column(index);
 			if (column.is_null)
 			{
-				throw exception("null value field");
+				throw exception(__FILE__, __LINE__, "null value field");
 			}
 
 			T value = T();
@@ -149,7 +165,7 @@ namespace mysqlpp
 			st_mysql_column& column = get_column(name);
 			if (column.is_null)
 			{
-				throw exception("null value field");
+				throw exception(__FILE__, __LINE__, "null value field");
 			}
 
 			T value = T();

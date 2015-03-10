@@ -18,12 +18,12 @@ namespace mysqlpp
 		{
 			if (!mysql)
 			{
-				throw exception("mysql_init failed");
+				throw exception(__FILE__, __LINE__, "mysql_init failed");
 			}
 
 			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))
 			{
-				throw exception(mysql_error(mysql));
+				throw exception(__FILE__, __LINE__, mysql_error(mysql));
 			}
 		}
 		catch (...)

@@ -18,31 +18,33 @@ namespace mysqlpp
 		{
 			if (!metadata)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
 			field_count = mysql_stmt_field_count(stmt);
 			if (field_count == 0)
 			{
-				throw exception("zero field_count");
+				throw exception(__FILE__, __LINE__, "zero field_count");
 			}
 
 			fields = mysql_fetch_fields(metadata);
 
-			binds.resize(0);
-			binds.resize(field_count, st_mysql_bind());
-
 			columns.resize(0);
 			columns.resize(field_count, st_mysql_column());
+
+			binds.resize(0);
+			binds.resize(field_count, st_mysql_bind());
 
 			for (std::size_t i = 0; i < field_count; ++i)
 			{
 				columns[i].name = std::string(fields[i].name);
-				columns[i].type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
+				columns[i].type = (fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type);
+				columns[i].length = fields[i].length;
 				columns[i].buffer.resize(0);
 				columns[i].buffer.resize(fields[i].length);
 
-				binds[i].buffer_type = fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type;
+				binds[i].buffer_type = columns[i].type;
+				binds[i].buffer_length = columns[i].length;
 				binds[i].buffer = &columns[i].buffer.front();
 				binds[i].length = &columns[i].length;
 				binds[i].is_unsigned = columns[i].is_unsigned;
@@ -52,12 +54,12 @@ namespace mysqlpp
 
 			if (mysql_stmt_bind_result(stmt, &binds.front()) != 0)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
 			if (mysql_stmt_store_result(stmt) != 0)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 		}
 		catch (...)
@@ -85,15 +87,14 @@ namespace mysqlpp
 		{
 			return false;
 		}
-		else if (fetch_result == MYSQL_DATA_TRUNCATED)
+
+		if (fetch_result == MYSQL_DATA_TRUNCATED)
 		{
 			for (unsigned int i = 0; i < field_count; ++i)
 			{
-				binds[i].buffer_length = columns[i].length;
-
 				if (mysql_stmt_fetch_column(stmt, &binds[i], i, 0) != 0)
 				{
-					throw exception(mysql_stmt_error(stmt));
+					throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 				}
 			}
 		}
@@ -162,7 +163,7 @@ namespace mysqlpp
 	{
 		if (index >= field_count)
 		{
-			throw exception("invalid column_index");
+			throw exception(__FILE__, __LINE__, "invalid column_index");
 		}
 
 		return columns.at(index).is_null == 1;
@@ -181,7 +182,7 @@ namespace mysqlpp
 
 		if (i == field_count)
 		{
-			throw exception("invalid column_name");
+			throw exception(__FILE__, __LINE__, "invalid column_name");
 		}
 
 		return columns.at(i).is_null == 1;
@@ -191,7 +192,7 @@ namespace mysqlpp
 	{
 		if (index >= field_count)
 		{
-			throw exception("invalid column_index");
+			throw exception(__FILE__, __LINE__, "invalid column_index");
 		}
 
 		return columns.at(index);
@@ -210,7 +211,7 @@ namespace mysqlpp
 
 		if (i == field_count)
 		{
-			throw exception("invalid column_name");
+			throw exception(__FILE__, __LINE__, "invalid column_name");
 		}
 
 		return columns.at(i);

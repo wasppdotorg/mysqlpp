@@ -18,12 +18,12 @@ namespace mysqlpp
 		{
 			if (!stmt)
 			{
-				throw exception("stmt_init failed");
+				throw exception(__FILE__, __LINE__, "stmt_init failed");
 			}
 
 			if (mysql_stmt_prepare(stmt, query.c_str(), query.size()) != 0)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
 			param_count = mysql_stmt_param_count(stmt);
@@ -180,13 +180,13 @@ namespace mysqlpp
 			{
 				if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
 				{
-					throw exception(mysql_stmt_error(stmt));
+					throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 				}
 			}
 
 			if (mysql_stmt_execute(stmt) != 0)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
 			affected_rows = mysql_stmt_affected_rows(stmt);
@@ -207,13 +207,13 @@ namespace mysqlpp
 			{
 				if (mysql_stmt_bind_param(stmt, &binds.front()) != 0)
 				{
-					throw exception(mysql_stmt_error(stmt));
+					throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 				}
 			}
 
 			if (mysql_stmt_execute(stmt) != 0)
 			{
-				throw exception(mysql_stmt_error(stmt));
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 		}
 		catch (...)
@@ -228,7 +228,7 @@ namespace mysqlpp
 	{
 		if (bind_index < 0 || bind_index >= param_count)
 		{
-			throw exception("invalid bind_index");
+			throw exception(__FILE__, __LINE__, "invalid bind_index");
 		}
 
 		return binds[bind_index++];
