@@ -141,7 +141,7 @@ namespace mysqlpp
 		~result();
 
 		bool bind();
-		unsigned long long num_rows();
+		unsigned long long int num_rows();
 		bool fetch();
 		bool fetch_proc_result();
 
@@ -231,7 +231,7 @@ namespace mysqlpp
 		void param(const std::string& value);
 		void param_null(char is_null = 1);
 
-		unsigned long long execute();
+		unsigned long long int execute();
 		result* query();
 
 	private:
