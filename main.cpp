@@ -30,11 +30,11 @@ int main()
 	{
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
-		stmt_ptr stmt1(conn->prepare("DROP TABLE IF EXISTS test"));
-		stmt1->execute();
+		stmt_ptr stmt(conn->prepare("DROP TABLE IF EXISTS test"));
+		stmt->execute();
 
-		stmt_ptr stmt2(conn->prepare("CREATE TABLE test(col01 TINYINT, col02 SMALLINT unsigned, col03 INT unsigned, col04 BIGINT unsigned, col05 FLOAT, col06 DOUBLE, col07 VARCHAR(10), col08 TEXT, col09 DATETIME, col10 DATETIME, col11 INT NULL)"));
-		stmt2->execute();
+		stmt.reset(conn->prepare("CREATE TABLE test(col01 TINYINT, col02 SMALLINT unsigned, col03 INT unsigned, col04 BIGINT unsigned, col05 FLOAT, col06 DOUBLE, col07 VARCHAR(10), col08 TEXT, col09 DATETIME, col10 DATETIME, col11 INT NULL)"));
+		stmt->execute();
 
 		unsigned char param01 = 1;
 		unsigned short int param02 = 2;
@@ -49,95 +49,94 @@ int main()
 		mysqlpp::datetime datetime_;
 		std::string param09 = datetime_.str();
 
-		stmt_ptr stmt3(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
+		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
 		{
-			stmt3->param(param01);
-			stmt3->param(param02);
-			stmt3->param(param03);
-			stmt3->param(param04);
-			stmt3->param(param05);
-			stmt3->param(param06);
-			stmt3->param(param07);
-			stmt3->param(param08);
-			stmt3->param(param09);
-			stmt3->param_null();
+			stmt->param(param01);
+			stmt->param(param02);
+			stmt->param(param03);
+			stmt->param(param04);
+			stmt->param(param05);
+			stmt->param(param06);
+			stmt->param(param07);
+			stmt->param(param08);
+			stmt->param(param09);
+			stmt->param_null();
 		}
-		stmt3->execute();
+		stmt->execute();
 
 		// insert one more time
-		unsigned long long int affected_rows = stmt3->execute();
+		unsigned long long int affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt_ptr stmt4(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11 from test WHERE col01 = ?"));
+		stmt.reset(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11 from test WHERE col01 = ?"));
 		{
-			stmt4->param(1);
+			stmt->param(1);
 		}
 
-		res_ptr r1(stmt4->query());
-		if (r1->num_rows() == 0)
+		res_ptr r(stmt->query());
+		if (r->num_rows() == 0)
 		{
 			std::cout << "no result" << std::endl << std::endl;
 		}
 
-		while (r1->fetch())
+		while (r->fetch())
 		{
-			std::cout << "col01(0) : " << r1->get<unsigned short int>(0) << std::endl;
-			std::cout << "col02(1) : " << r1->get<unsigned short int>(1) << std::endl;
+			std::cout << "col01(0) : " << r->get<unsigned short int>(0) << std::endl;
+			std::cout << "col02(1) : " << r->get<unsigned short int>(1) << std::endl;
 
-			std::cout << "col01 : " << r1->get<unsigned short int>("col01") << std::endl;
-			std::cout << "col02 : " << r1->get<unsigned short int>("col02") << std::endl;
-			std::cout << "col03 : " << r1->get<unsigned int>("col03") << std::endl;
-			std::cout << "col04 : " << r1->get<unsigned long long int>("col04") << std::endl;
-			std::cout << "col05 : " << r1->get<float>("col05") << std::endl;
-			std::cout << "col06 : " << r1->get<double>("col06") << std::endl;
-			std::cout << "col07 : " << r1->get<std::string>("col07") << std::endl;
-			std::cout << "col08 : " << r1->get<std::string>("col08") << std::endl;
-			std::cout << "col09 : " << r1->get<std::string>("col09") << std::endl;
-			std::cout << "col10 : " << r1->get<std::string>("col10") << std::endl;
+			std::cout << "col01 : " << r->get<unsigned short int>("col01") << std::endl;
+			std::cout << "col02 : " << r->get<unsigned short int>("col02") << std::endl;
+			std::cout << "col03 : " << r->get<unsigned int>("col03") << std::endl;
+			std::cout << "col04 : " << r->get<unsigned long long int>("col04") << std::endl;
+			std::cout << "col05 : " << r->get<float>("col05") << std::endl;
+			std::cout << "col06 : " << r->get<double>("col06") << std::endl;
+			std::cout << "col07 : " << r->get<std::string>("col07") << std::endl;
+			std::cout << "col08 : " << r->get<std::string>("col08") << std::endl;
+			std::cout << "col09 : " << r->get<std::string>("col09") << std::endl;
+			std::cout << "col10 : " << r->get<std::string>("col10") << std::endl;
 
-			if (r1->is_null("col11"))
+			if (r->is_null("col11"))
 			{
 				std::cout << "param11 is null" << std::endl;
 			}
 			else
 			{
-				std::cout << "param11 : " << r1->get<int>("col11") << std::endl;
+				std::cout << "param11 : " << r->get<int>("col11") << std::endl;
 			}
 
 			std::cout << "--" << std::endl;
 		}
 		
-		stmt_ptr stmt5(conn->prepare("CALL USP_GET_UNIQUE_KEYS(?, ?)"));
+		/*
+		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
 		{
-			stmt5->param("users_idx");
-			stmt5->param(1);
+			stmt->param(1);
 		}
 
-		res_ptr r2(stmt5->query());
-		if (r2->fetch_proc_result())
+		r.reset(stmt->query());
+		if (r->fetch_proc_result())
 		{
-			std::cout << 1 << std::endl;
-			std::cout << r2->get<unsigned int>("last_key") << std::endl;
-			std::cout << 2 << std::endl;
+			std::cout << r->get<int>("last_key") << std::endl;
 		}
+		*/
 
-		stmt_ptr stmt6(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
+		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
 		{
-			stmt6->param(param01);
-			stmt6->param(param02);
-			stmt6->param(param03);
-			stmt6->param(param04);
-			stmt6->param(param05);
-			stmt6->param(param06);
-			stmt6->param(param07);
-			stmt6->param(param08);
-			stmt6->param(param09);
-			stmt6->param_null();
+			stmt->param(param01);
+			stmt->param(param02);
+			stmt->param(param03);
+			stmt->param(param04);
+			stmt->param(param05);
+			stmt->param(param06);
+			stmt->param(param07);
+			stmt->param(param08);
+			stmt->param(param09);
+			stmt->param_null();
 		}
-		stmt6->execute();
+		stmt->execute();
 
 		// insert one more time
-		affected_rows = stmt6->execute();
+		affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 	}
 	catch (std::exception& e)

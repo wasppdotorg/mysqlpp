@@ -140,6 +140,7 @@ namespace mysqlpp
 		result(st_mysql_stmt* stmt_);
 		~result();
 
+		bool bind();
 		unsigned long long num_rows();
 		bool fetch();
 		bool fetch_proc_result();
@@ -233,14 +234,11 @@ namespace mysqlpp
 		unsigned long long execute();
 		result* query();
 
-		int get_status();
-
 	private:
 		st_mysql_bind& get_bind();
 
 		st_mysql_stmt* stmt;
 
-		int status;
 		int param_count;
 		int bind_index;
 
