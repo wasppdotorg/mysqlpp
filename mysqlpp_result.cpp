@@ -201,7 +201,7 @@ namespace mysqlpp
 
 			if (!bind())
 			{
-				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
+				return false;
 			}
 
 			while (1)
@@ -223,7 +223,6 @@ namespace mysqlpp
 		}
 		catch (...)
 		{
-			mysql_free_result(metadata);
 			throw;
 		}
 
