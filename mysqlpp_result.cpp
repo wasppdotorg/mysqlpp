@@ -219,7 +219,6 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
-			mysql_free_result(metadata);
 			return true;
 		}
 		catch (...)
