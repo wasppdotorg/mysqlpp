@@ -22,7 +22,7 @@ namespace mysqlpp
 			}
 
 			bind();
-			
+
 			if (mysql_stmt_store_result(stmt) != 0)
 			{
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
@@ -86,46 +86,14 @@ namespace mysqlpp
 		return mysql_stmt_num_rows(stmt);
 	}
 
-	bool result::fetch()
+	bool result::fetch(bool is_proc)
 	{
-		if (mysql_stmt_fetch(stmt) == MYSQL_NO_DATA)
+		if (is_proc)
 		{
-			return false;
+			return fetch_proc_result();
 		}
 
-		return true;
-	}
-
-	bool result::fetch_proc_result()
-	{
-		metadata = mysql_stmt_result_metadata(stmt);
-
-		if (!metadata)
-		{
-			throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
-		}
-
-		if (!bind())
-		{
-			return false;
-		}
-
-		while (1)
-		{
-			int fetch_result = mysql_stmt_fetch(stmt);
-
-			if (fetch_result == 1 || fetch_result == MYSQL_NO_DATA)
-			{
-				break;
-			}
-		}
-
-		if (mysql_stmt_next_result(stmt) > 0)
-		{
-			return false;
-		}
-
-		return true;
+		return fetch_stmt_result();
 	}
 
 	void result::fetch_column(const st_mysql_column& column, unsigned char& value)
@@ -207,6 +175,60 @@ namespace mysqlpp
 		}
 
 		return columns.at(i).is_null == 1;
+	}
+
+	bool result::fetch_stmt_result()
+	{
+		if (mysql_stmt_fetch(stmt) == MYSQL_NO_DATA)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	bool result::fetch_proc_result()
+	{
+		mysql_free_result(metadata);
+		metadata = mysql_stmt_result_metadata(stmt);
+
+		try
+		{
+			if (!metadata)
+			{
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
+			}
+
+			if (!bind())
+			{
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
+			}
+
+			while (1)
+			{
+				int fetch_result = mysql_stmt_fetch(stmt);
+
+				if (fetch_result == 1 || fetch_result == MYSQL_NO_DATA)
+				{
+					break;
+				}
+			}
+
+			if (mysql_stmt_next_result(stmt) > 0)
+			{
+				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
+			}
+
+			mysql_free_result(metadata);
+			return true;
+		}
+		catch (...)
+		{
+			mysql_free_result(metadata);
+			throw;
+		}
+
+		return false;
 	}
 
 	st_mysql_column& result::get_column(unsigned int index)

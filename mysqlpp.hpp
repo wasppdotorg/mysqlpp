@@ -142,8 +142,7 @@ namespace mysqlpp
 
 		bool bind();
 		unsigned long long int num_rows();
-		bool fetch();
-		bool fetch_proc_result();
+		bool fetch(bool is_proc = false);
 
 		template<typename T>
 		T get(unsigned int index)
@@ -195,6 +194,9 @@ namespace mysqlpp
 		bool is_null(const std::string& name);
 
 	private:
+		bool fetch_stmt_result();
+		bool fetch_proc_result();
+
 		st_mysql_column& get_column(unsigned int index);
 		st_mysql_column& get_column(const std::string& name);
 
