@@ -106,7 +106,7 @@ int main()
 
 			std::cout << "--" << std::endl;
 		}
-		
+
 		/*
 		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
 		{
@@ -114,7 +114,7 @@ int main()
 		}
 
 		r.reset(stmt->query());
-		if (r->fetch_proc_result())
+		if (r->fetch(true))
 		{
 			std::cout << r->get<int>("last_key") << std::endl;
 		}
