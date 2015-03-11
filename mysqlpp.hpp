@@ -108,7 +108,7 @@ namespace mysqlpp
 
 		std::string str()
 		{
-			char buf[32] = { 0 };
+			char buf[32] = {0};
 
 			std::tm time = c_tm();
 			std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
