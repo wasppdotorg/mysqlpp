@@ -10,7 +10,7 @@ http://www.boost.org/LICENSE_1_0.txt
 namespace mysqlpp
 {
 
-	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, bool pooled_)
+	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, const std::string& charset, bool pooled_)
 	{
 		mysql = mysql_init(0);
 
@@ -22,6 +22,11 @@ namespace mysqlpp
 			}
 
 			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))
+			{
+				throw exception(__FILE__, __LINE__, mysql_error(mysql));
+			}
+
+			if (mysql_options(mysql, MYSQL_SET_CHARSET_NAME, charset.c_str()) != 0)
 			{
 				throw exception(__FILE__, __LINE__, mysql_error(mysql));
 			}

@@ -24,8 +24,14 @@ typedef boost::scoped_ptr<mysqlpp::statement> stmt_ptr;
 typedef boost::scoped_ptr<mysqlpp::result> res_ptr;
 */
 
-int main()
+int main(int argc, char* argv[])
 {
+	std::string utf8_str;
+	if (argc > 1)
+	{
+		utf8_str = std::string(argv[1]);
+	}
+
 	try
 	{
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
@@ -33,7 +39,7 @@ int main()
 		stmt_ptr stmt(conn->prepare("DROP TABLE IF EXISTS test"));
 		stmt->execute();
 
-		stmt.reset(conn->prepare("CREATE TABLE test(col01 TINYINT, col02 SMALLINT unsigned, col03 INT unsigned, col04 BIGINT unsigned, col05 FLOAT, col06 DOUBLE, col07 VARCHAR(10), col08 TEXT, col09 DATETIME, col10 DATETIME, col11 INT NULL)"));
+		stmt.reset(conn->prepare("CREATE TABLE test(col01 TINYINT, col02 SMALLINT unsigned, col03 INT unsigned, col04 BIGINT unsigned, col05 FLOAT, col06 DOUBLE, col07 VARCHAR(10), col08 VARCHAR(10), col09 TEXT, col10 DATETIME, col11 INT NULL, col12 DATETIME)"));
 		stmt->execute();
 
 		unsigned char param01 = 1;
@@ -44,12 +50,13 @@ int main()
 		double param06 = 6.01f;
 
 		std::string param07("param7");
-		std::string param08("param8");
+		std::string param08(utf8_str);
+		std::string param09("param9");
 
 		mysqlpp::datetime datetime_;
-		std::string param09 = datetime_.str();
+		std::string param10 = datetime_.str();
 
-		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
+		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())"));
 		{
 			stmt->param(param01);
 			stmt->param(param02);
@@ -60,6 +67,7 @@ int main()
 			stmt->param(param07);
 			stmt->param(param08);
 			stmt->param(param09);
+			stmt->param(param10);
 			stmt->param_null();
 		}
 		stmt->execute();
@@ -68,7 +76,7 @@ int main()
 		unsigned long long int affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
-		stmt.reset(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11 from test WHERE col01 = ?"));
+		stmt.reset(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col01 = ?"));
 		{
 			stmt->param(1);
 		}
@@ -94,16 +102,17 @@ int main()
 			std::cout << "col08 : " << r->get<std::string>("col08") << std::endl;
 			std::cout << "col09 : " << r->get<std::string>("col09") << std::endl;
 			std::cout << "col10 : " << r->get<std::string>("col10") << std::endl;
-
+			
 			if (r->is_null("col11"))
 			{
-				std::cout << "param11 is null" << std::endl;
+				std::cout << "col11 is null" << std::endl;
 			}
 			else
 			{
-				std::cout << "param11 : " << r->get<int>("col11") << std::endl;
+				std::cout << "col11 : " << r->get<int>("col11") << std::endl;
 			}
 
+			std::cout << "col12 : " << r->get<std::string>("col12") << std::endl;
 			std::cout << "--" << std::endl;
 		}
 
@@ -120,7 +129,7 @@ int main()
 		}
 		*/
 
-		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"));
+		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())"));
 		{
 			stmt->param(param01);
 			stmt->param(param02);
@@ -131,6 +140,7 @@ int main()
 			stmt->param(param07);
 			stmt->param(param08);
 			stmt->param(param09);
+			stmt->param(param10);
 			stmt->param_null();
 		}
 		stmt->execute();
