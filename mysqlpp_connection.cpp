@@ -26,7 +26,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_error(mysql));
 			}
 
-			if (mysql_options(mysql, MYSQL_SET_CHARSET_NAME, charset.c_str()) != 0)
+			if (mysql_set_character_set(mysql, charset.c_str()) != 0)
 			{
 				throw exception(__FILE__, __LINE__, mysql_error(mysql));
 			}
