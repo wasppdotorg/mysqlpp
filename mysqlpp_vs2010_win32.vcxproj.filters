@@ -21,10 +21,10 @@
     <ClCompile Include="mysqlpp_connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mysqlpp_result.cpp">
+    <ClCompile Include="mysqlpp_statement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mysqlpp_statement.cpp">
+    <ClCompile Include="mysqlpp_result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

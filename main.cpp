@@ -12,7 +12,7 @@ http://www.boost.org/LICENSE_1_0.txt
 
 typedef std::auto_ptr<mysqlpp::connection> conn_ptr;
 typedef std::auto_ptr<mysqlpp::statement> stmt_ptr;
-typedef std::auto_ptr<mysqlpp::result> res_ptr;
+typedef std::auto_ptr<mysqlpp::result> rs_ptr;
 
 // std::auto_ptr is deprecated.
 // if boost is available, then:
@@ -21,7 +21,7 @@ typedef std::auto_ptr<mysqlpp::result> res_ptr;
 
 typedef boost::scoped_ptr<mysqlpp::connection> conn_ptr;
 typedef boost::scoped_ptr<mysqlpp::statement> stmt_ptr;
-typedef boost::scoped_ptr<mysqlpp::result> res_ptr;
+typedef boost::scoped_ptr<mysqlpp::result> rs_ptr;
 */
 
 int main()
@@ -73,37 +73,37 @@ int main()
 			stmt->param(1);
 		}
 
-		res_ptr r(stmt->query());
-		if (r->num_rows() == 0)
+		rs_ptr rs(stmt->query());
+		if (rs->num_rows() == 0)
 		{
 			std::cout << "no result" << std::endl << std::endl;
 		}
 
-		while (r->fetch())
+		while (rs->fetch())
 		{
-			std::cout << "col01(0) : " << r->get<unsigned short int>(0) << std::endl;
-			std::cout << "col02(1) : " << r->get<unsigned short int>(1) << std::endl;
+			std::cout << "col01(0) : " << rs->get<unsigned short int>(0) << std::endl;
+			std::cout << "col02(1) : " << rs->get<unsigned short int>(1) << std::endl;
 
-			std::cout << "col01 : " << r->get<unsigned short int>("col01") << std::endl;
-			std::cout << "col02 : " << r->get<unsigned short int>("col02") << std::endl;
-			std::cout << "col03 : " << r->get<unsigned int>("col03") << std::endl;
-			std::cout << "col04 : " << r->get<unsigned long long int>("col04") << std::endl;
-			std::cout << "col05 : " << r->get<float>("col05") << std::endl;
-			std::cout << "col06 : " << r->get<double>("col06") << std::endl;
-			std::cout << "col07 : " << r->get<std::string>("col07") << std::endl;
-			std::cout << "col08 : " << r->get<std::string>("col08") << std::endl;
-			std::cout << "col09 : " << r->get<std::string>("col09") << std::endl;
+			std::cout << "col01 : " << rs->get<unsigned short int>("col01") << std::endl;
+			std::cout << "col02 : " << rs->get<unsigned short int>("col02") << std::endl;
+			std::cout << "col03 : " << rs->get<unsigned int>("col03") << std::endl;
+			std::cout << "col04 : " << rs->get<unsigned long long int>("col04") << std::endl;
+			std::cout << "col05 : " << rs->get<float>("col05") << std::endl;
+			std::cout << "col06 : " << rs->get<double>("col06") << std::endl;
+			std::cout << "col07 : " << rs->get<std::string>("col07") << std::endl;
+			std::cout << "col08 : " << rs->get<std::string>("col08") << std::endl;
+			std::cout << "col09 : " << rs->get<std::string>("col09") << std::endl;
 			
-			if (r->is_null("col10"))
+			if (rs->is_null("col10"))
 			{
 				std::cout << "col10 is null" << std::endl;
 			}
 			else
 			{
-				std::cout << "col10 : " << r->get<int>("col10") << std::endl;
+				std::cout << "col10 : " << rs->get<int>("col10") << std::endl;
 			}
 
-			std::cout << "col11 : " << r->get<std::string>("col11") << std::endl;
+			std::cout << "col11 : " << rs->get<std::string>("col11") << std::endl;
 			std::cout << "--" << std::endl;
 		}
 
