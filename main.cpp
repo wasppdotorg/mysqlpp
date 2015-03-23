@@ -93,7 +93,7 @@ int main()
 			std::cout << "col07 : " << rs->get<std::string>("col07") << std::endl;
 			std::cout << "col08 : " << rs->get<std::string>("col08") << std::endl;
 			std::cout << "col09 : " << rs->get<std::string>("col09") << std::endl;
-			
+
 			if (rs->is_null("col10"))
 			{
 				std::cout << "col10 is null" << std::endl;
@@ -110,13 +110,13 @@ int main()
 		/*
 		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
 		{
-			stmt->param(1);
+		stmt->param(1);
 		}
 
 		r.reset(stmt->query());
 		if (r->fetch(true))
 		{
-			std::cout << r->get<int>("last_key") << std::endl;
+		std::cout << r->get<int>("last_key") << std::endl;
 		}
 		*/
 
