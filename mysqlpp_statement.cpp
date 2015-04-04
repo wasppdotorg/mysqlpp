@@ -162,6 +162,19 @@ namespace mysqlpp
 		bind.length = &lengths[bind_index - 1];
 	}
 
+	void statement::param_blob(const std::string& value)
+	{
+		st_mysql_bind& bind = get_bind();
+
+		bind.buffer_type = MYSQL_TYPE_BLOB;
+		bind.buffer = (void*)value.c_str();
+		bind.is_null = 0;
+
+		lengths[bind_index - 1] = value.size();
+		bind.buffer_length = lengths[bind_index - 1];
+		bind.length = &lengths[bind_index - 1];
+	}
+
 	void statement::param_null(char is_null)
 	{
 		st_mysql_bind& bind = get_bind();

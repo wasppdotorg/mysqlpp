@@ -231,6 +231,7 @@ namespace mysqlpp
 		void param(const double& value);
 
 		void param(const std::string& value);
+		void param_blob(const std::string& value);
 		void param_null(char is_null = 1);
 
 		unsigned long long int execute();
