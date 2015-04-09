@@ -37,9 +37,9 @@ int main()
 		stmt->execute();
 
 		unsigned char param01 = 1;
-		unsigned short int param02 = 2;
-		unsigned int param03 = 3;
-		unsigned long long int param04 = 4;
+		unsigned short int param02 = 65535;
+		unsigned int param03 = 4294967295;
+		unsigned long long int param04 = 18446744073709551615;
 		float param05 = 5.01f;
 		double param06 = 6.01f;
 
