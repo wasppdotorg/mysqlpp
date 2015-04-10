@@ -123,12 +123,14 @@ namespace mysqlpp
 
 	void result::fetch_column(const st_mysql_column& column, long long int& value)
 	{
-		value = static_cast<long long int>(column.buffer.front());
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<long long int*>(buffer);
 	}
 
 	void result::fetch_column(const st_mysql_column& column, unsigned long long int& value)
 	{
-		value = static_cast<unsigned long long int>(column.buffer.front());
+		char* buffer = const_cast<char*>(&column.buffer.front());
+		value = *reinterpret_cast<unsigned long long int*>(buffer);
 	}
 
 	void result::fetch_column(const st_mysql_column& column, float& value)
