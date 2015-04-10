@@ -123,26 +123,22 @@ namespace mysqlpp
 
 	void result::fetch_column(const st_mysql_column& column, long long int& value)
 	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<long long int*>(buffer);
+		value = *reinterpret_cast<long long int*>(const_cast<char*>(&column.buffer.front()));
 	}
 
 	void result::fetch_column(const st_mysql_column& column, unsigned long long int& value)
 	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<unsigned long long int*>(buffer);
+		value = *reinterpret_cast<unsigned long long int*>(const_cast<char*>(&column.buffer.front()));
 	}
 
 	void result::fetch_column(const st_mysql_column& column, float& value)
 	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<float*>(buffer);
+		value = *reinterpret_cast<float*>(const_cast<char*>(&column.buffer.front()));
 	}
 
 	void result::fetch_column(const st_mysql_column& column, double& value)
 	{
-		char* buffer = const_cast<char*>(&column.buffer.front());
-		value = *reinterpret_cast<double*>(buffer);
+		value = *reinterpret_cast<double*>(const_cast<char*>(&column.buffer.front()));
 	}
 
 	void result::fetch_column(const st_mysql_column& column, std::string& value)
