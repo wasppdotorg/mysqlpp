@@ -52,20 +52,7 @@ namespace mysqlpp
 
 	bool connection::ping()
 	{
-		try
-		{
-			if (!mysql)
-			{
-				return false;
-			}
-
-			return mysql_ping(mysql) == 0;
-		}
-		catch (...)
-		{
-		}
-
-		return false;
+		return mysql_ping(mysql) == 0;
 	}
 
 	statement* connection::prepare(const std::string& query)
