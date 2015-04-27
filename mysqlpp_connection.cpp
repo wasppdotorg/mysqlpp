@@ -50,6 +50,24 @@ namespace mysqlpp
 		mysql_library_end();
 	}
 
+	bool connection::ping()
+	{
+		try
+		{
+			if (!mysql)
+			{
+				return false;
+			}
+
+			return mysql_ping(mysql) == 0;
+		}
+		catch (...)
+		{
+		}
+
+		return false;
+	}
+
 	statement* connection::prepare(const std::string& query)
 	{
 		return new statement(mysql, query);

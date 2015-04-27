@@ -254,6 +254,7 @@ namespace mysqlpp
 		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port = 3306, const std::string& charset = "utf8", bool pooled_ = false);
 		~connection();
 
+		bool ping();
 		statement* prepare(const std::string& query);
 
 		std::tm* last_released()
