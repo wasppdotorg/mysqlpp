@@ -5,6 +5,8 @@ Distributed under the Boost Software License, Version 1.0.
 http://www.boost.org/LICENSE_1_0.txt
 */
 
+#include <cstdlib>
+
 #include <iostream>
 #include <memory>
 
@@ -28,6 +30,8 @@ int main()
 {
 	try
 	{
+		mysql_library_init(0, 0, 0);
+		
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
 		stmt_ptr stmt(conn->prepare("DROP TABLE IF EXISTS test"));
@@ -142,6 +146,8 @@ int main()
 		// insert one more time
 		affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
+
+		mysql_library_end();
 	}
 	catch (std::exception& e)
 	{

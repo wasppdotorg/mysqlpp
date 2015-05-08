@@ -34,7 +34,9 @@ namespace mysqlpp
 		catch (...)
 		{
 			mysql_close(mysql);
-			mysql_library_end();
+
+			// let your own database manager or main call this function below
+			//mysql_library_end();
 
 			throw;
 		}
@@ -47,7 +49,9 @@ namespace mysqlpp
 	connection::~connection()
 	{
 		mysql_close(mysql);
-		mysql_library_end();
+
+		// let your own database manager or main call this function below
+		//mysql_library_end();
 	}
 
 	bool connection::ping()
