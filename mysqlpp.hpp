@@ -94,8 +94,8 @@ namespace mysqlpp
 		{
 			std::tm time;
 
-			time.tm_year = static_cast<int>(year)-1900;
-			time.tm_mon = static_cast<int>(month)-1;
+			time.tm_year = static_cast<int>(year) - 1900;
+			time.tm_mon = static_cast<int>(month) - 1;
 			time.tm_mday = static_cast<int>(day);
 			time.tm_hour = static_cast<int>(hour);
 			time.tm_min = static_cast<int>(minute);
