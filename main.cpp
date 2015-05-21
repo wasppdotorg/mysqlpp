@@ -79,6 +79,8 @@ int main()
 			stmt->param(1);
 		}
 
+		//stmt.reset(conn->prepare_like("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col07 like ", false, std::string("param"), true));
+		
 		rs_ptr rs(stmt->query());
 		if (rs->num_rows() == 0)
 		{

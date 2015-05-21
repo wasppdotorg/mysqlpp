@@ -64,4 +64,24 @@ namespace mysqlpp
 		return new statement(mysql, query);
 	}
 
+	statement* connection::prepare_like(const std::string& query, bool left_percent, std::string& keyword, bool right_percent)
+	{
+		std::ostringstream oss;
+		oss << query << " '";
+
+		if (left_percent)
+		{
+			oss << "%";
+		}
+		oss << keyword;
+
+		if (right_percent)
+		{
+			oss << "%";
+		}
+		oss << "'";
+
+		return new statement(mysql, oss.str());
+	}
+
 } // namespace mysqlpp

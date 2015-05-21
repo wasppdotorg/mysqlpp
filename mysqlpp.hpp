@@ -256,6 +256,7 @@ namespace mysqlpp
 
 		bool ping();
 		statement* prepare(const std::string& query);
+		statement* prepare_like(const std::string& query, bool left_percent, std::string& keyword, bool right_percent);
 
 		std::tm* last_released()
 		{
