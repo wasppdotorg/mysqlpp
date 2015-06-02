@@ -10,6 +10,7 @@ http://www.boost.org/LICENSE_1_0.txt
 
 #include <cstdio>
 #include <ctime>
+#include <cstring>
 
 #include <mysql/mysql.h>
 
@@ -256,7 +257,7 @@ namespace mysqlpp
 
 		bool ping();
 		statement* prepare(const std::string& query);
-		statement* prepare_like(const std::string& query, bool left_percent, std::string& keyword, bool right_percent);
+		statement* prepare_like(const std::string& query, bool left_percent, const std::string& keyword, bool right_percent);
 
 		std::tm* last_released()
 		{

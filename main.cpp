@@ -31,7 +31,7 @@ int main()
 	try
 	{
 		mysql_library_init(0, 0, 0);
-		
+
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
 		stmt_ptr stmt(conn->prepare("DROP TABLE IF EXISTS test"));
@@ -79,8 +79,8 @@ int main()
 			stmt->param(1);
 		}
 
-		//stmt.reset(conn->prepare_like("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col07 like ", false, std::string("param"), true));
-		
+		//stmt.reset(conn->prepare_like("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col07 like ", false, "param", true));
+
 		rs_ptr rs(stmt->query());
 		if (rs->num_rows() == 0)
 		{
