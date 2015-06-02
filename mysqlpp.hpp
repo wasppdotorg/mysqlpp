@@ -50,9 +50,9 @@ namespace mysqlpp
 		datetime()
 		{
 			std::time_t time_ = std::time(0);
-			std::tm time = *std::localtime(&time_);
+			std::tm tm_ = *std::localtime(&time_);
 
-			set_time(time);
+			set_time(tm_);
 		}
 
 		datetime(const std::string& str)
@@ -62,56 +62,56 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
-			std::tm time;
-			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &time.tm_year, &time.tm_mon, &time.tm_mday, &time.tm_hour, &time.tm_min, &time.tm_sec);
+			std::tm tm_;
+			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
 			if (count != 3 && count != 6)
 			{
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
-			time.tm_year -= 1900;
-			time.tm_mon -= 1;
-			time.tm_isdst = -1;
+			tm_.tm_year -= 1900;
+			tm_.tm_mon -= 1;
+			tm_.tm_isdst = -1;
 
-			if (std::mktime(&time) == -1)
+			if (std::mktime(&tm_) == -1)
 			{
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
-			set_time(time);
+			set_time(tm_);
 		}
 
-		void set_time(const std::tm& time)
+		void set_time(const std::tm& tm_)
 		{
-			year = static_cast<unsigned int>(time.tm_year) + 1900;
-			month = static_cast<unsigned int>(time.tm_mon) + 1;
-			day = static_cast<unsigned int>(time.tm_mday);
-			hour = static_cast<unsigned int>(time.tm_hour);
-			minute = static_cast<unsigned int>(time.tm_min);
-			second = static_cast<unsigned int>(time.tm_sec);
+			year = static_cast<unsigned int>(tm_.tm_year) + 1900;
+			month = static_cast<unsigned int>(tm_.tm_mon) + 1;
+			day = static_cast<unsigned int>(tm_.tm_mday);
+			hour = static_cast<unsigned int>(tm_.tm_hour);
+			minute = static_cast<unsigned int>(tm_.tm_min);
+			second = static_cast<unsigned int>(tm_.tm_sec);
 		}
 
 		std::tm c_tm()
 		{
-			std::tm time;
+			std::tm tm_;
 
-			time.tm_year = static_cast<int>(year) - 1900;
-			time.tm_mon = static_cast<int>(month) - 1;
-			time.tm_mday = static_cast<int>(day);
-			time.tm_hour = static_cast<int>(hour);
-			time.tm_min = static_cast<int>(minute);
-			time.tm_sec = static_cast<int>(second);
-			time.tm_isdst = -1;
+			tm_.tm_year = static_cast<int>(year) - 1900;
+			tm_.tm_mon = static_cast<int>(month) - 1;
+			tm_.tm_mday = static_cast<int>(day);
+			tm_.tm_hour = static_cast<int>(hour);
+			tm_.tm_min = static_cast<int>(minute);
+			tm_.tm_sec = static_cast<int>(second);
+			tm_.tm_isdst = -1;
 
-			return time;
+			return tm_;
 		}
 
 		std::string str()
 		{
 			char buf[32] = { 0 };
 
-			std::tm time = c_tm();
-			std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &time);
+			std::tm tm_ = c_tm();
+			std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_);
 
 			return std::string(buf);
 		}
