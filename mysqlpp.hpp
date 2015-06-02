@@ -246,7 +246,7 @@ namespace mysqlpp
 		int bind_index;
 
 		std::vector<st_mysql_bind> binds;
-		std::vector<unsigned long> lengths;
+		std::vector<unsigned long int> lengths;
 	};
 
 	class connection
