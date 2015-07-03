@@ -119,13 +119,13 @@ int main()
 		/*
 		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
 		{
-		stmt->param(1);
+			stmt->param(1);
 		}
 
-		r.reset(stmt->query());
-		if (r->fetch(true))
+		rs.reset(stmt->query());
+		if (rs->fetch(true))
 		{
-		std::cout << r->get<int>("last_key") << std::endl;
+			std::cout << rs->get<int>("last_key") << std::endl;
 		}
 		*/
 
