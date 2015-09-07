@@ -17,4 +17,8 @@ add_executable (
 
 )
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+	set (CMAKE_CXX_FLAGS "-g -Wall -O2")
+endif()
+
 target_link_libraries (mysqlpp ${MySQLClient_LIBRARIES})
