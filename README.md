@@ -49,7 +49,9 @@ Install mysqlpp
 * cd mysqpp
 * sudo apt-get install build-essential
 * sudo apt-get install cmake
-* cmake . (look, there's a dot :)
+* mkdir cmakebuild
+* cd cmakebuild
+* cmake ..
 * make
 
 Run
