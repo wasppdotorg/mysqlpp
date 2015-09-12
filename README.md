@@ -5,8 +5,7 @@ Built with
 ----------
 * CMake 2.8 - Ubuntu Linux 14.04 LTS
 * Codeblocks 13.12 - Ubuntu Linux 14.04 LTS
-* Visual Studio 2010 Express - Windows 7
-* Visual Studio 2013 Professional - Windows 7
+* Visual Studio 2013 - Windows 7
 * Xcode 6.1 - MacOS X 10.9
 
 Install MariaDB
@@ -65,7 +64,7 @@ Memory Leak Check
 
 For Windows
 -----------
-* mariadb-10.0.16-winx64.msi (mariadb-10.0.16-win32.msi)
+* mariadb-10.0.16-winx64.msi
 
 For MacOS X
 -----------
