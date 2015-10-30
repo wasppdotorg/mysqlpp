@@ -153,7 +153,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, "null value field");
 			}
 
-			T value = T();
+			T value;
 			fetch_column(column, value);
 
 			return value;
@@ -168,7 +168,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, "null value field");
 			}
 
-			T value = T();
+			T value;
 			fetch_column(column, value);
 
 			return value;

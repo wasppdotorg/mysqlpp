@@ -12,10 +12,10 @@ namespace mysqlpp
 
 	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, const std::string& charset, bool pooled_)
 	{
-		mysql = mysql_init(0);
-
 		try
 		{
+			mysql = mysql_init(0);
+
 			if (!mysql)
 			{
 				throw exception(__FILE__, __LINE__, "mysql_init failed");
