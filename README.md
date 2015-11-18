@@ -1,12 +1,11 @@
 mysqlpp
 =======
 
-Built with
-----------
-* CMake 2.8 - Ubuntu Linux 14.04 LTS
-* Codeblocks 13.12 - Ubuntu Linux 14.04 LTS
+Build Environment
+-----------------
+* GCC 4.8 - Ubuntu Linux 14.04 LTS
+* Clang 3.4 - FreeBSD 10.2
 * Visual Studio 2013 - Windows 7
-* Xcode 6.1 - MacOS X 10.9
 
 Install MariaDB
 ---------------
@@ -34,8 +33,10 @@ collation_server     = utf8_general_ci
 
 * sudo /etc/init.d/mysql restart
 * mysql -u root -p
-* create database test default character set utf8 default collate utf8_general_ci;
-* exit
+```
+create database test default character set utf8 default collate utf8_general_ci;
+exit
+```
 
 Install MySQLClient Library
 ---------------------------
@@ -62,11 +63,11 @@ Memory Leak Check
 * sudo apt-get install valgrind
 * valgrind ./mysqlpp
 
+For FreeBSD
+-----------
+* sudo pkg install mariadb100-client
+* sudo pkg install mariadb100-server
+
 For Windows
 -----------
-* mariadb-10.0.16-winx64.msi
-
-For MacOS X
------------
-* install macports (http://www.macports.org)
-* sudo port install mariadb
+* mariadb-10.0.22-winx64.msi
