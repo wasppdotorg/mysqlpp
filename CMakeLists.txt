@@ -1,24 +1,17 @@
 cmake_minimum_required (VERSION 2.8)
 
-project (mysqlpp)
+set (TARGET mysqlpp)
+project (${TARGET})
 
-find_library (MySQLClient_LIBRARIES NAMES mysqlclient)
+aux_source_directory (. Source_DIRECTORIES)
+add_executable (${TARGET} ${Source_DIRECTORIES})
 
-add_executable (
+include_directories (/usr/include /usr/local/include)
 
-	mysqlpp
-
-	mysqlpp.hpp
-
-	main.cpp
-	mysqlpp_connection.cpp
-	mysqlpp_result.cpp
-	mysqlpp_statement.cpp
-
-)
+find_library (MySQLClient_LIBRARIES NAMES mysqlclient PATHS /usr/lib/mysql /usr/local/lib/mysql)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (CMAKE_CXX_FLAGS "-Wall -O2 -g")
 endif()
 
-target_link_libraries (mysqlpp ${MySQLClient_LIBRARIES})
+target_link_libraries (${TARGET} ${MySQLClient_LIBRARIES})
