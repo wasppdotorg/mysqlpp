@@ -12,10 +12,9 @@ namespace mysqlpp
 
 	result::result(st_mysql_stmt* stmt_) : stmt(stmt_), metadata(0), fields(0)
 	{
-		metadata = mysql_stmt_result_metadata(stmt);
-
 		try
 		{
+			metadata = mysql_stmt_result_metadata(stmt);
 			if (!metadata)
 			{
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
@@ -30,7 +29,11 @@ namespace mysqlpp
 		}
 		catch (...)
 		{
-			mysql_free_result(metadata);
+			if (metadata)
+			{
+				mysql_free_result(metadata);
+			}
+			
 			throw;
 		}
 	}
@@ -187,11 +190,11 @@ namespace mysqlpp
 
 	bool result::fetch_proc_result()
 	{
-		mysql_free_result(metadata);
-		metadata = mysql_stmt_result_metadata(stmt);
-
 		try
 		{
+			mysql_free_result(metadata);
+
+			metadata = mysql_stmt_result_metadata(stmt);
 			if (!metadata)
 			{
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));

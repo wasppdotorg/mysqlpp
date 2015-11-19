@@ -12,10 +12,9 @@ namespace mysqlpp
 
 	statement::statement(st_mysql* mysql, const std::string& query)
 	{
-		stmt = mysql_stmt_init(mysql);
-
 		try
 		{
+			stmt = mysql_stmt_init(mysql);
 			if (!stmt)
 			{
 				throw exception(__FILE__, __LINE__, "stmt_init failed");
@@ -38,7 +37,11 @@ namespace mysqlpp
 		}
 		catch (...)
 		{
-			mysql_stmt_close(stmt);
+			if (stmt)
+			{
+				mysql_stmt_close(stmt);
+			}
+
 			throw;
 		}
 	}

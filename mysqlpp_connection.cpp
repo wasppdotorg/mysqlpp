@@ -10,15 +10,14 @@ http://www.boost.org/LICENSE_1_0.txt
 namespace mysqlpp
 {
 
-	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, const std::string& charset, bool pooled_)
+	connection::connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port, const std::string& charset, unsigned int connect_timeout, bool pooled_)
 	{
 		try
 		{
 			mysql = mysql_init(0);
-
-			if (!mysql)
+			if (connect_timeout > 0)
 			{
-				throw exception(__FILE__, __LINE__, "mysql_init failed");
+				mysql_options(mysql, MYSQL_OPT_CONNECT_TIMEOUT, &connect_timeout);
 			}
 
 			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))

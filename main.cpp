@@ -5,6 +5,8 @@ Distributed under the Boost Software License, Version 1.0.
 http://www.boost.org/LICENSE_1_0.txt
 */
 
+#include <cstdlib>
+
 #include <iostream>
 #include <memory>
 
@@ -24,11 +26,17 @@ typedef boost::scoped_ptr<mysqlpp::statement> stmt_ptr;
 typedef boost::scoped_ptr<mysqlpp::result> rs_ptr;
 */
 
+static void mysql_library_end_()
+{
+	mysql_library_end();
+}
+
 int main()
 {
 	try
 	{
 		mysql_library_init(0, 0, 0);
+		atexit(mysql_library_end_);
 
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
@@ -146,8 +154,6 @@ int main()
 		// insert one more time
 		affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
-
-		mysql_library_end();
 	}
 	catch (std::exception& e)
 	{
