@@ -62,7 +62,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
 
-			std::tm tm_ = { 0 };
+			std::tm tm_;
 			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
 			if (count != 3 && count != 6)
 			{
@@ -93,7 +93,7 @@ namespace mysqlpp
 
 		std::tm c_tm()
 		{
-			std::tm tm_ = { 0 };
+			std::tm tm_;
 
 			tm_.tm_year = static_cast<int>(year) - 1900;
 			tm_.tm_mon = static_cast<int>(month) - 1;
