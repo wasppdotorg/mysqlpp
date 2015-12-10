@@ -38,8 +38,8 @@ create database test default character set utf8 default collate utf8_general_ci;
 exit
 ```
 
-Install MySQLClient Library
----------------------------
+Install MariaDB Client Library
+-----------------------------
 * sudo apt-get install libmariadbclient-dev
 
 Install mysqlpp
