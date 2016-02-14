@@ -3,19 +3,12 @@ mysqlpp
 
 Build Environment
 -----------------
-* GCC 4.8 - Ubuntu Linux 14.04 LTS
+* GCC 4.9 - Debian 8
 * Clang 3.4 - FreeBSD 10.2
 * Visual Studio 2013 - Windows 7
 
 Install MariaDB
 ---------------
-* sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-* sudo vi /etc/apt/sources.list
-```
-deb http://ftp.osuosl.org/pub/mariadb/repo/10.0/ubuntu trusty main
-deb-src http://ftp.osuosl.org/pub/mariadb/repo/10.0/ubuntu trusty main
-```
-
 * sudo apt-get update
 * sudo apt-get upgrade
 * sudo apt-get install mariadb-server
@@ -70,4 +63,4 @@ For FreeBSD
 
 For Windows
 -----------
-* mariadb-10.0.22-winx64.msi
+* mariadb-10.0.23-winx64.msi
