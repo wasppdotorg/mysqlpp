@@ -12,19 +12,9 @@ http://www.boost.org/LICENSE_1_0.txt
 
 #include "mysqlpp.hpp"
 
-typedef std::auto_ptr<mysqlpp::connection> conn_ptr;
-typedef std::auto_ptr<mysqlpp::statement> stmt_ptr;
-typedef std::auto_ptr<mysqlpp::result> rs_ptr;
-
-// std::auto_ptr is deprecated.
-// if boost is available, then:
-/*
-#include <boost/scoped_ptr.hpp>
-
-typedef boost::scoped_ptr<mysqlpp::connection> conn_ptr;
-typedef boost::scoped_ptr<mysqlpp::statement> stmt_ptr;
-typedef boost::scoped_ptr<mysqlpp::result> rs_ptr;
-*/
+typedef std::unique_ptr<mysqlpp::connection> conn_ptr;
+typedef std::unique_ptr<mysqlpp::statement> stmt_ptr;
+typedef std::unique_ptr<mysqlpp::result> rs_ptr;
 
 static void mysql_library_end_()
 {

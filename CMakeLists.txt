@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 set (TARGET mysqlpp)
 project (${TARGET})
 
+add_definitions(-std=c++11)
 aux_source_directory (. Source_DIRECTORIES)
 add_executable (${TARGET} ${Source_DIRECTORIES})
 
