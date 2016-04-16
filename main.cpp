@@ -7,8 +7,8 @@ http://www.boost.org/LICENSE_1_0.txt
 
 #include <cstdlib>
 
-#include <iostream>
 #include <memory>
+#include <iostream>
 
 #include "mysqlpp.hpp"
 
