@@ -49,7 +49,7 @@ namespace mysqlpp
 	{
 		datetime()
 		{
-			std::time_t time_ = std::time(0);
+			std::time_t time_ = std::time(nullptr);
 			std::tm tm_ = *std::localtime(&time_);
 
 			set_time(tm_);
