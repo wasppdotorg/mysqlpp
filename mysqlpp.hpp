@@ -124,7 +124,7 @@ namespace mysqlpp
 		}
 
 		enum_field_types type;
-		std::string name;
+		char* name;
 
 		std::vector<char> buffer;
 		unsigned long length;
