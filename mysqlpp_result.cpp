@@ -20,7 +20,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
-			bind();
+			bind_();
 
 			if (mysql_stmt_store_result(stmt) != 0)
 			{
@@ -43,7 +43,7 @@ namespace mysqlpp
 		mysql_free_result(metadata);
 	}
 
-	bool result::bind()
+	bool result::bind_()
 	{
 		field_count = mysql_stmt_field_count(stmt);
 		if (field_count == 0)
@@ -71,7 +71,7 @@ namespace mysqlpp
 			binds[i].buffer_length = columns[i].length;
 			binds[i].buffer = &columns[i].buffer.front();
 			binds[i].length = &columns[i].length;
-			binds[i].is_unsigned = columns[i].is_unsigned;
+			binds[i].is_unsigned = columns[i].is_unsigned_;
 			binds[i].is_null = &columns[i].is_null;
 			binds[i].error = &columns[i].error;
 		}
@@ -200,7 +200,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
-			if (!bind())
+			if (!bind_())
 			{
 				return false;
 			}

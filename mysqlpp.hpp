@@ -63,8 +63,8 @@ namespace mysqlpp
 			}
 
 			std::tm tm_;
-			int count = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
-			if (count != 3 && count != 6)
+			int count_ = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
+			if (count_ != 3 && count_ != 6)
 			{
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
 			}
@@ -119,7 +119,7 @@ namespace mysqlpp
 
 	struct st_mysql_column
 	{
-		st_mysql_column() : buffer(0), length(0), is_unsigned(0), is_null(0), error(0)
+		st_mysql_column() : buffer(0), length(0), is_unsigned_(0), is_null(0), error(0)
 		{
 		}
 
@@ -129,7 +129,7 @@ namespace mysqlpp
 		std::vector<char> buffer;
 		unsigned long length;
 
-		char is_unsigned;
+		char is_unsigned_;
 		char is_null;
 		char error;
 	};
@@ -140,7 +140,7 @@ namespace mysqlpp
 		result(st_mysql_stmt* stmt_);
 		~result();
 
-		bool bind();
+		bool bind_();
 		unsigned long long int num_rows();
 		bool fetch(bool is_proc = false);
 

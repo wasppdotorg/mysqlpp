@@ -53,137 +53,137 @@ namespace mysqlpp
 
 	void statement::param(const unsigned char& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_TINY;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 1;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_TINY;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 1;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const short int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_SHORT;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 0;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_SHORT;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 0;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const unsigned short int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_SHORT;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 1;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_SHORT;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 1;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_LONG;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 0;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_LONG;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 0;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const unsigned int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_LONG;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 1;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_LONG;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 1;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const long long int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_LONGLONG;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 0;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_LONGLONG;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 0;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const unsigned long long int& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_LONGLONG;
-		bind.buffer = (void*)&value;
-		bind.is_unsigned = 1;
-		bind.is_null = 0;
-		bind.length = 0;
+		b.buffer_type = MYSQL_TYPE_LONGLONG;
+		b.buffer = (void*)&value;
+		b.is_unsigned = 1;
+		b.is_null = 0;
+		b.length = 0;
 	}
 
 	void statement::param(const float& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_FLOAT;
-		bind.buffer = (void*)&value;
-		bind.is_null = 0;
+		b.buffer_type = MYSQL_TYPE_FLOAT;
+		b.buffer = (void*)&value;
+		b.is_null = 0;
 
 		lengths[bind_index - 1] = sizeof(value);
-		bind.length = &lengths[bind_index - 1];
+		b.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param(const double& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_DOUBLE;
-		bind.buffer = (void*)&value;
-		bind.is_null = 0;
+		b.buffer_type = MYSQL_TYPE_DOUBLE;
+		b.buffer = (void*)&value;
+		b.is_null = 0;
 
 		lengths[bind_index - 1] = sizeof(value);
-		bind.length = &lengths[bind_index - 1];
+		b.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param(const std::string& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_STRING;
-		bind.buffer = (void*)value.c_str();
-		bind.is_null = 0;
+		b.buffer_type = MYSQL_TYPE_STRING;
+		b.buffer = (void*)value.c_str();
+		b.is_null = 0;
 
 		lengths[bind_index - 1] = value.size();
-		bind.buffer_length = lengths[bind_index - 1];
-		bind.length = &lengths[bind_index - 1];
+		b.buffer_length = lengths[bind_index - 1];
+		b.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param_blob(const std::string& value)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_BLOB;
-		bind.buffer = (void*)value.c_str();
-		bind.is_null = 0;
+		b.buffer_type = MYSQL_TYPE_BLOB;
+		b.buffer = (void*)value.c_str();
+		b.is_null = 0;
 
 		lengths[bind_index - 1] = value.size();
-		bind.buffer_length = lengths[bind_index - 1];
-		bind.length = &lengths[bind_index - 1];
+		b.buffer_length = lengths[bind_index - 1];
+		b.length = &lengths[bind_index - 1];
 	}
 
 	void statement::param_null(char is_null)
 	{
-		st_mysql_bind& bind = get_bind();
+		st_mysql_bind& b = get_bind();
 
-		bind.buffer_type = MYSQL_TYPE_NULL;
-		bind.is_null = &is_null;
+		b.buffer_type = MYSQL_TYPE_NULL;
+		b.is_null = &is_null;
 	}
 
 	unsigned long long int statement::execute()
