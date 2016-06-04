@@ -61,7 +61,7 @@ namespace mysqlpp
 
 	statement* connection::prepare_like(const std::string& query, bool left_percent, const std::string& keyword, bool right_percent)
 	{
-		char* escaped_keyword = new char[(keyword.size() * 2) + 1];
+		auto escaped_keyword = new char[(keyword.size() * 2) + 1];
 
 		mysql_real_escape_string(mysql, escaped_keyword, keyword.c_str(), keyword.size());
 

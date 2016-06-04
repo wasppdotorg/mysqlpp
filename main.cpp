@@ -12,21 +12,16 @@ http://www.boost.org/LICENSE_1_0.txt
 
 #include "mysqlpp.hpp"
 
-typedef std::unique_ptr<mysqlpp::connection> conn_ptr;
-typedef std::unique_ptr<mysqlpp::statement> stmt_ptr;
-typedef std::unique_ptr<mysqlpp::result> rs_ptr;
-
-static void mysql_library_end_()
-{
-	mysql_library_end();
-}
+using conn_ptr = std::unique_ptr<mysqlpp::connection>;
+using stmt_ptr = std::unique_ptr<mysqlpp::statement>;
+using rs_ptr = std::unique_ptr<mysqlpp::result>;
 
 int main()
 {
 	try
 	{
 		mysql_library_init(0, 0, 0);
-		atexit(mysql_library_end_);
+		atexit(mysql_library_end);
 
 		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
 
