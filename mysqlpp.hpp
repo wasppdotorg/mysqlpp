@@ -49,8 +49,8 @@ namespace mysqlpp
 	{
 		datetime()
 		{
-			std::time_t time_ = std::time(nullptr);
-			std::tm tm_ = *std::localtime(&time_);
+			auto time_ = std::time(nullptr);
+			auto tm_ = *std::localtime(&time_);
 
 			set_time(tm_);
 		}
@@ -63,7 +63,7 @@ namespace mysqlpp
 			}
 
 			std::tm tm_;
-			int count_ = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
+			auto count_ = std::sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &tm_.tm_year, &tm_.tm_mon, &tm_.tm_mday, &tm_.tm_hour, &tm_.tm_min, &tm_.tm_sec);
 			if (count_ != 3 && count_ != 6)
 			{
 				throw exception(__FILE__, __LINE__, "datetime cast failed");
@@ -110,7 +110,7 @@ namespace mysqlpp
 		{
 			char buf[32] = { 0 };
 
-			std::tm tm_ = c_tm();
+			auto tm_ = c_tm();
 			std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_);
 
 			return std::string(buf);
@@ -147,7 +147,7 @@ namespace mysqlpp
 		template<typename T>
 		T get(unsigned int index)
 		{
-			st_mysql_column& column = get_column(index);
+			auto column = get_column(index);
 			if (column.is_null)
 			{
 				throw exception(__FILE__, __LINE__, "null value field");
@@ -162,7 +162,7 @@ namespace mysqlpp
 		template<typename T>
 		T get(const std::string& name)
 		{
-			st_mysql_column& column = get_column(name);
+			auto column = get_column(name);
 			if (column.is_null)
 			{
 				throw exception(__FILE__, __LINE__, "null value field");
