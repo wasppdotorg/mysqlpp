@@ -12,7 +12,7 @@ include_directories (/usr/include /usr/local/include)
 find_library (MySQLClient_LIBRARIES NAMES mysqlclient PATHS /usr/lib/mysql /usr/local/lib/mysql)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set (CMAKE_CXX_FLAGS "-g -Wall -O2 -DNDEBUG -std=c++11")
+	set (CMAKE_CXX_FLAGS "-std=c++11 -Wall -g -fexceptions -O2 -DNDEBUG")
 endif()
 
 target_link_libraries (${TARGET} ${MySQLClient_LIBRARIES})
