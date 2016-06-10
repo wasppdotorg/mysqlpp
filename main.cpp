@@ -23,7 +23,7 @@ int main()
 		mysql_library_init(0, 0, 0);
 		atexit(mysql_library_end);
 
-		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "root", "1235", "test"));
+		conn_ptr conn(new mysqlpp::connection("127.0.0.1", "dbuser", "passwd", "test"));
 
 		stmt_ptr stmt(conn->prepare("DROP TABLE IF EXISTS test"));
 		stmt->execute();

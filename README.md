@@ -12,28 +12,18 @@ Install MariaDB
 * sudo apt-get update
 * sudo apt-get upgrade
 * sudo apt-get install mariadb-server
-* sudo vi /etc/mysql/conf.d/mariadb.cnf
-```
-[client]
-default-character-set = utf8
-
-[mysqld]
-character-set-server = utf8
-collation-server     = utf8_general_ci
-character_set_server = utf8
-collation_server     = utf8_general_ci
-```
-
 * sudo /etc/init.d/mysql restart
-* mysql -u root -p
+* sudo mysql -u root -p
 ```
 create database test default character set utf8 default collate utf8_general_ci;
+grant all privileges on test.* to 'dbuser'@'localhost' identified by 'passwd' with grant option;
+flush privileges;
 exit
 ```
 
 Install MariaDB Client Library
 -----------------------------
-* sudo apt-get install libmariadbclient-dev
+* sudo apt-get install libmysqlclient-dev
 
 Install mysqlpp
 -------------
