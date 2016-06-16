@@ -28,7 +28,7 @@ Install MariaDB Client Library
 Install mysqlpp
 -------------
 * sudo apt-get install git
-* git clone https://github.com/waspporg/mysqlpp.git
+* git clone https://github.com/wasppdotorg/mysqlpp.git
 * cd mysqpp
 * sudo apt-get install build-essential
 * sudo apt-get install cmake
