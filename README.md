@@ -22,11 +22,11 @@ exit
 ```
 
 Install MariaDB Client Library
------------------------------
+------------------------------
 * sudo apt-get install libmysqlclient-dev
 
 Install mysqlpp
--------------
+---------------
 * sudo apt-get install git
 * git clone https://github.com/wasppdotorg/mysqlpp.git
 * cd mysqpp
