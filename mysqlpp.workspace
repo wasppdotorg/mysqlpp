@@ -2,10 +2,12 @@
 <CodeLite_Workspace Name="mysqlpp" Database="">
   <Project Name="mysqlpp" Path="mysqlpp.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="no">
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
       <Project Name="mysqlpp" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
+      <Environment/>
       <Project Name="mysqlpp" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
