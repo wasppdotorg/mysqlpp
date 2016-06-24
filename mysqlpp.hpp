@@ -15,7 +15,6 @@ http://www.boost.org/LICENSE_1_0.txt
 #include <mysql/mysql.h>
 
 #include <stdexcept>
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
