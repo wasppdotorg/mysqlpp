@@ -8,15 +8,12 @@ http://www.boost.org/LICENSE_1_0.txt
 #ifndef mysqlpp_hpp
 #define mysqlpp_hpp
 
-#include <cstdio>
 #include <ctime>
-#include <cstring>
 
 #include <mysql/mysql.h>
 
 #include <stdexcept>
 #include <sstream>
-#include <string>
 #include <vector>
 
 namespace mysqlpp
