@@ -6,7 +6,7 @@ Build Environment
 -----------------
 * GCC 4.9 - Debian 8.5
 * Clang 3.4 - FreeBSD 10.2
-* Visual Studio 2015 - Windows 7
+* Visual Studio 2015 - Windows 10
 
 Install MariaDB
 ---------------
