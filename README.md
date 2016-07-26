@@ -4,9 +4,9 @@ mysqlpp
 
 Build Environment
 -----------------
-* GCC 4.9 - Debian 8
+* GCC 4.9 - Debian 8.5
 * Clang 3.4 - FreeBSD 10.2
-* Visual Studio 2013 - Windows 7
+* Visual Studio 2015 - Windows 7
 
 Install MariaDB
 ---------------
@@ -33,8 +33,8 @@ Install mysqlpp
 * cd mysqpp
 * sudo apt-get install build-essential
 * sudo apt-get install cmake
-* mkdir cmakebuild
-* cd cmakebuild
+* mkdir cmake_build
+* cd cmake_build
 * cmake ..
 * make
 
@@ -54,5 +54,5 @@ For FreeBSD
 
 For Windows
 -----------
-* mariadb-10.0.23-winx64.msi
+* mariadb-10.1.14-winx64.msi
 
