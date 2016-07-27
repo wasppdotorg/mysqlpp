@@ -49,8 +49,8 @@ Memory Leak Check
 
 For FreeBSD
 -----------
-* sudo pkg install mariadb100-client
-* sudo pkg install mariadb100-server
+* sudo pkg install mariadb101-client
+* sudo pkg install mariadb101-server
 
 For Windows
 -----------
