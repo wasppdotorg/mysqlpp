@@ -5,7 +5,7 @@ mysqlpp
 Build Environment
 -----------------
 * GCC 4.9 - Debian 8.5
-* Clang 3.4 - FreeBSD 10.2
+* Clang 3.4 - FreeBSD 10.3
 * Visual Studio 2015 - Windows 10
 
 Install MariaDB
