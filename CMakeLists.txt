@@ -11,7 +11,7 @@ include_directories (/usr/include /usr/local/include)
 
 find_library (MySQLClient_LIBRARIES NAMES mysqlclient PATHS /usr/lib/mysql /usr/local/lib/mysql)
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if (CMAKE_CXX_COMPILER_ID MATCHES Clang)
 	set (CMAKE_COMPILER_IS_CLANGCXX 1)
 endif()
 
