@@ -46,7 +46,7 @@ int main()
 		std::string param10 = datetime_.str();
 
 		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())"));
-		//{
+		//
 			stmt->param(param01);
 			stmt->param(param02);
 			stmt->param(param03);
@@ -58,7 +58,7 @@ int main()
 			stmt->param(param09);
 			stmt->param(param10);
 			stmt->param_null();
-		//}
+		//
 		stmt->execute();
 
 		// insert one more time
@@ -66,9 +66,9 @@ int main()
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
 		stmt.reset(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col01 = ?"));
-		//{
+		//
 			stmt->param(1);
-		//}
+		//
 
 		//stmt.reset(conn->prepare_like("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col07 like ", false, "param", true));
 
@@ -109,9 +109,9 @@ int main()
 
 		/*
 		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
-		//{
+		//
 			stmt->param(1);
-		//}
+		//
 
 		rs.reset(stmt->query());
 		if (rs->fetch(true))
@@ -121,7 +121,7 @@ int main()
 		*/
 
 		stmt.reset(conn->prepare("INSERT INTO test(col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())"));
-		//{
+		//
 			stmt->param(param01);
 			stmt->param(param02);
 			stmt->param(param03);
@@ -133,7 +133,7 @@ int main()
 			stmt->param(param09);
 			stmt->param(param10);
 			stmt->param_null();
-		//}
+		//
 		stmt->execute();
 
 		// insert one more time
