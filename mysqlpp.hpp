@@ -257,12 +257,12 @@ namespace mysqlpp
 
 		std::tm* last_released()
 		{
-			return &released;
+			return &freed;
 		}
 
 		void set_released(const std::tm& released_)
 		{
-			released = released_;
+			freed = released_;
 		}
 
 		bool is_pooled()
@@ -278,7 +278,7 @@ namespace mysqlpp
 	private:
 		st_mysql* mysql;
 
-		std::tm released;
+		std::tm freed;
 		bool pooled;
 
 	};
