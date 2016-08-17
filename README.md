@@ -41,7 +41,7 @@ exit
 
 Install MariaDB Client Library
 ------------------------------
-* sudo apt-get install libmysqlclient-dev
+* sudo apt-get install libmariadbclient-dev
 
 Install mysqlpp
 ---------------
