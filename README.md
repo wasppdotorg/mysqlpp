@@ -6,7 +6,6 @@ Build Environment
 -----------------
 * GCC 5.4 - Ubuntu 16.04 LTS
 * Visual Studio 2015 - Windows 10
-* Clang 3.4 - FreeBSD 10.3
 
 Install MariaDB
 ---------------
@@ -28,7 +27,7 @@ deb-src http://ftp.kaist.ac.kr/mariadb/repo/10.1/ubuntu xenial main
 update mysql.user set plugin='mysql_native_password';
 quit;
 ```
- 
+
 * sudo kill -9 $(pgrep mysql)
 * sudo /etc/init.d/mysql start
 * mysql -u root -p
@@ -38,6 +37,10 @@ grant all privileges on test.* to 'dbuser'@'localhost' identified by 'passwd' wi
 flush privileges;
 exit
 ```
+
+Install MariaDB (Windows)
+-------------------------
+* mariadb-10.1.14-winx64.msi
 
 Install MariaDB Client Library
 ------------------------------
@@ -59,17 +62,16 @@ Run
 ---
 * ./mysqlpp
 
+Run (Windows)
+-------------
+* Run cmd.exe
+```
+cd path\to\mysqlpp
+copy "C:\Program Files\Mariadb 10.1\lib\libmysql.dll" .\x64\Debug\
+.\mysqlpp.exe
+```
+
 Memory Leak Check
 -----------------
 * sudo apt-get install valgrind
 * valgrind ./mysqlpp
-
-For FreeBSD
------------
-* sudo pkg install mariadb101-client
-* sudo pkg install mariadb101-server
-
-For Windows
------------
-* mariadb-10.1.14-winx64.msi
-
