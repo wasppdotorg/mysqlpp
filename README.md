@@ -64,12 +64,9 @@ Run
 
 Run (Windows)
 -------------
-* Run cmd.exe
-```
 cd path\to\mysqlpp
 copy "C:\Program Files\Mariadb 10.1\lib\libmysql.dll" .\x64\Debug\
 .\mysqlpp.exe
-```
 
 Memory Leak Check
 -----------------
