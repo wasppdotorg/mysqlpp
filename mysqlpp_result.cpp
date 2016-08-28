@@ -20,7 +20,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
-			bind_();
+			bind();
 
 			if (mysql_stmt_store_result(stmt) != 0)
 			{
@@ -43,7 +43,7 @@ namespace mysqlpp
 		mysql_free_result(metadata);
 	}
 
-	bool result::bind_()
+	bool result::bind()
 	{
 		field_count = mysql_stmt_field_count(stmt);
 		if (field_count == 0)
@@ -200,7 +200,7 @@ namespace mysqlpp
 				throw exception(__FILE__, __LINE__, mysql_stmt_error(stmt));
 			}
 
-			if (!bind_())
+			if (!bind())
 			{
 				return false;
 			}

@@ -136,7 +136,7 @@ namespace mysqlpp
 		result(st_mysql_stmt* stmt_);
 		~result();
 
-		bool bind_();
+		bool bind();
 		unsigned long long int num_rows();
 		bool fetch(bool is_proc = false);
 
