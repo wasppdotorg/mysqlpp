@@ -40,7 +40,7 @@ exit
 
 Install MariaDB (Windows)
 -------------------------
-* mariadb-10.1.14-winx64.msi
+* mariadb-10.1.18-winx64.msi
 
 Install MariaDB Client Library
 ------------------------------
