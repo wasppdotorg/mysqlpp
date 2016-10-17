@@ -108,7 +108,7 @@ int main()
 		}
 
 		/*
-		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users_idx', ?)"));
+		stmt.reset(conn->prepare("CALL USP_GET_UNIQUE_KEYS('users', ?)"));
 		//
 			stmt->param(1);
 		//
