@@ -188,7 +188,7 @@ namespace mysqlpp
 
 	uint64_t statement::execute()
 	{
-		unsigned long long int affected_rows = 0;
+		uint64_t affected_rows = 0;
 
 		try
 		{
