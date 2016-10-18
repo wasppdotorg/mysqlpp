@@ -51,7 +51,7 @@ namespace mysqlpp
 		mysql_stmt_close(stmt);
 	}
 
-	void statement::param(const unsigned char& value)
+	void statement::param(const uint8_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -62,7 +62,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const short int& value)
+	void statement::param(const int16_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -73,7 +73,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const unsigned short int& value)
+	void statement::param(const uint16_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -84,7 +84,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const int& value)
+	void statement::param(const int32_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -95,7 +95,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const unsigned int& value)
+	void statement::param(const uint32_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -106,7 +106,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const long long int& value)
+	void statement::param(const int64_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -117,7 +117,7 @@ namespace mysqlpp
 		b.length = 0;
 	}
 
-	void statement::param(const unsigned long long int& value)
+	void statement::param(const uint64_t& value)
 	{
 		st_mysql_bind& b = get_bind();
 
@@ -186,7 +186,7 @@ namespace mysqlpp
 		b.is_null = &is_null;
 	}
 
-	unsigned long long int statement::execute()
+	uint64_t statement::execute()
 	{
 		unsigned long long int affected_rows = 0;
 
