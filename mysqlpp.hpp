@@ -151,7 +151,7 @@ namespace mysqlpp
 			}
 
 			T value;
-			fetch_column(column, value);
+			set_value(column, value);
 
 			return value;
 		}
@@ -166,26 +166,10 @@ namespace mysqlpp
 			}
 
 			T value;
-			fetch_column(column, value);
+			set_value(column, value);
 
 			return value;
 		}
-
-		void fetch_column(const st_mysql_column& column, uint8_t& value);
-
-		void fetch_column(const st_mysql_column& column, int16_t& value);
-		void fetch_column(const st_mysql_column& column, uint16_t& value);
-
-		void fetch_column(const st_mysql_column& column, int32_t& value);
-		void fetch_column(const st_mysql_column& column, uint32_t& value);
-
-		void fetch_column(const st_mysql_column& column, int64_t& value);
-		void fetch_column(const st_mysql_column& column, uint64_t& value);
-
-		void fetch_column(const st_mysql_column& column, float& value);
-		void fetch_column(const st_mysql_column& column, double& value);
-
-		void fetch_column(const st_mysql_column& column, std::string& value);
 
 		bool is_null(unsigned int index);
 		bool is_null(const std::string& name);
@@ -196,6 +180,22 @@ namespace mysqlpp
 
 		st_mysql_column& get_column(unsigned int index);
 		st_mysql_column& get_column(const std::string& name);
+
+		void set_value(const st_mysql_column& column, uint8_t& value);
+
+		void set_value(const st_mysql_column& column, int16_t& value);
+		void set_value(const st_mysql_column& column, uint16_t& value);
+
+		void set_value(const st_mysql_column& column, int32_t& value);
+		void set_value(const st_mysql_column& column, uint32_t& value);
+
+		void set_value(const st_mysql_column& column, int64_t& value);
+		void set_value(const st_mysql_column& column, uint64_t& value);
+
+		void set_value(const st_mysql_column& column, float& value);
+		void set_value(const st_mysql_column& column, double& value);
+
+		void set_value(const st_mysql_column& column, std::string& value);
 
 		st_mysql_stmt* stmt;
 		st_mysql_res* metadata;
