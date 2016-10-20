@@ -9,7 +9,6 @@ http://www.boost.org/LICENSE_1_0.txt
 #define mysqlpp_hpp
 
 #include <ctime>
-#include <cstdint>
 
 #include <mysql/mysql.h>
 
@@ -138,7 +137,7 @@ namespace mysqlpp
 		~result();
 
 		bool bind();
-		uint64_t num_rows();
+		unsigned long long int num_rows();
 		bool fetch(bool is_proc = false);
 
 		template<typename T>
@@ -181,16 +180,16 @@ namespace mysqlpp
 		st_mysql_column& get_column(unsigned int index);
 		st_mysql_column& get_column(const std::string& name);
 
-		void set_value(const st_mysql_column& column, uint8_t& value);
+		void set_value(const st_mysql_column& column, unsigned char& value);
 
-		void set_value(const st_mysql_column& column, int16_t& value);
-		void set_value(const st_mysql_column& column, uint16_t& value);
+		void set_value(const st_mysql_column& column, short int& value);
+		void set_value(const st_mysql_column& column, unsigned short int& value);
 
-		void set_value(const st_mysql_column& column, int32_t& value);
-		void set_value(const st_mysql_column& column, uint32_t& value);
+		void set_value(const st_mysql_column& column, long int& value);
+		void set_value(const st_mysql_column& column, unsigned long int& value);
 
-		void set_value(const st_mysql_column& column, int64_t& value);
-		void set_value(const st_mysql_column& column, uint64_t& value);
+		void set_value(const st_mysql_column& column, long long int& value);
+		void set_value(const st_mysql_column& column, unsigned long long int& value);
 
 		void set_value(const st_mysql_column& column, float& value);
 		void set_value(const st_mysql_column& column, double& value);
@@ -213,16 +212,16 @@ namespace mysqlpp
 		statement(st_mysql* mysql, const std::string& query);
 		~statement();
 
-		void param(const uint8_t& value);
+		void param(const unsigned char& value);
 
-		void param(const int16_t& value);
-		void param(const uint16_t& value);
+		void param(const short int& value);
+		void param(const unsigned short int& value);
 
-		void param(const int32_t& value);
-		void param(const uint32_t& value);
+		void param(const long int& value);
+		void param(const unsigned long int& value);
 
-		void param(const int64_t& value);
-		void param(const uint64_t& value);
+		void param(const long long int& value);
+		void param(const unsigned long long int& value);
 
 		void param(const float& value);
 		void param(const double& value);
@@ -231,7 +230,7 @@ namespace mysqlpp
 		void param_blob(const std::string& value);
 		void param_null(char is_null = 1);
 
-		uint64_t execute();
+		unsigned long long int execute();
 		result* query();
 
 	private:
