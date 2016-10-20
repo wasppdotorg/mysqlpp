@@ -31,10 +31,10 @@ int main()
 		stmt.reset(conn->prepare("CREATE TABLE test(col01 TINYINT unsigned, col02 SMALLINT unsigned, col03 INT unsigned, col04 BIGINT unsigned, col05 FLOAT, col06 DOUBLE, col07 VARCHAR(10), col08 TEXT, col09 BLOB, col10 DATETIME, col11 INT NULL, col12 DATETIME)"));
 		stmt->execute();
 
-		unsigned char param01 = 255;
-		unsigned short int param02 = 65535;
-		unsigned long int param03 = 429496729;//5;
-		unsigned long long int param04 = 1844674407370955161;//5;
+		uint8_t param01 = 255;
+		uint16_t param02 = 65535;
+		uint32_t param03 = 429496729;//5;
+		uint64_t param04 = 1844674407370955161;//5;
 		float param05 = 5.01f;
 		double param06 = 6.01f;
 
@@ -62,12 +62,12 @@ int main()
 		stmt->execute();
 
 		// insert one more time
-		unsigned long long int affected_rows = stmt->execute();
+		uint64_t affected_rows = stmt->execute();
 		std::cout << affected_rows << " rows affected" << std::endl << std::endl;
 
 		stmt.reset(conn->prepare("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col01 = ?"));
 		//
-			stmt->param((unsigned char)255);
+			stmt->param((uint8_t)255);
 		//
 
 		//stmt.reset(conn->prepare_like("SELECT col01, col02, col03, col04, col05, col06, col07, col08, col09, col10, col11, col12 from test WHERE col07 like ", false, "param", true));
@@ -80,13 +80,13 @@ int main()
 
 		while (rs->fetch())
 		{
-			std::cout << "col01(0) : " << (int)rs->get<unsigned char>(0) << std::endl;
-			std::cout << "col02(1) : " << rs->get<unsigned short int>(1) << std::endl;
+			std::cout << "col01(0) : " << (int)rs->get<uint8_t>(0) << std::endl;
+			std::cout << "col02(1) : " << rs->get<uint16_t>(1) << std::endl;
 
-			std::cout << "col01 : " << (int)rs->get<unsigned char>("col01") << std::endl;
-			std::cout << "col02 : " << rs->get<unsigned short int>("col02") << std::endl;
-			std::cout << "col03 : " << rs->get<unsigned long int>("col03") << std::endl;
-			std::cout << "col04 : " << rs->get<unsigned long long int>("col04") << std::endl;
+			std::cout << "col01 : " << (int)rs->get<uint8_t>("col01") << std::endl;
+			std::cout << "col02 : " << rs->get<uint16_t>("col02") << std::endl;
+			std::cout << "col03 : " << rs->get<uint32_t>("col03") << std::endl;
+			std::cout << "col04 : " << rs->get<uint64_t>("col04") << std::endl;
 			std::cout << "col05 : " << rs->get<float>("col05") << std::endl;
 			std::cout << "col06 : " << rs->get<double>("col06") << std::endl;
 			std::cout << "col07 : " << rs->get<std::string>("col07") << std::endl;
@@ -100,7 +100,7 @@ int main()
 			}
 			else
 			{
-				std::cout << "col11 : " << rs->get<long int>("col11") << std::endl;
+				std::cout << "col11 : " << rs->get<int32_t>("col11") << std::endl;
 			}
 
 			std::cout << "col12 : " << rs->get<std::string>("col12") << std::endl;
@@ -116,7 +116,7 @@ int main()
 		rs.reset(stmt->query());
 		if (rs->fetch(true))
 		{
-			std::cout << rs->get<unsigned long long int>("last_key") << std::endl;
+			std::cout << rs->get<uint64_t>("last_key") << std::endl;
 		}
 		*/
 

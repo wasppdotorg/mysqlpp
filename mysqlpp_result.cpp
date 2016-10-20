@@ -84,7 +84,7 @@ namespace mysqlpp
 		return true;
 	}
 
-	unsigned long long int result::num_rows()
+	uint64_t result::num_rows()
 	{
 		return mysql_stmt_num_rows(stmt);
 	}
@@ -209,39 +209,39 @@ namespace mysqlpp
 		return columns[i];
 	}
 
-	void result::set_value(const st_mysql_column& column, unsigned char& value)
+	void result::set_value(const st_mysql_column& column, uint8_t& value)
 	{
-		value = static_cast<unsigned char>(column.buffer.front());		
+		value = static_cast<uint8_t>(column.buffer.front());		
 	}
 
-	void result::set_value(const st_mysql_column& column, short int& value)
+	void result::set_value(const st_mysql_column& column, int16_t& value)
 	{
-		value = static_cast<short int>(column.buffer.front());
+		value = static_cast<int16_t>(column.buffer.front());
 	}
 
-	void result::set_value(const st_mysql_column& column, unsigned short int& value)
+	void result::set_value(const st_mysql_column& column, uint16_t& value)
 	{
-		value = static_cast<unsigned short int>(column.buffer.front());
+		value = static_cast<uint16_t>(column.buffer.front());
 	}
 
-	void result::set_value(const st_mysql_column& column, long int& value)
+	void result::set_value(const st_mysql_column& column, int32_t& value)
 	{
-		value = static_cast<long int>(column.buffer.front());
+		value = static_cast<int32_t>(column.buffer.front());
 	}
 
-	void result::set_value(const st_mysql_column& column, unsigned long int& value)
+	void result::set_value(const st_mysql_column& column, uint32_t& value)
 	{
-		value = static_cast<unsigned long int>(column.buffer.front());
+		value = static_cast<uint32_t>(column.buffer.front());
 	}
 
-	void result::set_value(const st_mysql_column& column, long long int& value)
+	void result::set_value(const st_mysql_column& column, int64_t& value)
 	{
-		value = *reinterpret_cast<long long int*>(const_cast<char*>(&column.buffer.front()));
+		value = *reinterpret_cast<int64_t*>(const_cast<char*>(&column.buffer.front()));
 	}
 
-	void result::set_value(const st_mysql_column& column, unsigned long long int& value)
+	void result::set_value(const st_mysql_column& column, uint64_t& value)
 	{
-		value = *reinterpret_cast<unsigned long long int*>(const_cast<char*>(&column.buffer.front()));
+		value = *reinterpret_cast<uint64_t*>(const_cast<char*>(&column.buffer.front()));
 	}
 
 	void result::set_value(const st_mysql_column& column, float& value)
