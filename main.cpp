@@ -116,7 +116,7 @@ int main()
 		rs.reset(stmt->query());
 		if (rs->fetch(true))
 		{
-			std::cout << rs->get<int>("last_key") << std::endl;
+			std::cout << rs->get<uint64_t>("last_key") << std::endl;
 		}
 		*/
 
