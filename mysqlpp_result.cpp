@@ -209,9 +209,14 @@ namespace mysqlpp
 		return columns[i];
 	}
 
+	void result::set_value(const st_mysql_column& column, int8_t& value)
+	{
+		value = static_cast<int8_t>(column.buffer.front());
+	}
+
 	void result::set_value(const st_mysql_column& column, uint8_t& value)
 	{
-		value = static_cast<uint8_t>(column.buffer.front());		
+		value = static_cast<uint8_t>(column.buffer.front());
 	}
 
 	void result::set_value(const st_mysql_column& column, int16_t& value)

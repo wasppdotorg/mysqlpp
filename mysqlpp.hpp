@@ -180,6 +180,7 @@ namespace mysqlpp
 		st_mysql_column& get_column(unsigned int index);
 		st_mysql_column& get_column(const std::string& name);
 
+		void set_value(const st_mysql_column& column, int8_t& value);
 		void set_value(const st_mysql_column& column, uint8_t& value);
 
 		void set_value(const st_mysql_column& column, int16_t& value);
