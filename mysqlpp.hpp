@@ -256,29 +256,15 @@ namespace mysqlpp
 		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port = 3306, const std::string& charset = "utf8", bool pooled_ = true);
 		~connection();
 
+		std::tm* last_released() { return &released; }
+		void set_released(const std::tm& released_) { released = released_; }
+
+		bool is_pooled() { return pooled; }
+		void set_pooled(bool pooled_) { pooled = pooled_; }
+
 		bool ping();
 		statement* prepare(const std::string& query);
 		statement* prepare_like(const std::string& query, bool left_percent, const std::string& keyword, bool right_percent);
-
-		std::tm* last_released()
-		{
-			return &released;
-		}
-
-		void set_released(const std::tm& released_)
-		{
-			released = released_;
-		}
-
-		bool is_pooled()
-		{
-			return pooled;
-		}
-
-		void set_pooled(bool pooled_)
-		{
-			pooled = pooled_;
-		}
 
 	private:
 		st_mysql* mysql;
