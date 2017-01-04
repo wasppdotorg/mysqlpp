@@ -53,10 +53,10 @@ namespace mysqlpp
 
 		fields = mysql_fetch_fields(metadata);
 
-		columns.resize(0);
+		columns.clear();
 		columns.resize(field_count, st_mysql_column());
 
-		binds.resize(0);
+		binds.clear();
 		binds.resize(field_count, st_mysql_bind());
 
 		for (std::size_t i = 0; i < field_count; ++i)
@@ -64,7 +64,7 @@ namespace mysqlpp
 			columns[i].name = fields[i].name;
 			columns[i].type = (fields[i].type == MYSQL_TYPE_DATETIME ? MYSQL_TYPE_STRING : fields[i].type);
 			columns[i].length = fields[i].length;
-			columns[i].buffer.resize(0);
+			columns[i].buffer.clear();
 			columns[i].buffer.resize(fields[i].length);
 
 			binds[i].buffer_type = columns[i].type;

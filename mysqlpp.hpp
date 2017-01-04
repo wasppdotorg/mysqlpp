@@ -116,7 +116,7 @@ namespace mysqlpp
 
 	struct st_mysql_column
 	{
-		st_mysql_column() : buffer(), length(0), is_unsigned_(0), is_null(0), error(0)
+		st_mysql_column() : length(0), is_unsigned_(0), is_null(0), error(0)
 		{
 		}
 

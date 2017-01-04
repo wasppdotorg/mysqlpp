@@ -27,10 +27,10 @@ namespace mysqlpp
 
 			param_count = mysql_stmt_param_count(stmt);
 
-			binds.resize(0);
+			binds.clear();
 			binds.resize(param_count, st_mysql_bind());
 
-			lengths.resize(0);
+			lengths.clear();
 			lengths.resize(param_count, 0);
 
 			bind_index = 0;
