@@ -53,7 +53,7 @@ namespace mysqlpp
 
 	void statement::param(const uint8_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_TINY;
 		b.buffer = (void*)&value;
@@ -64,7 +64,7 @@ namespace mysqlpp
 
 	void statement::param(const int16_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_SHORT;
 		b.buffer = (void*)&value;
@@ -86,7 +86,7 @@ namespace mysqlpp
 
 	void statement::param(const int32_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_LONG;
 		b.buffer = (void*)&value;
@@ -97,7 +97,7 @@ namespace mysqlpp
 
 	void statement::param(const uint32_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_LONG;
 		b.buffer = (void*)&value;
@@ -108,7 +108,7 @@ namespace mysqlpp
 
 	void statement::param(const int64_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_LONGLONG;
 		b.buffer = (void*)&value;
@@ -119,7 +119,7 @@ namespace mysqlpp
 
 	void statement::param(const uint64_t& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_LONGLONG;
 		b.buffer = (void*)&value;
@@ -130,7 +130,7 @@ namespace mysqlpp
 
 	void statement::param(const float& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_FLOAT;
 		b.buffer = (void*)&value;
@@ -142,7 +142,7 @@ namespace mysqlpp
 
 	void statement::param(const double& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_DOUBLE;
 		b.buffer = (void*)&value;
@@ -154,7 +154,7 @@ namespace mysqlpp
 
 	void statement::param(const std::string& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_STRING;
 		b.buffer = (void*)value.c_str();
@@ -167,7 +167,7 @@ namespace mysqlpp
 
 	void statement::param_blob(const std::string& value)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_BLOB;
 		b.buffer = (void*)value.c_str();
@@ -180,7 +180,7 @@ namespace mysqlpp
 
 	void statement::param_null(char is_null)
 	{
-		st_mysql_bind& b = get_bind();
+		auto& b = get_bind();
 
 		b.buffer_type = MYSQL_TYPE_NULL;
 		b.is_null = &is_null;
