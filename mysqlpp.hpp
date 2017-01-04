@@ -111,6 +111,7 @@ namespace mysqlpp
 
 			return std::string(buf);
 		}
+
 	};
 
 	struct st_mysql_column
@@ -128,6 +129,7 @@ namespace mysqlpp
 		char is_unsigned_;
 		char is_null;
 		char error;
+
 	};
 
 	class result
@@ -205,6 +207,7 @@ namespace mysqlpp
 
 		std::vector<st_mysql_bind> binds;
 		std::vector<st_mysql_column> columns;
+
 	};
 
 	class statement
@@ -244,6 +247,7 @@ namespace mysqlpp
 
 		std::vector<st_mysql_bind> binds;
 		std::vector<unsigned long> lengths;
+
 	};
 
 	class connection
