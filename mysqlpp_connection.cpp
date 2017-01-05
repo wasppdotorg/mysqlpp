@@ -14,21 +14,21 @@ namespace mysqlpp
 	{
 		try
 		{
-			mysql = mysql_init(0);
+			mysql_ = mysql_init(0);
 
-			if (!mysql_real_connect(mysql, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))
+			if (!mysql_real_connect(mysql_, host.c_str(), userid.c_str(), passwd.c_str(), database.c_str(), port, 0, 0))
 			{
-				throw exception(__FILE__, __LINE__, mysql_error(mysql));
+				throw exception(__FILE__, __LINE__, mysql_error(mysql_));
 			}
 
-			if (mysql_set_character_set(mysql, charset.c_str()) != 0)
+			if (mysql_set_character_set(mysql_, charset.c_str()) != 0)
 			{
-				throw exception(__FILE__, __LINE__, mysql_error(mysql));
+				throw exception(__FILE__, __LINE__, mysql_error(mysql_));
 			}
 		}
 		catch (...)
 		{
-			mysql_close(mysql);
+			mysql_close(mysql_);
 
 			// let your own database manager or main call this function below
 			//mysql_library_end();
@@ -43,7 +43,8 @@ namespace mysqlpp
 
 	connection::~connection()
 	{
-		mysql_close(mysql);
+		clear();
+		mysql_close(mysql_);
 
 		// let your own database manager or main call this function below
 		//mysql_library_end();
@@ -51,19 +52,22 @@ namespace mysqlpp
 
 	bool connection::ping()
 	{
-		return mysql_ping(mysql) == 0;
+		return mysql_ping(mysql_) == 0;
 	}
 
 	statement* connection::prepare(const std::string& query)
 	{
-		return new statement(mysql, query);
+		auto stmt = new statement(this, query);
+		statements.push_back(stmt);
+		
+		return stmt;
 	}
 
 	statement* connection::prepare_like(const std::string& query, bool left_percent, const std::string& keyword, bool right_percent)
 	{
 		auto escaped_keyword = new char[(keyword.size() * 2) + 1];
 
-		mysql_real_escape_string(mysql, escaped_keyword, keyword.c_str(), keyword.size());
+		mysql_real_escape_string(mysql_, escaped_keyword, keyword.c_str(), keyword.size());
 
 		std::ostringstream oss;
 		oss << query << " '";
@@ -81,7 +85,33 @@ namespace mysqlpp
 		}
 		oss << "'";
 
-		return new statement(mysql, oss.str());
+		auto stmt = new statement(this, oss.str());
+		statements.push_back(stmt);
+		
+		return stmt;
+	}
+	
+	result* connection::__query(st_mysql_stmt* stmt)
+	{
+		auto rs = new result(stmt);
+		results.push_back(rs);
+
+		return rs;
+	}
+
+	void connection::clear()
+	{
+		for (auto& r : results)
+		{
+			delete r;
+		}
+		results.clear();
+		
+		for (auto& s : statements)
+		{
+			delete s;
+		}
+		statements.clear();
 	}
 
 } // namespace mysqlpp

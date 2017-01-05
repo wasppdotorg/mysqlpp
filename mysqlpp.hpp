@@ -19,6 +19,8 @@ http://www.boost.org/LICENSE_1_0.txt
 namespace mysqlpp
 {
 
+	class connection;
+
 	class exception : public std::runtime_error
 	{
 	public:
@@ -213,7 +215,7 @@ namespace mysqlpp
 	class statement
 	{
 	public:
-		statement(st_mysql* mysql, const std::string& query);
+		statement(connection* conn_, const std::string& query);
 		~statement();
 
 		void param(const uint8_t& value);
@@ -240,6 +242,7 @@ namespace mysqlpp
 	private:
 		st_mysql_bind& get_bind();
 
+		connection* conn;
 		st_mysql_stmt* stmt;
 
 		int param_count;
@@ -255,6 +258,8 @@ namespace mysqlpp
 	public:
 		connection(const std::string& host, const std::string& userid, const std::string& passwd, const std::string& database, unsigned int port = 3306, const std::string& charset = "utf8", bool pooled_ = true);
 		~connection();
+		
+		st_mysql* mysql() { return mysql_; }
 
 		std::tm* last_released() { return &released; }
 		void set_released(const std::tm& released_) { released = released_; }
@@ -265,12 +270,18 @@ namespace mysqlpp
 		bool ping();
 		statement* prepare(const std::string& query);
 		statement* prepare_like(const std::string& query, bool left_percent, const std::string& keyword, bool right_percent);
+		
+		result* __query(st_mysql_stmt* stmt);
+		void clear();
 
 	private:
-		st_mysql* mysql;
+		st_mysql* mysql_;
 
 		std::tm released;
 		bool pooled;
+		
+		std::vector<statement*> statements;
+		std::vector<result*> results;
 
 	};
 

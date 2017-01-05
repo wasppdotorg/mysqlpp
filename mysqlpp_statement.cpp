@@ -10,11 +10,12 @@ http://www.boost.org/LICENSE_1_0.txt
 namespace mysqlpp
 {
 
-	statement::statement(st_mysql* mysql, const std::string& query)
+	statement::statement(connection* conn_, const std::string& query)
+		: conn(conn_)
 	{
 		try
 		{
-			stmt = mysql_stmt_init(mysql);
+			stmt = mysql_stmt_init(conn->mysql());
 			if (!stmt)
 			{
 				throw exception(__FILE__, __LINE__, "stmt_init failed");
@@ -237,7 +238,7 @@ namespace mysqlpp
 			throw;
 		}
 
-		return new result(stmt);
+		return conn->__query(stmt);
 	}
 
 	st_mysql_bind& statement::get_bind()
