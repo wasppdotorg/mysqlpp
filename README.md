@@ -20,6 +20,16 @@ deb-src http://ftp.kaist.ac.kr/mariadb/repo/10.1/ubuntu xenial main
 * sudo apt update
 * sudo apt upgrade
 * sudo apt install mariadb-server
+* sudo nano /etc/mysql/conf.d/maria.cnf
+```
+[mysqld]
+..
+character-set-server  = utf8 
+collation-server      = utf8_general_ci 
+character_set_server   = utf8 
+collation_server       = utf8_general_ci 
+```
+
 * sudo /etc/init.d/mysql restart
 
 <!--
