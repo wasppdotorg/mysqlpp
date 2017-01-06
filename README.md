@@ -20,7 +20,7 @@ deb-src http://ftp.kaist.ac.kr/mariadb/repo/10.1/ubuntu xenial main
 * sudo apt update
 * sudo apt upgrade
 * sudo apt install mariadb-server
-* sudo nano /etc/mysql/conf.d/maria.cnf
+* sudo nano /etc/mysql/conf.d/mariadb.cnf
 ```
 [mysqld]
 ..
