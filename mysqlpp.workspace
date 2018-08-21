@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Workspace Name="mysqlpp" Database="">
+<CodeLite_Workspace Name="mysqlpp" Database="" Version="10.0.0">
   <Project Name="mysqlpp" Path="mysqlpp.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
